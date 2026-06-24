@@ -1,0 +1,3155 @@
+Built-in Functions
+
+The Python interpreter has a number of functions and types built into it that
+are always available.  They are listed here in alphabetical order.
+
+Built-in Functions
+
+abs()
+
+aiter()
+
+all()
+
+anext()
+
+any()
+
+ascii()
+
+bin()
+
+bool()
+
+breakpoint()
+
+bytearray()
+
+bytes()
+
+callable()
+
+chr()
+
+classmethod()
+
+compile()
+
+complex()
+
+delattr()
+
+dict()
+
+dir()
+
+divmod()
+
+enumerate()
+
+eval()
+
+exec()
+
+filter()
+
+float()
+
+format()
+
+frozenset()
+
+getattr()
+
+globals()
+
+hasattr()
+
+hash()
+
+help()
+
+hex()
+
+id()
+
+input()
+
+int()
+
+isinstance()
+
+issubclass()
+
+iter()
+
+len()
+
+list()
+
+locals()
+
+map()
+
+max()
+
+memoryview()
+
+min()
+
+next()
+
+object()
+
+oct()
+
+open()
+
+ord()
+
+pow()
+
+print()
+
+property()
+
+range()
+
+repr()
+
+reversed()
+
+round()
+
+set()
+
+setattr()
+
+slice()
+
+sorted()
+
+staticmethod()
+
+str()
+
+sum()
+
+super()
+
+tuple()
+
+type()
+
+vars()
+
+zip()
+
+__import__()
+
+Return the absolute value of a number.  The argument may be an
+integer, a floating-point number, or an object implementing__abs__().
+If the argument is a complex number, its magnitude is returned.
+
+__abs__()
+
+Return anasynchronous iteratorfor anasynchronous iterable.
+Equivalent to callingx.__aiter__().
+
+x.__aiter__()
+
+Note: Unlikeiter(),aiter()has no 2-argument variant.
+
+iter()
+
+aiter()
+
+Added in version 3.10.
+
+ReturnTrueif all elements of theiterableare true (or if the iterable
+is empty).  Equivalent to:
+
+True
+
+defall(iterable):forelementiniterable:ifnotelement:returnFalsereturnTrue
+
+When awaited, return the next item from the givenasynchronous
+iterator, ordefaultif given and the iterator is exhausted.
+
+This is the async variant of thenext()builtin, and behaves
+similarly.
+
+next()
+
+This calls the__anext__()method ofasync_iterator,
+returning anawaitable. Awaiting this returns the next value of the
+iterator. Ifdefaultis given, it is returned if the iterator is exhausted,
+otherwiseStopAsyncIterationis raised.
+
+__anext__()
+
+StopAsyncIteration
+
+Added in version 3.10.
+
+ReturnTrueif any element of theiterableis true.  If the iterable
+is empty, returnFalse.  Equivalent to:
+
+True
+
+False
+
+defany(iterable):forelementiniterable:ifelement:returnTruereturnFalse
+
+Asrepr(), return a string containing a printable representation of an
+object, but escape the non-ASCII characters in the string returned byrepr()using\x,\u, or\Uescapes.  This generates a string
+similar to that returned byrepr()in Python 2.
+
+repr()
+
+repr()
+
+\x
+
+\u
+
+\U
+
+repr()
+
+Convert an integer number to a binary string prefixed with â0bâ. The result
+is a valid Python expression. Ifintegeris not a Pythonintobject, it
+has to define an__index__()method that returns an integer. Some
+examples:
+
+int
+
+__index__()
+
+>>>bin(3)'0b11'>>>bin(-10)'-0b1010'
+
+If the prefix â0bâ is desired or not, you can use either of the following ways.
+
+>>>format(14,'#b'),format(14,'b')('0b1110', '1110')>>>f'{14:#b}',f'{14:b}'('0b1110', '1110')
+
+See alsoenum.bin()to represent negative values as twos-complement.
+
+enum.bin()
+
+See alsoformat()for more information.
+
+format()
+
+Return a Boolean value, i.e. one ofTrueorFalse.  The argument
+is converted using the standardtruth testing procedure.
+If the argument is false
+or omitted, this returnsFalse; otherwise, it returnsTrue.  Theboolclass is a subclass ofint(seeNumeric Types â int, float, complex).
+It cannot be subclassed further.  Its only instances areFalseandTrue(seeBoolean Type - bool).
+
+True
+
+False
+
+False
+
+True
+
+bool
+
+int
+
+False
+
+True
+
+Changed in version 3.7:The parameter is now positional-only.
+
+This function drops you into the debugger at the call site.  Specifically,
+it callssys.breakpointhook(), passingargsandkwsstraight
+through.  By default,sys.breakpointhook()callspdb.set_trace()expecting no arguments.  In this case, it is
+purely a convenience function so you donât have to explicitly importpdbor type as much code to enter the debugger.  However,sys.breakpointhook()can be set to some other function andbreakpoint()will automatically call that, allowing you to drop into
+the debugger of choice.
+Ifsys.breakpointhook()is not accessible, this function will
+raiseRuntimeError.
+
+sys.breakpointhook()
+
+args
+
+kws
+
+sys.breakpointhook()
+
+pdb.set_trace()
+
+pdb
+
+sys.breakpointhook()
+
+breakpoint()
+
+sys.breakpointhook()
+
+RuntimeError
+
+By default, the behavior ofbreakpoint()can be changed with
+thePYTHONBREAKPOINTenvironment variable.
+Seesys.breakpointhook()for usage details.
+
+breakpoint()
+
+PYTHONBREAKPOINT
+
+sys.breakpointhook()
+
+Note that this is not guaranteed ifsys.breakpointhook()has been replaced.
+
+sys.breakpointhook()
+
+Raises anauditing eventbuiltins.breakpointwith argumentbreakpointhook.
+
+builtins.breakpoint
+
+breakpointhook
+
+Added in version 3.7.
+
+Return a new array of bytes.  Thebytearrayclass is a mutable
+sequence of integers in the range 0 <= x < 256.  It has most of the usual
+methods of mutable sequences, described inMutable Sequence Types, as well
+as most methods that thebytestype has, seeBytes and Bytearray Operations.
+
+bytearray
+
+bytes
+
+The optionalsourceparameter can be used to initialize the array in a few
+different ways:
+
+If it is astring, you must also give theencoding(and optionally,errors) parameters;bytearray()then converts the string to
+bytes usingstr.encode().
+
+If it is astring, you must also give theencoding(and optionally,errors) parameters;bytearray()then converts the string to
+bytes usingstr.encode().
+
+bytearray()
+
+str.encode()
+
+If it is aninteger, the array will have that size and will be
+initialized with null bytes.
+
+If it is aninteger, the array will have that size and will be
+initialized with null bytes.
+
+If it is an object conforming to thebuffer interface,
+a read-only buffer of the object will be used to initialize the bytes array.
+
+If it is an object conforming to thebuffer interface,
+a read-only buffer of the object will be used to initialize the bytes array.
+
+If it is aniterable, it must be an iterable of integers in the range0<=x<256, which are used as the initial contents of the array.
+
+If it is aniterable, it must be an iterable of integers in the range0<=x<256, which are used as the initial contents of the array.
+
+0<=x<256
+
+Without an argument, an array of size 0 is created.
+
+See alsoBinary Sequence Types â bytes, bytearray, memoryviewandBytearray Objects.
+
+Return a new âbytesâ object which is an immutable sequence of integers in
+the range0<=x<256.bytesis an immutable version ofbytearrayâ it has the same non-mutating methods and the same
+indexing and slicing behavior.
+
+0<=x<256
+
+bytes
+
+bytearray
+
+Accordingly, constructor arguments are interpreted as forbytearray().
+
+bytearray()
+
+Bytes objects can also be created with literals, seeString and Bytes literals.
+
+See alsoBinary Sequence Types â bytes, bytearray, memoryview,Bytes Objects, andBytes and Bytearray Operations.
+
+ReturnTrueif theobjectargument appears callable,Falseif not.  If this returnsTrue, it is still possible that a
+call fails, but if it isFalse, callingobjectwill never succeed.
+Note that classes are callable (calling a class returns a new instance);
+instances are callable if their class has a__call__()method.
+
+True
+
+False
+
+True
+
+False
+
+__call__()
+
+Added in version 3.2:This function was first removed in Python 3.0 and then brought back
+in Python 3.2.
+
+Return the string representing a character with the specified Unicode code point.
+For example,chr(97)returns the string'a', whilechr(8364)returns the string'â¬'. This is the inverse oford().
+
+chr(97)
+
+'a'
+
+chr(8364)
+
+'â¬'
+
+ord()
+
+The valid range for the argument is from 0 through 1,114,111 (0x10FFFF in
+base 16).ValueErrorwill be raised if it is outside that range.
+
+ValueError
+
+Transform a method into a class method.
+
+A class method receives the class as an implicit first argument, just like an
+instance method receives the instance. To declare a class method, use this
+idiom:
+
+classC:@classmethoddeff(cls,arg1,arg2):...
+
+The@classmethodform is a functiondecoratorâ seeFunction definitionsfor details.
+
+@classmethod
+
+A class method can be called either on the class (such asC.f()) or on an instance (such
+asC().f()).  The instance is ignored except for its class. If a class
+method is called for a derived class, the derived class object is passed as the
+implied first argument.
+
+C.f()
+
+C().f()
+
+Class methods are different than C++ or Java static methods. If you want those,
+seestaticmethod()in this section.
+For more information on class methods, seeThe standard type hierarchy.
+
+staticmethod()
+
+Changed in version 3.9:Class methods can now wrap otherdescriptorssuch asproperty().
+
+property()
+
+Changed in version 3.10:Class methods now inherit the method attributes
+(__module__,__name__,__qualname__,__doc__and__annotations__) and have a new__wrapped__attribute.
+
+__module__
+
+__name__
+
+__qualname__
+
+__doc__
+
+__annotations__
+
+__wrapped__
+
+Deprecated since version 3.11, removed in version 3.13:Class methods can no longer wrap otherdescriptorssuch asproperty().
+
+property()
+
+Compile thesourceinto a code or AST object.  Code objects can be executed
+byexec()oreval().sourcecan either be a normal string, a
+byte string, or an AST object.  Refer to theastmodule documentation
+for information on how to work with AST objects.
+
+exec()
+
+eval()
+
+ast
+
+Thefilenameargument should give the file from which the code was read;
+pass some recognizable value if it wasnât read from a file ('<string>'is
+commonly used).
+
+'<string>'
+
+Themodeargument specifies what kind of code must be compiled; it can be'exec'ifsourceconsists of a sequence of statements,'eval'if it
+consists of a single expression, or'single'if it consists of a single
+interactive statement (in the latter case, expression statements that
+evaluate to something other thanNonewill be printed).
+
+'exec'
+
+'eval'
+
+'single'
+
+None
+
+The optional argumentsflagsanddont_inheritcontrol whichcompiler optionsshould be activated
+and whichfuture featuresshould be allowed. If neither
+is present (or both are zero) the code is compiled with the same flags that
+affect the code that is callingcompile(). If theflagsargument is given anddont_inheritis not (or is zero) then the compiler
+options and the future statements specified by theflagsargument are used
+in addition to those that would be used anyway. Ifdont_inheritis a
+non-zero integer then theflagsargument is it â the flags (future
+features and compiler options) in the surrounding code are ignored.
+
+compile()
+
+Compiler options and future statements are specified by bits which can be
+bitwise ORed together to specify multiple options. The bitfield required to
+specify a given future feature can be found as thecompiler_flagattribute on the_Featureinstance in the__future__module.Compiler flagscan be found inastmodule, withPyCF_prefix.
+
+compiler_flag
+
+_Feature
+
+__future__
+
+ast
+
+PyCF_
+
+The argumentoptimizespecifies the optimization level of the compiler; the
+default value of-1selects the optimization level of the interpreter as
+given by-Ooptions.  Explicit levels are0(no optimization;__debug__is true),1(asserts are removed,__debug__is false)
+or2(docstrings are removed too).
+
+-1
+
+-O
+
+0
+
+__debug__
+
+1
+
+__debug__
+
+2
+
+This function raisesSyntaxErrororValueErrorif the compiled
+source is invalid.
+
+SyntaxError
+
+ValueError
+
+If you want to parse Python code into its AST representation, seeast.parse().
+
+ast.parse()
+
+Raises anauditing eventcompilewith argumentssourceandfilename. This event may also be raised by implicit
+compilation.
+
+compile
+
+source
+
+filename
+
+Note
+
+When compiling a string with multi-line code in'single'or'eval'mode, input must be terminated by at least one newline
+character.  This is to facilitate detection of incomplete and complete
+statements in thecodemodule.
+
+'single'
+
+'eval'
+
+code
+
+Warning
+
+It is possible to crash the Python interpreter with a
+sufficiently large/complex string when compiling to an AST
+object due to stack depth limitations in Pythonâs AST compiler.
+
+Changed in version 3.2:Allowed use of Windows and Mac newlines.  Also, input in'exec'mode
+does not have to end in a newline anymore.  Added theoptimizeparameter.
+
+'exec'
+
+Changed in version 3.5:Previously,TypeErrorwas raised when null bytes were encountered
+insource.
+
+TypeError
+
+Added in version 3.8:ast.PyCF_ALLOW_TOP_LEVEL_AWAITcan now be passed in flags to enable
+support for top-levelawait,asyncfor, andasyncwith.
+
+ast.PyCF_ALLOW_TOP_LEVEL_AWAIT
+
+await
+
+asyncfor
+
+asyncwith
+
+Convert a single string or number to a complex number, or create a
+complex number from real and imaginary parts.
+
+Examples:
+
+>>>complex('+1.23')(1.23+0j)>>>complex('-4.5j')-4.5j>>>complex('-1.23+4.5j')(-1.23+4.5j)>>>complex('\t( -1.23+4.5J )\n')(-1.23+4.5j)>>>complex('-Infinity+NaNj')(-inf+nanj)>>>complex(1.23)(1.23+0j)>>>complex(imag=-4.5)-4.5j>>>complex(-1.23,4.5)(-1.23+4.5j)
+
+If the argument is a string, it must contain either a real part (in the
+same format as forfloat()) or an imaginary part (in the same
+format but with a'j'or'J'suffix), or both real and imaginary
+parts (the sign of the imaginary part is mandatory in this case).
+The string can optionally be surrounded by whitespaces and the round
+parentheses'('and')', which are ignored.
+The string must not contain whitespace between'+','-', the'j'or'J'suffix, and the decimal number.
+For example,complex('1+2j')is fine, butcomplex('1+2j')raisesValueError.
+More precisely, the input must conform to thecomplexvalueproduction rule in the following grammar, after parentheses and leading and
+trailing whitespace characters are removed:
+
+float()
+
+'j'
+
+'J'
+
+'('
+
+')'
+
+'+'
+
+'-'
+
+'j'
+
+'J'
+
+complex('1+2j')
+
+complex('1+2j')
+
+ValueError
+
+complexvalue
+
+complexvalue:floatvalue|floatvalue("j"|"J") |floatvaluesignabsfloatvalue("j"|"J")
+
+floatvalue
+
+floatvalue
+
+floatvalue
+
+sign
+
+absfloatvalue
+
+If the argument is a number, the constructor serves as a numeric
+conversion likeintandfloat.
+For a general Python objectx,complex(x)delegates tox.__complex__().
+If__complex__()is not defined then it falls back
+to__float__().
+If__float__()is not defined then it falls back
+to__index__().
+
+int
+
+float
+
+x
+
+complex(x)
+
+x.__complex__()
+
+__complex__()
+
+__float__()
+
+__float__()
+
+__index__()
+
+If two arguments are provided or keyword arguments are used, each argument
+may be any numeric type (including complex).
+If both arguments are real numbers, return a complex number with the real
+componentrealand the imaginary componentimag.
+If both arguments are complex numbers, return a complex number with the real
+componentreal.real-imag.imagand the imaginary componentreal.imag+imag.real.
+If one of arguments is a real number, only its real component is used in
+the above expressions.
+
+real.real-imag.imag
+
+real.imag+imag.real
+
+See alsocomplex.from_number()which only accepts a single numeric argument.
+
+complex.from_number()
+
+If all arguments are omitted, returns0j.
+
+0j
+
+The complex type is described inNumeric Types â int, float, complex.
+
+Changed in version 3.6:Grouping digits with underscores as in code literals is allowed.
+
+Changed in version 3.8:Falls back to__index__()if__complex__()and__float__()are not defined.
+
+__index__()
+
+__complex__()
+
+__float__()
+
+Deprecated since version 3.14:Passing a complex number as therealorimagargument is now
+deprecated; it should only be passed as a single positional argument.
+
+This is a relative ofsetattr().  The arguments are an object and a
+string.  The string must be the name of one of the objectâs attributes.  The
+function deletes the named attribute, provided the object allows it.  For
+example,delattr(x,'foobar')is equivalent todelx.foobar.nameneed not be a Python identifier (seesetattr()).
+
+setattr()
+
+delattr(x,'foobar')
+
+delx.foobar
+
+setattr()
+
+Create a new dictionary.  Thedictobject is the dictionary class.
+See alsoMapping Types â dictfor documentation about this class.
+
+dict
+
+For other containers see the built-inlist,set, andtupleclasses, as well as thecollectionsmodule.
+
+list
+
+set
+
+tuple
+
+collections
+
+Without arguments, return the list of names in the current local scope.  With an
+argument, attempt to return a list of valid attributes for that object.
+
+If the object has a method named__dir__(),
+this method will be called and
+must return the list of attributes. This allows objects that implement a custom__getattr__()or__getattribute__()function
+to customize the waydir()reports their attributes.
+
+__dir__()
+
+__getattr__()
+
+__getattribute__()
+
+dir()
+
+If the object does not provide__dir__(),
+the function tries its best to gather information from the objectâs__dict__attribute, if defined, and
+from its type object.  The resulting list is not necessarily complete and may
+be inaccurate when the object has a custom__getattr__().
+
+__dir__()
+
+__dict__
+
+__getattr__()
+
+The defaultdir()mechanism behaves differently with different types of
+objects, as it attempts to produce the most relevant, rather than complete,
+information:
+
+dir()
+
+If the object is a module object, the list contains the names of the moduleâs
+attributes.
+
+If the object is a module object, the list contains the names of the moduleâs
+attributes.
+
+If the object is a type or class object, the list contains the names of its
+attributes, and recursively of the attributes of its bases.
+
+If the object is a type or class object, the list contains the names of its
+attributes, and recursively of the attributes of its bases.
+
+Otherwise, the list contains the objectâs attributesâ names, the names of its
+classâs attributes, and recursively of the attributes of its classâs base
+classes.
+
+Otherwise, the list contains the objectâs attributesâ names, the names of its
+classâs attributes, and recursively of the attributes of its classâs base
+classes.
+
+The resulting list is sorted alphabetically.  For example:
+
+>>>importstruct>>>dir()# show the names in the module namespace['__builtins__', '__name__', 'struct']>>>dir(struct)# show the names in the struct module['Struct', '__all__', '__builtins__', '__cached__', '__doc__', '__file__','__initializing__', '__loader__', '__name__', '__package__','_clearcache', 'calcsize', 'error', 'pack', 'pack_into','unpack', 'unpack_from']>>>classShape:...def__dir__(self):...return['area','perimeter','location']...>>>s=Shape()>>>dir(s)['area', 'location', 'perimeter']
+
+Note
+
+Becausedir()is supplied primarily as a convenience for use at an
+interactive prompt, it tries to supply an interesting set of names more
+than it tries to supply a rigorously or consistently defined set of names,
+and its detailed behavior may change across releases.  For example,
+metaclass attributes are not in the result list when the argument is a
+class.
+
+dir()
+
+Take two (non-complex) numbers as arguments and return a pair of numbers
+consisting of their quotient and remainder when using integer division.  With
+mixed operand types, the rules for binary arithmetic operators apply.  For
+integers, the result is the same as(a//b,a%b). For floating-point
+numbers the result is(q,a%b), whereqis usuallymath.floor(a/b)but may be 1 less than that.  In any caseq*b+a%bis very
+close toa, ifa%bis non-zero it has the same sign asb, and0<=abs(a%b)<abs(b).
+
+(a//b,a%b)
+
+(q,a%b)
+
+math.floor(a/b)
+
+q*b+a%b
+
+a%b
+
+0<=abs(a%b)<abs(b)
+
+Return an enumerate object.iterablemust be a sequence, aniterator, or some other object which supports iteration.
+The__next__()method of the iterator returned byenumerate()returns a tuple containing a count (fromstartwhich
+defaults to 0) and the values obtained from iterating overiterable.
+
+__next__()
+
+enumerate()
+
+>>>seasons=['Spring','Summer','Fall','Winter']>>>list(enumerate(seasons))[(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]>>>list(enumerate(seasons,start=1))[(1, 'Spring'), (2, 'Summer'), (3, 'Fall'), (4, 'Winter')]
+
+Equivalent to:
+
+defenumerate(iterable,start=0):n=startforeleminiterable:yieldn,elemn+=1
+
+source(str|code object) â A Python expression.
+
+source(str|code object) â A Python expression.
+
+str
+
+globals(dict|None) â The global namespace (default:None).
+
+globals(dict|None) â The global namespace (default:None).
+
+dict
+
+None
+
+None
+
+locals(mapping|None) â The local namespace (default:None).
+
+locals(mapping|None) â The local namespace (default:None).
+
+None
+
+None
+
+The result of the evaluated expression.
+
+Syntax errors are reported as exceptions.
+
+Warning
+
+This function executes arbitrary code. Calling it with
+untrusted user-supplied input will lead to security vulnerabilities.
+
+Thesourceargument is parsed and evaluated as a Python expression
+(technically speaking, a condition list) using theglobalsandlocalsmappings as global and local namespace.  If theglobalsdictionary is
+present and does not contain a value for the key__builtins__, a
+reference to the dictionary of the built-in modulebuiltinsis
+inserted under that key beforesourceis parsed.
+Overriding__builtins__can be used to restrict or change the available
+names, but this isnota security mechanism: the executed code can
+still access all builtins.
+If thelocalsmapping is omitted it defaults to theglobalsdictionary.  If both mappings are omitted, the source is
+executed with theglobalsandlocalsin the environment whereeval()is called.  Note,eval()will only have access to thenested scopes(non-locals) in the enclosing
+environment if they are already referenced in the scope that is callingeval()(e.g. via anonlocalstatement).
+
+__builtins__
+
+builtins
+
+__builtins__
+
+eval()
+
+eval()
+
+nonlocal
+
+Example:
+
+>>>x=1>>>eval('x+1')2
+
+This function can also be used to execute arbitrary code objects (such as
+those created bycompile()).  In this case, pass a code object instead
+of a string.  If the code object has been compiled with'exec'as themodeargument,eval()'s return value will beNone.
+
+compile()
+
+'exec'
+
+eval()
+
+None
+
+Hints: dynamic execution of statements is supported by theexec()function.  Theglobals()andlocals()functions
+return the current global and local dictionary, respectively, which may be
+useful to pass around for use byeval()orexec().
+
+exec()
+
+globals()
+
+locals()
+
+eval()
+
+exec()
+
+If the given source is a string, then leading and trailing spaces and tabs
+are stripped.
+
+Seeast.literal_eval()for a function to evaluate strings
+with expressions containing only literals.
+
+ast.literal_eval()
+
+Raises anauditing eventexecwith the code object
+as the argument. Code compilation events may also be raised.
+
+exec
+
+Changed in version 3.13:Theglobalsandlocalsarguments can now be passed as keywords.
+
+Changed in version 3.13:The semantics of the defaultlocalsnamespace have been adjusted as
+described for thelocals()builtin.
+
+locals()
+
+Warning
+
+This function executes arbitrary code. Calling it with
+untrusted user-supplied input will lead to security vulnerabilities.
+
+This function supports dynamic execution of Python code.sourcemust be
+either a string or a code object.  If it is a string, the string is parsed as
+a suite of Python statements which is then executed (unless a syntax error
+occurs).[1]If it is a code object, it is simply executed.  In all cases,
+the code thatâs executed is expected to be valid as file input (see the
+sectionFile inputin the Reference Manual). Be aware that thenonlocal,yield,  andreturnstatements may not be used outside of
+function definitions even within the context of code passed to theexec()function. The return value isNone.
+
+nonlocal
+
+yield
+
+return
+
+exec()
+
+None
+
+In all cases, if the optional parts are omitted, the code is executed in the
+current scope.  If onlyglobalsis provided, it must be a dictionary
+(and not a subclass of dictionary), which
+will be used for both the global and the local variables.  Ifglobalsandlocalsare given, they are used for the global and local variables,
+respectively.  If provided,localscan be any mapping object.  Remember
+that at the module level, globals and locals are the same dictionary.
+
+Note
+
+Whenexecgets two separate objects asglobalsandlocals, the
+code will be executed as if it were embedded in a class definition. This
+means functions and classes defined in the executed code will not be able
+to access variables assigned at the top level (as the âtop levelâ
+variables are treated as class variables in a class definition).
+
+exec
+
+If theglobalsdictionary does not contain a value for the key__builtins__, a reference to the dictionary of the built-in modulebuiltinsis inserted under that key.
+Overriding__builtins__can be used to restrict or change the available
+names, but this isnota security mechanism: the executed code can
+still access all builtins.
+
+__builtins__
+
+builtins
+
+__builtins__
+
+Theclosureargument specifies a closureâa tuple of cellvars.
+Itâs only valid when theobjectis a code object containingfree (closure) variables.
+The length of the tuple must exactly match the length of the code objectâsco_freevarsattribute.
+
+co_freevars
+
+Raises anauditing eventexecwith the code object
+as the argument. Code compilation events may also be raised.
+
+exec
+
+Note
+
+The built-in functionsglobals()andlocals()return the current
+global and local namespace, respectively, which may be useful to pass around
+for use as the second and third argument toexec().
+
+globals()
+
+locals()
+
+exec()
+
+Note
+
+The defaultlocalsact as described for functionlocals()below.
+Pass an explicitlocalsdictionary if you need to see effects of the
+code onlocalsafter functionexec()returns.
+
+locals()
+
+exec()
+
+Changed in version 3.11:Added theclosureparameter.
+
+Changed in version 3.13:Theglobalsandlocalsarguments can now be passed as keywords.
+
+Changed in version 3.13:The semantics of the defaultlocalsnamespace have been adjusted as
+described for thelocals()builtin.
+
+locals()
+
+Construct an iterator from those elements ofiterablefor whichfunctionis true.iterablemay be either a sequence, a container which
+supports iteration, or an iterator.  IffunctionisNone, the identity
+function is assumed, that is, all elements ofiterablethat are false are
+removed.
+
+None
+
+Note thatfilter(function,iterable)is equivalent to the generator
+expression(itemforiteminiterableiffunction(item))if function is
+notNoneand(itemforiteminiterableifitem)if function isNone.
+
+filter(function,iterable)
+
+(itemforiteminiterableiffunction(item))
+
+None
+
+(itemforiteminiterableifitem)
+
+None
+
+Seeitertools.filterfalse()for the complementary function that returns
+elements ofiterablefor whichfunctionis false.
+
+itertools.filterfalse()
+
+Return a floating-point number constructed from a number or a string.
+
+Examples:
+
+>>>float('+1.23')1.23>>>float('   -12345\n')-12345.0>>>float('1e-003')0.001>>>float('+1E6')1000000.0>>>float('-Infinity')-inf
+
+If the argument is a string, it should contain a decimal number, optionally
+preceded by a sign, and optionally embedded in whitespace.  The optional
+sign may be'+'or'-'; a'+'sign has no effect on the value
+produced.  The argument may also be a string representing a NaN
+(not-a-number), or positive or negative infinity.
+More precisely, the input must conform to thefloatvalueproduction rule in the following grammar, after leading and trailing
+whitespace characters are removed:
+
+'+'
+
+'-'
+
+'+'
+
+floatvalue
+
+sign:"+"|"-"infinity:"Infinity"|"inf"nan:"nan"digit:         <a Unicode decimal digit, i.e. characters in Unicode general category Nd>digitpart:digit(["_"]digit)*number:        [digitpart]"."digitpart|digitpart["."]exponent:      ("e"|"E") [sign]digitpartfloatnumber:number[exponent]absfloatvalue:floatnumber|infinity|nanfloatvalue:    [sign]absfloatvalue
+
+digit
+
+digit
+
+digitpart
+
+digitpart
+
+digitpart
+
+sign
+
+digitpart
+
+number
+
+exponent
+
+floatnumber
+
+infinity
+
+nan
+
+sign
+
+absfloatvalue
+
+Case is not significant, so, for example, âinfâ, âInfâ, âINFINITYâ, and
+âiNfINityâ are all acceptable spellings for positive infinity.
+
+Otherwise, if the argument is an integer or a floating-point number, a
+floating-point number with the same value (within Pythonâs floating-point
+precision) is returned.  If the argument is outside the range of a Python
+float, anOverflowErrorwill be raised.
+
+OverflowError
+
+For a general Python objectx,float(x)delegates tox.__float__().  If__float__()is not defined then it falls back
+to__index__().
+
+x
+
+float(x)
+
+x.__float__()
+
+__float__()
+
+__index__()
+
+See alsofloat.from_number()which only accepts a numeric argument.
+
+float.from_number()
+
+If no argument is given,0.0is returned.
+
+0.0
+
+The float type is described inNumeric Types â int, float, complex.
+
+Changed in version 3.6:Grouping digits with underscores as in code literals is allowed.
+
+Changed in version 3.7:The parameter is now positional-only.
+
+Changed in version 3.8:Falls back to__index__()if__float__()is not defined.
+
+__index__()
+
+__float__()
+
+Convert avalueto a âformattedâ representation, as controlled byformat_spec.  The interpretation offormat_specwill depend on the type
+of thevalueargument; however, there is a standard formatting syntax that
+is used by most built-in types:Format specification mini-language.
+
+The defaultformat_specis an empty string which usually gives the same
+effect as callingstr(value).
+
+str(value)
+
+A call toformat(value,format_spec)is translated totype(value).__format__(value,format_spec)which bypasses the instance
+dictionary when searching for the valueâs__format__()method.
+ATypeErrorexception is raised if the method search reachesobjectand theformat_specis non-empty, or if either theformat_specor the return value are not strings.
+
+format(value,format_spec)
+
+type(value).__format__(value,format_spec)
+
+__format__()
+
+TypeError
+
+object
+
+Changed in version 3.4:object().__format__(format_spec)raisesTypeErrorifformat_specis not an empty string.
+
+object().__format__(format_spec)
+
+TypeError
+
+Return a newfrozensetobject, optionally with elements taken fromiterable.frozensetis a built-in class.  See alsoSet Types â set, frozensetfor documentation about this class.
+
+frozenset
+
+frozenset
+
+For other containers see the built-inset,list,tuple, anddictclasses, as well as thecollectionsmodule.
+
+set
+
+list
+
+tuple
+
+dict
+
+collections
+
+Return the value of the named attribute ofobject.namemust be a string.
+If the string is the name of one of the objectâs attributes, the result is the
+value of that attribute.  For example,getattr(x,'foobar')is equivalent tox.foobar.  If the named attribute does not exist,defaultis returned if
+provided, otherwiseAttributeErroris raised.nameneed not be a Python identifier (seesetattr()).
+
+getattr(x,'foobar')
+
+x.foobar
+
+AttributeError
+
+setattr()
+
+Note
+
+Sinceprivate name manglinghappens at
+compilation time, one must manually mangle a private attributeâs
+(attributes with two leading underscores) name in order to retrieve it withgetattr().
+
+getattr()
+
+Return the dictionary implementing the current module namespace. For code within
+functions, this is set when the function is defined and remains the same
+regardless of where the function is called.
+
+The arguments are an object and a string.  The result isTrueif the
+string is the name of one of the objectâs attributes,Falseif not. (This
+is implemented by callinggetattr(object,name)and seeing whether it
+raises anAttributeErroror not.)
+
+True
+
+False
+
+getattr(object,name)
+
+AttributeError
+
+Return the hash value of the object (if it has one).  Hash values are
+integers.  They are used to quickly compare dictionary keys during a
+dictionary lookup.  Numeric values that compare equal have the same hash
+value (even if they are of different types, as is the case for 1 and 1.0).
+
+Note
+
+For objects with custom__hash__()methods,
+note thathash()truncates the return value based on the bit width of the host machine.
+
+__hash__()
+
+hash()
+
+Invoke the built-in help system.  (This function is intended for interactive
+use.)  If no argument is given, the interactive help system starts on the
+interpreter console.  If the argument is a string, then the string is looked up
+as the name of a module, function, class, method, keyword, or documentation
+topic, and a help page is printed on the console.  If the argument is any other
+kind of object, a help page on the object is generated.
+
+Note that if a slash(/) appears in the parameter list of a function when
+invokinghelp(), it means that the parameters prior to the slash are
+positional-only. For more info, seethe FAQ entry on positional-only parameters.
+
+help()
+
+This function is added to the built-in namespace by thesitemodule.
+
+site
+
+Changed in version 3.4:Changes topydocandinspectmean that the reported
+signatures for callables are now more comprehensive and consistent.
+
+pydoc
+
+inspect
+
+Convert an integer number to a lowercase hexadecimal string prefixed with
+â0xâ. Ifintegeris not a Pythonintobject, it has to define an__index__()method that returns an integer. Some examples:
+
+int
+
+__index__()
+
+>>>hex(255)'0xff'>>>hex(-42)'-0x2a'
+
+If you want to convert an integer number to an uppercase or lower hexadecimal
+string with prefix or not, you can use either of the following ways:
+
+>>>'%#x'%255,'%x'%255,'%X'%255('0xff', 'ff', 'FF')>>>format(255,'#x'),format(255,'x'),format(255,'X')('0xff', 'ff', 'FF')>>>f'{255:#x}',f'{255:x}',f'{255:X}'('0xff', 'ff', 'FF')
+
+See alsoformat()for more information.
+
+format()
+
+See alsoint()for converting a hexadecimal string to an
+integer using a base of 16.
+
+int()
+
+Note
+
+To obtain a hexadecimal string representation for a float, use thefloat.hex()method.
+
+float.hex()
+
+Return the âidentityâ of an object.  This is an integer which
+is guaranteed to be unique and constant for this object during its lifetime.
+Two objects with non-overlapping lifetimes may have the sameid()value.
+
+id()
+
+CPython implementation detail:This is the address of the object in memory.
+
+Raises anauditing eventbuiltins.idwith argumentid.
+
+builtins.id
+
+id
+
+If thepromptargument is present, it is written to standard output without
+a trailing newline.  The function then reads a line from input, converts it
+to a string (stripping a trailing newline), and returns that.  When EOF is
+read,EOFErroris raised.  Example:
+
+EOFError
+
+>>>s=input('--> ')--> Monty Python's Flying Circus>>>s"Monty Python's Flying Circus"
+
+If thereadlinemodule was loaded, theninput()will use it
+to provide elaborate line editing and history features.
+
+readline
+
+input()
+
+Raises anauditing eventbuiltins.inputwith
+argumentpromptbefore reading input
+
+builtins.input
+
+prompt
+
+Raises anauditing eventbuiltins.input/resultwith the result after successfully reading input.
+
+builtins.input/result
+
+Return an integer object constructed from a number or a string, or return0if no arguments are given.
+
+0
+
+Examples:
+
+>>>int(123.45)123>>>int('123')123>>>int('   -12_345\n')-12345>>>int('FACE',16)64206>>>int('0xface',0)64206>>>int('01110011',base=2)115
+
+If the argument defines__int__(),int(x)returnsx.__int__().  If the argument defines__index__(), it returnsx.__index__().
+For floating-point numbers, this truncates towards zero.
+
+__int__()
+
+int(x)
+
+x.__int__()
+
+__index__()
+
+x.__index__()
+
+If the argument is not a number or ifbaseis given, then it must be a string,bytes, orbytearrayinstance representing an integer
+in radixbase.  Optionally, the string can be preceded by+or-(with no space in between), have leading zeros, be surrounded by whitespace,
+and have single underscores interspersed between digits.
+
+bytes
+
+bytearray
+
++
+
+-
+
+A base-n integer string contains digits, each representing a value from 0 to
+n-1. The values 0â9 can be represented by any Unicode decimal digit. The
+values 10â35 can be represented byatoz(orAtoZ). The
+defaultbaseis 10. The allowed bases are 0 and 2â36. Base-2, -8, and -16
+strings can be optionally prefixed with0b/0B,0o/0O, or0x/0X, as with integer literals in code.  For base 0, the string is
+interpreted in a similar way to aninteger literal in code,
+in that the actual base is 2, 8, 10, or 16 as determined by the prefix. Base
+0 also disallows leading zeros:int('010',0)is not legal, whileint('010')andint('010',8)are.
+
+a
+
+z
+
+A
+
+Z
+
+0b
+
+0B
+
+0o
+
+0O
+
+0x
+
+0X
+
+int('010',0)
+
+int('010')
+
+int('010',8)
+
+The integer type is described inNumeric Types â int, float, complex.
+
+Changed in version 3.4:Ifbaseis not an instance ofintand thebaseobject has abase.__index__method, that method is called
+to obtain an integer for the base.  Previous versions usedbase.__int__instead ofbase.__index__.
+
+int
+
+base.__index__
+
+base.__int__
+
+base.__index__
+
+Changed in version 3.6:Grouping digits with underscores as in code literals is allowed.
+
+Changed in version 3.7:The first parameter is now positional-only.
+
+Changed in version 3.8:Falls back to__index__()if__int__()is not defined.
+
+__index__()
+
+__int__()
+
+Changed in version 3.11:intstring inputs and string representations can be limited to
+help avoid denial of service attacks. AValueErroris raised when
+the limit is exceeded while converting a string to anintor
+when converting anintinto a string would exceed the limit.
+See theinteger string conversion length limitationdocumentation.
+
+int
+
+ValueError
+
+int
+
+int
+
+Changed in version 3.14:int()no longer delegates to the__trunc__()method.
+
+int()
+
+__trunc__()
+
+ReturnTrueif theobjectargument is an instance of theclassinfoargument, or of a (direct, indirect, orvirtual) subclass thereof.  Ifobjectis not
+an object of the given type, the function always returnsFalse.
+Ifclassinfois a tuple of type objects (or recursively, other such
+tuples) or aUnion Typeof multiple types, returnTrueifobjectis an instance of any of the types.
+Ifclassinfois not a type or tuple of types and such tuples,
+aTypeErrorexception is raised.TypeErrormay not be
+raised for an invalid type if an earlier check succeeds.
+
+True
+
+False
+
+True
+
+TypeError
+
+TypeError
+
+Changed in version 3.10:classinfocan be aUnion Type.
+
+ReturnTrueifclassis a subclass (direct, indirect, orvirtual) ofclassinfo.  A
+class is considered a subclass of itself.classinfomay be a tuple of class
+objects (or recursively, other such tuples)
+or aUnion Type, in which case returnTrueifclassis a
+subclass of any entry inclassinfo.  In any other case, aTypeErrorexception is raised.
+
+True
+
+True
+
+TypeError
+
+Changed in version 3.10:classinfocan be aUnion Type.
+
+Return aniteratorobject.  The first argument is interpreted very
+differently depending on the presence of the second argument. Without a
+second argument, the single argument must be a collection object which supports theiterableprotocol (the__iter__()method),
+or it must support
+the sequence protocol (the__getitem__()method with integer arguments
+starting at0).  If it does not support either of those protocols,TypeErroris raised. If the second argument,sentinel, is given,
+then the first argument must be a callable object.  The iterator created in this case
+will callcallablewith no arguments for each call to its__next__()method; if the value returned is equal tosentinel,StopIterationwill be raised, otherwise the value will
+be returned.
+
+__iter__()
+
+__getitem__()
+
+0
+
+TypeError
+
+__next__()
+
+StopIteration
+
+See alsoIterator Types.
+
+One useful application of the second form ofiter()is to build a
+block-reader. For example, reading fixed-width blocks from a binary
+database file until the end of file is reached:
+
+iter()
+
+fromfunctoolsimportpartialwithopen('mydata.db','rb')asf:forblockiniter(partial(f.read,64),b''):process_block(block)
+
+Return the length (the number of items) of an object.  The argument may be a
+sequence (such as a string, bytes, tuple, list, or range) or a collection
+(such as a dictionary, set, or frozen set).
+
+CPython implementation detail:lenraisesOverflowErroron lengths larger thansys.maxsize, such asrange(2**100).
+
+len
+
+OverflowError
+
+sys.maxsize
+
+range(2**100)
+
+Rather than being a function,listis actually a mutable
+sequence type, as documented inListsandSequence Types â list, tuple, range.
+
+list
+
+Return a mapping object representing the current local symbol table, with
+variable names as the keys, and their currently bound references as the
+values.
+
+At module scope, as well as when usingexec()oreval()with
+a single namespace, this function returns the same namespace asglobals().
+
+exec()
+
+eval()
+
+globals()
+
+At class scope, it returns the namespace that will be passed to the
+metaclass constructor.
+
+When usingexec()oreval()with separate local and global
+arguments, it returns the local namespace passed in to the function call.
+
+exec()
+
+eval()
+
+In all of the above cases, each call tolocals()in a given frame of
+execution will return thesamemapping object. Changes made through
+the mapping object returned fromlocals()will be visible as assigned,
+reassigned, or deleted local variables, and assigning, reassigning, or
+deleting local variables will immediately affect the contents of the
+returned mapping object.
+
+locals()
+
+locals()
+
+In anoptimized scope(including functions, generators, and
+coroutines), each call tolocals()instead returns a fresh dictionary
+containing the current bindings of the functionâs local variables and any
+nonlocal cell references. In this case, name binding changes made via the
+returned dict arenotwritten back to the corresponding local variables
+or nonlocal cell references, and assigning, reassigning, or deleting local
+variables and nonlocal cell references doesnotaffect the contents
+of previously returned dictionaries.
+
+locals()
+
+Callinglocals()as part of a comprehension in a function, generator, or
+coroutine is equivalent to calling it in the containing scope, except that
+the comprehensionâs initialised iteration variables will be included. In
+other scopes, it behaves as if the comprehension were running as a nested
+function.
+
+locals()
+
+Callinglocals()as part of a generator expression is equivalent to
+calling it in a nested generator function.
+
+locals()
+
+Changed in version 3.12:The behaviour oflocals()in a comprehension has been updated as
+described inPEP 709.
+
+locals()
+
+Changed in version 3.13:As part ofPEP 667, the semantics of mutating the mapping objects
+returned from this function are now defined. The behavior inoptimized scopesis now as described above.
+Aside from being defined, the behaviour in other scopes remains
+unchanged from previous versions.
+
+Return an iterator that appliesfunctionto every item ofiterable,
+yielding the results.  If additionaliterablesarguments are passed,functionmust take that many arguments and is applied to the items from all
+iterables in parallel.  With multiple iterables, the iterator stops when the
+shortest iterable is exhausted.  IfstrictisTrueand one of the
+iterables is exhausted before the others, aValueErroris raised. For
+cases where the function inputs are already arranged into argument tuples,
+seeitertools.starmap().
+
+True
+
+ValueError
+
+itertools.starmap()
+
+Changed in version 3.14:Added thestrictparameter.
+
+Return the largest item in an iterable or the largest of two or more
+arguments.
+
+If one positional argument is provided, it should be aniterable.
+The largest item in the iterable is returned.  If two or more positional
+arguments are provided, the largest of the positional arguments is
+returned.
+
+There are two optional keyword-only arguments. Thekeyargument specifies
+a one-argument ordering function like that used forlist.sort(). Thedefaultargument specifies an object to return if the provided iterable is
+empty. If the iterable is empty anddefaultis not provided, aValueErroris raised.
+
+list.sort()
+
+ValueError
+
+If multiple items are maximal, the function returns the first one
+encountered.  This is consistent with other sort-stability preserving tools
+such assorted(iterable,key=keyfunc,reverse=True)[0]andheapq.nlargest(1,iterable,key=keyfunc).
+
+sorted(iterable,key=keyfunc,reverse=True)[0]
+
+heapq.nlargest(1,iterable,key=keyfunc)
+
+Changed in version 3.4:Added thedefaultkeyword-only parameter.
+
+Changed in version 3.8:Thekeycan beNone.
+
+None
+
+Return a âmemory viewâ object created from the given argument.  SeeMemory Viewsfor more information.
+
+Return the smallest item in an iterable or the smallest of two or more
+arguments.
+
+If one positional argument is provided, it should be aniterable.
+The smallest item in the iterable is returned.  If two or more positional
+arguments are provided, the smallest of the positional arguments is
+returned.
+
+There are two optional keyword-only arguments. Thekeyargument specifies
+a one-argument ordering function like that used forlist.sort(). Thedefaultargument specifies an object to return if the provided iterable is
+empty. If the iterable is empty anddefaultis not provided, aValueErroris raised.
+
+list.sort()
+
+ValueError
+
+If multiple items are minimal, the function returns the first one
+encountered.  This is consistent with other sort-stability preserving tools
+such assorted(iterable,key=keyfunc)[0]andheapq.nsmallest(1,iterable,key=keyfunc).
+
+sorted(iterable,key=keyfunc)[0]
+
+heapq.nsmallest(1,iterable,key=keyfunc)
+
+Changed in version 3.4:Added thedefaultkeyword-only parameter.
+
+Changed in version 3.8:Thekeycan beNone.
+
+None
+
+Retrieve the next item from theiteratorby calling its__next__()method.  Ifdefaultis given, it is returned
+if the iterator is exhausted, otherwiseStopIterationis raised.
+
+__next__()
+
+StopIteration
+
+This is the ultimate base class of all other classes. It has methods
+that are common to all instances of Python classes. When the constructor
+is called, it returns a new featureless object. The constructor does not
+accept any arguments.
+
+Note
+
+objectinstances donothave__dict__attributes, so you canât assign arbitrary attributes to an instance ofobject.
+
+object
+
+__dict__
+
+object
+
+Convert an integer number to an octal string prefixed with â0oâ.  The result
+is a valid Python expression. Ifintegeris not a Pythonintobject, it
+has to define an__index__()method that returns an integer. For
+example:
+
+int
+
+__index__()
+
+>>>oct(8)'0o10'>>>oct(-56)'-0o70'
+
+If you want to convert an integer number to an octal string either with the prefix
+â0oâ or not, you can use either of the following ways.
+
+>>>'%#o'%10,'%o'%10('0o12', '12')>>>format(10,'#o'),format(10,'o')('0o12', '12')>>>f'{10:#o}',f'{10:o}'('0o12', '12')
+
+See alsoformat()for more information.
+
+format()
+
+Openfileand return a correspondingfile object.  If the file
+cannot be opened, anOSErroris raised. SeeReading and Writing Filesfor more examples of how to use this function.
+
+OSError
+
+fileis apath-like objectgiving the pathname (absolute or
+relative to the current working directory) of the file to be opened or an
+integer file descriptor of the file to be wrapped.  (If a file descriptor is
+given, it is closed when the returned I/O object is closed unlessclosefdis set toFalse.)
+
+False
+
+modeis an optional string that specifies the mode in which the file is
+opened.  It defaults to'r'which means open for reading in text mode.
+Other common values are'w'for writing (truncating the file if it
+already exists),'x'for exclusive creation, and'a'for appending
+(which onsomeUnix systems, means thatallwrites append to the end of
+the file regardless of the current seek position).  In text mode, ifencodingis not specified the encoding used is platform-dependent:locale.getencoding()is called to get the current locale encoding.
+(For reading and writing raw bytes use binary mode and leaveencodingunspecified.)  The available modes are:
+
+'r'
+
+'w'
+
+'x'
+
+'a'
+
+locale.getencoding()
+
+Character
+
+Meaning
+
+'r'
+
+'r'
+
+open for reading (default)
+
+'w'
+
+'w'
+
+open for writing, truncating the file first
+
+'x'
+
+'x'
+
+open for exclusive creation, failing if the file already exists
+
+'a'
+
+'a'
+
+open for writing, appending to the end of file if it exists
+
+'b'
+
+'b'
+
+binary mode
+
+'t'
+
+'t'
+
+text mode (default)
+
+'+'
+
+'+'
+
+open for updating (reading and writing)
+
+The default mode is'r'(open for reading text, a synonym of'rt').
+Modes'w+'and'w+b'open and truncate the file.  Modes'r+'and'r+b'open the file with no truncation.
+
+'r'
+
+'rt'
+
+'w+'
+
+'w+b'
+
+'r+'
+
+'r+b'
+
+As mentioned in theOverview, Python distinguishes between binary
+and text I/O.  Files opened in binary mode (including'b'in themodeargument) return contents asbytesobjects without any decoding.  In
+text mode (the default, or when't'is included in themodeargument),
+the contents of the file are returned asstr, the bytes having been
+first decoded using a platform-dependent encoding or using the specifiedencodingif given.
+
+'b'
+
+bytes
+
+'t'
+
+str
+
+Note
+
+Python doesnât depend on the underlying operating systemâs notion of text
+files; all the processing is done by Python itself, and is therefore
+platform-independent.
+
+bufferingis an optional integer used to set the buffering policy.  Pass 0
+to switch buffering off (only allowed in binary mode), 1 to select line
+buffering (only usable when writing in text mode), and an integer > 1 to indicate the size
+in bytes of a fixed-size chunk buffer. Note that specifying a buffer size this
+way applies for binary buffered I/O, butTextIOWrapper(i.e., files opened
+withmode='r+') would have another buffering. To disable buffering inTextIOWrapper, consider using thewrite_throughflag forio.TextIOWrapper.reconfigure(). When nobufferingargument is
+given, the default buffering policy works as follows:
+
+TextIOWrapper
+
+mode='r+'
+
+TextIOWrapper
+
+write_through
+
+io.TextIOWrapper.reconfigure()
+
+Binary files are buffered in fixed-size chunks; the size of the buffer
+ismax(min(blocksize,8MiB),DEFAULT_BUFFER_SIZE)when the device block size is available.
+On most systems, the buffer will typically be 128 kilobytes long.
+
+Binary files are buffered in fixed-size chunks; the size of the buffer
+ismax(min(blocksize,8MiB),DEFAULT_BUFFER_SIZE)when the device block size is available.
+On most systems, the buffer will typically be 128 kilobytes long.
+
+max(min(blocksize,8MiB),DEFAULT_BUFFER_SIZE)
+
+âInteractiveâ text files (files for whichisatty()returnsTrue) use line buffering.  Other text files use the policy
+described above for binary files.
+
+âInteractiveâ text files (files for whichisatty()returnsTrue) use line buffering.  Other text files use the policy
+described above for binary files.
+
+isatty()
+
+True
+
+encodingis the name of the encoding used to decode or encode the file.
+This should only be used in text mode.  The default encoding is platform
+dependent (whateverlocale.getencoding()returns), but anytext encodingsupported by Python can be used.
+See thecodecsmodule for the list of supported encodings.
+
+locale.getencoding()
+
+codecs
+
+errorsis an optional string that specifies how encoding and decoding
+errors are to be handledâthis cannot be used in binary mode.
+A variety of standard error handlers are available
+(listed underError Handlers), though any
+error handling name that has been registered withcodecs.register_error()is also valid.  The standard names
+include:
+
+codecs.register_error()
+
+'strict'to raise aValueErrorexception if there is
+an encoding error.  The default value ofNonehas the same
+effect.
+
+'strict'to raise aValueErrorexception if there is
+an encoding error.  The default value ofNonehas the same
+effect.
+
+'strict'
+
+ValueError
+
+None
+
+'ignore'ignores errors.  Note that ignoring encoding errors
+can lead to data loss.
+
+'ignore'ignores errors.  Note that ignoring encoding errors
+can lead to data loss.
+
+'ignore'
+
+'replace'causes a replacement marker (such as'?') to be inserted
+where there is malformed data.
+
+'replace'causes a replacement marker (such as'?') to be inserted
+where there is malformed data.
+
+'replace'
+
+'?'
+
+'surrogateescape'will represent any incorrect bytes as low
+surrogate code units ranging from U+DC80 to U+DCFF.
+These surrogate code units will then be turned back into
+the same bytes when thesurrogateescapeerror handler is used
+when writing data.  This is useful for processing files in an
+unknown encoding.
+
+'surrogateescape'will represent any incorrect bytes as low
+surrogate code units ranging from U+DC80 to U+DCFF.
+These surrogate code units will then be turned back into
+the same bytes when thesurrogateescapeerror handler is used
+when writing data.  This is useful for processing files in an
+unknown encoding.
+
+'surrogateescape'
+
+surrogateescape
+
+'xmlcharrefreplace'is only supported when writing to a file.
+Characters not supported by the encoding are replaced with the
+appropriate XML character reference&#nnn;.
+
+'xmlcharrefreplace'is only supported when writing to a file.
+Characters not supported by the encoding are replaced with the
+appropriate XML character reference&#nnn;.
+
+'xmlcharrefreplace'
+
+&#nnn;
+
+'backslashreplace'replaces malformed data by Pythonâs backslashed
+escape sequences.
+
+'backslashreplace'replaces malformed data by Pythonâs backslashed
+escape sequences.
+
+'backslashreplace'
+
+'namereplace'(also only supported when writing)
+replaces unsupported characters with\N{...}escape sequences.
+
+'namereplace'(also only supported when writing)
+replaces unsupported characters with\N{...}escape sequences.
+
+'namereplace'
+
+\N{...}
+
+newlinedetermines how to parse newline characters from the stream.
+It can beNone,'','\n','\r', and'\r\n'.  It works as follows:
+
+None
+
+''
+
+'\n'
+
+'\r'
+
+'\r\n'
+
+When reading input from the stream, ifnewlineisNone, universal
+newlines mode is enabled.  Lines in the input can end in'\n','\r', or'\r\n', and these are translated into'\n'before
+being returned to the caller.  If it is'', universal newlines mode is
+enabled, but line endings are returned to the caller untranslated.  If it
+has any of the other legal values, input lines are only terminated by the
+given string, and the line ending is returned to the caller untranslated.
+
+When reading input from the stream, ifnewlineisNone, universal
+newlines mode is enabled.  Lines in the input can end in'\n','\r', or'\r\n', and these are translated into'\n'before
+being returned to the caller.  If it is'', universal newlines mode is
+enabled, but line endings are returned to the caller untranslated.  If it
+has any of the other legal values, input lines are only terminated by the
+given string, and the line ending is returned to the caller untranslated.
+
+None
+
+'\n'
+
+'\r'
+
+'\r\n'
+
+'\n'
+
+''
+
+When writing output to the stream, ifnewlineisNone, any'\n'characters written are translated to the system default line separator,os.linesep.  Ifnewlineis''or'\n', no translation
+takes place.  Ifnewlineis any of the other legal values, any'\n'characters written are translated to the given string.
+
+When writing output to the stream, ifnewlineisNone, any'\n'characters written are translated to the system default line separator,os.linesep.  Ifnewlineis''or'\n', no translation
+takes place.  Ifnewlineis any of the other legal values, any'\n'characters written are translated to the given string.
+
+None
+
+'\n'
+
+os.linesep
+
+''
+
+'\n'
+
+'\n'
+
+IfclosefdisFalseand a file descriptor rather than a filename was
+given, the underlying file descriptor will be kept open when the file is
+closed.  If a filename is givenclosefdmust beTrue(the default);
+otherwise, an error will be raised.
+
+False
+
+True
+
+A custom opener can be used by passing a callable asopener. The underlying
+file descriptor for the file object is then obtained by callingopenerwith
+(file,flags).openermust return an open file descriptor (passingos.openasopenerresults in functionality similar to passingNone).
+
+os.open
+
+None
+
+The newly created file isnon-inheritable.
+
+The following example uses thedir_fdparameter of theos.open()function to open a file relative to a given directory:
+
+os.open()
+
+>>>importos>>>dir_fd=os.open('somedir',os.O_RDONLY)>>>defopener(path,flags):...returnos.open(path,flags,dir_fd=dir_fd)...>>>withopen('spamspam.txt','w',opener=opener)asf:...print('This will be written to somedir/spamspam.txt',file=f)...>>>os.close(dir_fd)# don't leak a file descriptor
+
+The type offile objectreturned by theopen()function
+depends on the mode.  Whenopen()is used to open a file in a text
+mode ('w','r','wt','rt', etc.), it returns a subclass ofio.TextIOBase(specificallyio.TextIOWrapper).  When used
+to open a file in a binary mode with buffering, the returned class is a
+subclass ofio.BufferedIOBase.  The exact class varies: in read
+binary mode, it returns anio.BufferedReader; in write binary and
+append binary modes, it returns anio.BufferedWriter, and in
+read/write mode, it returns anio.BufferedRandom.  When buffering is
+disabled, the raw stream, a subclass ofio.RawIOBase,io.FileIO, is returned.
+
+open()
+
+open()
+
+'w'
+
+'r'
+
+'wt'
+
+'rt'
+
+io.TextIOBase
+
+io.TextIOWrapper
+
+io.BufferedIOBase
+
+io.BufferedReader
+
+io.BufferedWriter
+
+io.BufferedRandom
+
+io.RawIOBase
+
+io.FileIO
+
+See also the file handling modules, such asfileinput,io(whereopen()is declared),os,os.path,tempfile,
+andshutil.
+
+fileinput
+
+io
+
+open()
+
+os
+
+os.path
+
+tempfile
+
+shutil
+
+Raises anauditing eventopenwith argumentspath,mode,flags.
+
+open
+
+path
+
+mode
+
+flags
+
+Themodeandflagsarguments may have been modified or inferred from
+the original call.
+
+mode
+
+flags
+
+Changed in version 3.3:
+
+Theopenerparameter was added.
+
+Theopenerparameter was added.
+
+The'x'mode was added.
+
+The'x'mode was added.
+
+'x'
+
+IOErrorused to be raised, it is now an alias ofOSError.
+
+IOErrorused to be raised, it is now an alias ofOSError.
+
+IOError
+
+OSError
+
+FileExistsErroris now raised if the file opened in exclusive
+creation mode ('x') already exists.
+
+FileExistsErroris now raised if the file opened in exclusive
+creation mode ('x') already exists.
+
+FileExistsError
+
+'x'
+
+Changed in version 3.4:
+
+The file is now non-inheritable.
+
+The file is now non-inheritable.
+
+Changed in version 3.5:
+
+If the system call is interrupted and the signal handler does not raise an
+exception, the function now retries the system call instead of raising anInterruptedErrorexception (seePEP 475for the rationale).
+
+If the system call is interrupted and the signal handler does not raise an
+exception, the function now retries the system call instead of raising anInterruptedErrorexception (seePEP 475for the rationale).
+
+InterruptedError
+
+The'namereplace'error handler was added.
+
+The'namereplace'error handler was added.
+
+'namereplace'
+
+Changed in version 3.6:
+
+Support added to accept objects implementingos.PathLike.
+
+Support added to accept objects implementingos.PathLike.
+
+os.PathLike
+
+On Windows, opening a console buffer may return a subclass ofio.RawIOBaseother thanio.FileIO.
+
+On Windows, opening a console buffer may return a subclass ofio.RawIOBaseother thanio.FileIO.
+
+io.RawIOBase
+
+io.FileIO
+
+Changed in version 3.11:The'U'mode has been removed.
+
+'U'
+
+Return the ordinal value of a character.
+
+If the argument is a one-character string, return the Unicode code point
+of that character.  For example,ord('a')returns the integer97andord('â¬')(Euro sign)
+returns8364.  This is the inverse ofchr().
+
+ord('a')
+
+97
+
+ord('â¬')
+
+8364
+
+chr()
+
+If the argument is abytesorbytearrayobject of
+length 1, return its single byte value.
+For example,ord(b'a')returns the integer97.
+
+bytes
+
+bytearray
+
+ord(b'a')
+
+97
+
+Returnbaseto the powerexp; ifmodis present, returnbaseto the
+powerexp, modulomod(computed more efficiently thanpow(base,exp)%mod). The two-argument formpow(base,exp)is
+equivalent to using the power operator:base**exp.
+
+pow(base,exp)%mod
+
+pow(base,exp)
+
+base**exp
+
+When arguments are builtin numeric types with mixed operand types, the
+coercion rules for binary arithmetic operators apply.  Forintoperands, the result has the same type as the operands (after coercion)
+unless the second argument is negative; in that case, all arguments are
+converted to float and a float result is delivered.  For example,pow(10,2)returns100, butpow(10,-2)returns0.01.  For a negative base of
+typeintorfloatand a non-integral exponent, a complex
+result is delivered.  For example,pow(-9,0.5)returns a value close
+to3j. Whereas, for a negative base of typeintorfloatwith an integral exponent, a float result is delivered. For example,pow(-9,2.0)returns81.0.
+
+int
+
+pow(10,2)
+
+100
+
+pow(10,-2)
+
+0.01
+
+int
+
+float
+
+pow(-9,0.5)
+
+3j
+
+int
+
+float
+
+pow(-9,2.0)
+
+81.0
+
+Forintoperandsbaseandexp, ifmodis present,modmust
+also be of integer type andmodmust be nonzero. Ifmodis present andexpis negative,basemust be relatively prime tomod. In that case,pow(inv_base,-exp,mod)is returned, whereinv_baseis an inverse tobasemodulomod.
+
+int
+
+pow(inv_base,-exp,mod)
+
+Hereâs an example of computing an inverse for38modulo97:
+
+38
+
+97
+
+>>>pow(38,-1,mod=97)23>>>23*38%97==1True
+
+Changed in version 3.8:Forintoperands, the three-argument form ofpownow allows
+the second argument to be negative, permitting computation of modular
+inverses.
+
+int
+
+pow
+
+Changed in version 3.8:Allow keyword arguments.  Formerly, only positional arguments were
+supported.
+
+Printobjectsto the text streamfile, separated bysepand followed
+byend.sep,end,file, andflush, if present, must be given as keyword
+arguments.
+
+All non-keyword arguments are converted to strings likestr()does and
+written to the stream, separated bysepand followed byend.  Bothsepandendmust be strings; they can also beNone, which means to use the
+default values.  If noobjectsare given,print()will just writeend.
+
+str()
+
+None
+
+print()
+
+Thefileargument must be an object with awrite(string)method; if it
+is not present orNone,sys.stdoutwill be used.  Since printed
+arguments are converted to text strings,print()cannot be used with
+binary mode file objects.  For these, usefile.write(...)instead.
+
+write(string)
+
+None
+
+sys.stdout
+
+print()
+
+file.write(...)
+
+Output buffering is usually determined byfile.
+However, ifflushis true, the stream is forcibly flushed.
+
+Changed in version 3.3:Added theflushkeyword argument.
+
+Return a property attribute.
+
+fgetis a function for getting an attribute value.fsetis a function
+for setting an attribute value.fdelis a function for deleting an attribute
+value.  Anddoccreates a docstring for the attribute.
+
+A typical use is to define a managed attributex:
+
+x
+
+classC:def__init__(self):self._x=Nonedefgetx(self):returnself._xdefsetx(self,value):self._x=valuedefdelx(self):delself._xx=property(getx,setx,delx,"I'm the 'x' property.")
+
+Ifcis an instance ofC,c.xwill invoke the getter,c.x=valuewill invoke the setter, anddelc.xthe deleter.
+
+c.x
+
+c.x=value
+
+delc.x
+
+If given,docwill be the docstring of the property attribute. Otherwise, the
+property will copyfgetâs docstring (if it exists).  This makes it possible to
+create read-only properties easily usingproperty()as adecorator:
+
+property()
+
+classParrot:def__init__(self):self._voltage=100000@propertydefvoltage(self):"""Get the current voltage."""returnself._voltage
+
+The@propertydecorator turns thevoltage()method into a âgetterâ
+for a read-only attribute with the same name, and it sets the docstring forvoltageto âGet the current voltage.â
+
+@property
+
+voltage()
+
+A property object hasgetter,setter,
+anddeletermethods usable as decorators that create a
+copy of the property with the corresponding accessor function set to the
+decorated function.  This is best explained with an example:
+
+getter
+
+setter
+
+deleter
+
+classC:def__init__(self):self._x=None@propertydefx(self):"""I'm the 'x' property."""returnself._x@x.setterdefx(self,value):self._x=value@x.deleterdefx(self):delself._x
+
+This code is exactly equivalent to the first example.  Be sure to give the
+additional functions the same name as the original property (xin this
+case.)
+
+x
+
+The returned property object also has the attributesfget,fset, andfdelcorresponding to the constructor arguments.
+
+fget
+
+fset
+
+fdel
+
+Changed in version 3.5:The docstrings of property objects are now writeable.
+
+Attribute holding the name of the property. The name of the property
+can be changed at runtime.
+
+Added in version 3.13.
+
+Rather than being a function,rangeis actually an immutable
+sequence type, as documented inRangesandSequence Types â list, tuple, range.
+
+range
+
+Return a string containing a printable representation of an object.  For many
+types, this function makes an attempt to return a string that would yield an
+object with the same value when passed toeval(); otherwise, the
+representation is a string enclosed in angle brackets that contains the name
+of the type of the object together with additional information often
+including the name and address of the object.  A class can control what this
+function returns for its instances
+by defining a__repr__()method.
+Ifsys.displayhook()is not accessible, this function will raiseRuntimeError.
+
+eval()
+
+__repr__()
+
+sys.displayhook()
+
+RuntimeError
+
+This class has a custom representation that can be evaluated:
+
+classPerson:def__init__(self,name,age):self.name=nameself.age=agedef__repr__(self):returnf"Person('{self.name}',{self.age})"
+
+Return a reverseiterator.  The argument must be an object which has
+a__reversed__()method or supports the sequence protocol (the__len__()method and the__getitem__()method
+with integer arguments starting at0).
+
+__reversed__()
+
+__len__()
+
+__getitem__()
+
+0
+
+Returnnumberrounded tondigitsprecision after the decimal
+point.  Ifndigitsis omitted or isNone, it returns the
+nearest integer to its input.
+
+None
+
+For the built-in types supportinground(), values are rounded to the
+closest multiple of 10 to the power minusndigits; if two multiples are
+equally close, rounding is done toward the even choice (so, for example,
+bothround(0.5)andround(-0.5)are0, andround(1.5)is2).  Any integer value is valid forndigits(positive, zero, or
+negative).  The return value is an integer ifndigitsis omitted orNone.
+Otherwise, the return value has the same type asnumber.
+
+round()
+
+round(0.5)
+
+round(-0.5)
+
+0
+
+round(1.5)
+
+2
+
+None
+
+For a general Python objectnumber,rounddelegates tonumber.__round__.
+
+number
+
+round
+
+number.__round__
+
+Note
+
+The behavior ofround()for floats can be surprising: for example,round(2.675,2)gives2.67instead of the expected2.68.
+This is not a bug: itâs a result of the fact that most decimal fractions
+canât be represented exactly as a float.  SeeFloating-Point Arithmetic:  Issues and Limitationsfor
+more information.
+
+round()
+
+round(2.675,2)
+
+2.67
+
+2.68
+
+Return a newsetobject, optionally with elements taken fromiterable.setis a built-in class.  See alsoSet Types â set, frozensetfor documentation about this class.
+
+set
+
+set
+
+For other containers see the built-infrozenset,list,tuple, anddictclasses, as well as thecollectionsmodule.
+
+frozenset
+
+list
+
+tuple
+
+dict
+
+collections
+
+This is the counterpart ofgetattr().  The arguments are an object, a
+string, and an arbitrary value.  The string may name an existing attribute or a
+new attribute.  The function assigns the value to the attribute, provided the
+object allows it.  For example,setattr(x,'foobar',123)is equivalent tox.foobar=123.
+
+getattr()
+
+setattr(x,'foobar',123)
+
+x.foobar=123
+
+nameneed not be a Python identifier as defined inNames (identifiers and keywords)unless the object chooses to enforce that, for example in a custom__getattribute__()or via__slots__.
+An attribute whose name is not an identifier will not be accessible using
+the dot notation, but is accessible throughgetattr()etc..
+
+__getattribute__()
+
+__slots__
+
+getattr()
+
+Note
+
+Sinceprivate name manglinghappens at
+compilation time, one must manually mangle a private attributeâs
+(attributes with two leading underscores) name in order to set it withsetattr().
+
+setattr()
+
+Return asliceobject representing the set of indices specified byrange(start,stop,step).  Thestartandsteparguments default toNone.
+
+range(start,stop,step)
+
+None
+
+Slice objects are also generated whenslicing syntaxis used.  For example:a[start:stop:step]ora[start:stop,i].
+
+a[start:stop:step]
+
+a[start:stop,i]
+
+Seeitertools.islice()for an alternate version that returns aniterator.
+
+itertools.islice()
+
+These read-only attributes are set to the argument values
+(or their default).  They have no other explicit functionality;
+however, they are used by NumPy and other third-party packages.
+
+Changed in version 3.12:Slice objects are nowhashable(providedstart,stop, andstepare hashable).
+
+start
+
+stop
+
+step
+
+Return a new sorted list from the items initerable.
+
+Has two optional arguments which must be specified as keyword arguments.
+
+keyspecifies a function of one argument that is used to extract a comparison
+key from each element initerable(for example,key=str.lower).  The
+default value isNone(compare the elements directly).
+
+key=str.lower
+
+None
+
+reverseis a boolean value.  If set toTrue, then the list elements are
+sorted as if each comparison were reversed.
+
+True
+
+Usefunctools.cmp_to_key()to convert an old-stylecmpfunction to akeyfunction.
+
+functools.cmp_to_key()
+
+The built-insorted()function is guaranteed to be stable. A sort is
+stable if it guarantees not to change the relative order of elements that
+compare equal â this is helpful for sorting in multiple passes (for
+example, sort by department, then by salary grade).
+
+sorted()
+
+The sort algorithm uses only<comparisons between items.  While
+defining an__lt__()method will suffice for sorting,PEP 8recommends that all sixrich comparisonsbe implemented.  This will help avoid bugs when using
+the same data with other ordering tools such asmax()that rely
+on a different underlying method.  Implementing all six comparisons
+also helps avoid confusion for mixed type comparisons which can call
+the reflected__gt__()method.
+
+<
+
+__lt__()
+
+max()
+
+__gt__()
+
+For sorting examples and a brief sorting tutorial, seeSorting Techniques.
+
+Transform a method into a static method.
+
+A static method does not receive an implicit first argument. To declare a static
+method, use this idiom:
+
+classC:@staticmethoddeff(arg1,arg2,argN):...
+
+The@staticmethodform is a functiondecoratorâ seeFunction definitionsfor details.
+
+@staticmethod
+
+A static method can be called either on the class (such asC.f()) or on
+an instance (such asC().f()).
+Moreover, the static methoddescriptoris also callable, so it can
+be used in the class definition (such asf()).
+
+C.f()
+
+C().f()
+
+f()
+
+Static methods in Python are similar to those found in Java or C++. Also, seeclassmethod()for a variant that is useful for creating alternate class
+constructors.
+
+classmethod()
+
+Like all decorators, it is also possible to callstaticmethodas
+a regular function and do something with its result.  This is needed
+in some cases where you need a reference to a function from a class
+body and you want to avoid the automatic transformation to instance
+method.  For these cases, use this idiom:
+
+staticmethod
+
+defregular_function():...classC:method=staticmethod(regular_function)
+
+For more information on static methods, seeThe standard type hierarchy.
+
+Changed in version 3.10:Static methods now inherit the method attributes
+(__module__,__name__,__qualname__,__doc__and__annotations__), have a new__wrapped__attribute,
+and are now callable as regular functions.
+
+__module__
+
+__name__
+
+__qualname__
+
+__doc__
+
+__annotations__
+
+__wrapped__
+
+Return astrversion ofobject.  Seestr()for details.
+
+str
+
+str()
+
+stris the built-in stringclass.  For general information
+about strings, seeText Sequence Type â str.
+
+str
+
+Sumsstartand the items of aniterablefrom left to right and returns the
+total.  Theiterableâs items are normally numbers, and the start value is not
+allowed to be a string.
+
+For some use cases, there are good alternatives tosum().
+The preferred, fast way to concatenate a sequence of strings is by calling''.join(sequence).  To add floating-point values with extended precision,
+seemath.fsum().  To concatenate a series of iterables, consider usingitertools.chain().
+
+sum()
+
+''.join(sequence)
+
+math.fsum()
+
+itertools.chain()
+
+Changed in version 3.8:Thestartparameter can be specified as a keyword argument.
+
+Changed in version 3.12:Summation of floats switched to an algorithm
+that gives higher accuracy and better commutativity on most builds.
+
+Changed in version 3.14:Added specialization for summation of complexes,
+using same algorithm as for summation of floats.
+
+Return a proxy object that delegates method calls to a parent or sibling
+class oftype.  This is useful for accessing inherited methods that have
+been overridden in a class.
+
+Theobject_or_typedetermines themethod resolution orderto be searched.  The search starts from the class right after thetype.
+
+For example, if__mro__ofobject_or_typeisD->B->C->A->objectand the value oftypeisB,
+thensuper()searchesC->A->object.
+
+__mro__
+
+D->B->C->A->object
+
+B
+
+super()
+
+C->A->object
+
+The__mro__attribute of the class corresponding toobject_or_typelists the method resolution search order used by bothgetattr()andsuper().  The attribute is dynamic and can change
+whenever the inheritance hierarchy is updated.
+
+__mro__
+
+getattr()
+
+super()
+
+If the second argument is omitted, the super object returned is unbound.  If
+the second argument is an object,isinstance(obj,type)must be true.  If
+the second argument is a type,issubclass(type2,type)must be true (this
+is useful for classmethods).
+
+isinstance(obj,type)
+
+issubclass(type2,type)
+
+When called directly within an ordinary method of a class, both arguments may
+be omitted (âzero-argumentsuper()â). In this case,typewill be the
+enclosing class, andobjwill be the first argument of the immediately
+enclosing function (typicallyself). (This means that zero-argumentsuper()will not work as expected within nested functions, including
+generator expressions, which implicitly create nested functions.)
+
+super()
+
+self
+
+super()
+
+There are two typical use cases forsuper.  In a class hierarchy with
+single inheritance,supercan be used to refer to parent classes without
+naming them explicitly, thus making the code more maintainable.  This use
+closely parallels the use ofsuperin other programming languages.
+
+The second use case is to support cooperative multiple inheritance in a
+dynamic execution environment.  This use case is unique to Python and is
+not found in statically compiled languages or languages that only support
+single inheritance.  This makes it possible to implement âdiamond diagramsâ
+where multiple base classes implement the same method.  Good design dictates
+that such implementations have the same calling signature in every case (because the
+order of calls is determined at runtime, because that order adapts
+to changes in the class hierarchy, and because that order can include
+sibling classes that are unknown prior to runtime).
+
+For both use cases, a typical superclass call looks like this:
+
+classC(B):defmethod(self,arg):super().method(arg)# This does the same thing as:# super(C, self).method(arg)
+
+In addition to method lookups,super()also works for attribute
+lookups.  One possible use case for this is callingdescriptorsin a parent or sibling class.
+
+super()
+
+Note thatsuper()is implemented as part of the binding process for
+explicit dotted attribute lookups such assuper().__getitem__(name).
+It does so by implementing its own__getattribute__()method
+for searching
+classes in a predictable order that supports cooperative multiple inheritance.
+Accordingly,super()is undefined for implicit lookups using statements or
+operators such assuper()[name].
+
+super()
+
+super().__getitem__(name)
+
+__getattribute__()
+
+super()
+
+super()[name]
+
+Also note that, aside from the zero argument form,super()is not
+limited to use inside methods.  The two argument form specifies the
+arguments exactly and makes the appropriate references.  The zero
+argument form only works inside a class definition, as the compiler fills
+in the necessary details to correctly retrieve the class being defined,
+as well as accessing the current instance for ordinary methods.
+
+super()
+
+For practical suggestions on how to design cooperative classes usingsuper(), seeguide to using super().
+
+super()
+
+Changed in version 3.14:superobjects are nowpickleableandcopyable.
+
+super
+
+pickleable
+
+copyable
+
+Rather than being a function,tupleis actually an immutable
+sequence type, as documented inTuplesandSequence Types â list, tuple, range.
+
+tuple
+
+With one argument, return the type of anobject.  The return value is a
+type object and generally the same object as returned byobject.__class__.
+
+object.__class__
+
+Theisinstance()built-in function is recommended for testing the type
+of an object, because it takes subclasses into account.
+
+isinstance()
+
+With three arguments, return a new type object.  This is essentially a
+dynamic form of theclassstatement. Thenamestring is
+the class name and becomes the__name__attribute.
+Thebasestuple contains the base classes and becomes the__bases__attribute; if empty,object, the
+ultimate base of all classes, is added.  Thedictdictionary contains
+attribute and method definitions for the class body; it may be copied
+or wrapped before becoming the__dict__attribute.
+The following two statements create identicaltypeobjects:
+
+class
+
+__name__
+
+__bases__
+
+object
+
+__dict__
+
+type
+
+>>>classX:...a=1...>>>X=type('X',(),dict(a=1))
+
+See also:
+
+Documentation on attributes and methods on classes.
+
+Documentation on attributes and methods on classes.
+
+Type Objects
+
+Type Objects
+
+Keyword arguments provided to the three argument form are passed to the
+appropriate metaclass machinery (usually__init_subclass__())
+in the same way that keywords in a class
+definition (besidesmetaclass) would.
+
+__init_subclass__()
+
+See alsoCustomizing class creation.
+
+Changed in version 3.6:Subclasses oftypewhich donât overridetype.__new__may no
+longer use the one-argument form to get the type of an object.
+
+type
+
+type.__new__
+
+Return the__dict__attribute for a module, class, instance,
+or any other object with a__dict__attribute.
+
+__dict__
+
+__dict__
+
+Objects such as modules and instances have an updateable__dict__attribute; however, other objects may have write restrictions on their__dict__attributes (for example, classes use atypes.MappingProxyTypeto prevent direct dictionary updates).
+
+__dict__
+
+__dict__
+
+types.MappingProxyType
+
+Without an argument,vars()acts likelocals().
+
+vars()
+
+locals()
+
+ATypeErrorexception is raised if an object is specified but
+it doesnât have a__dict__attribute (for example, if
+its class defines the__slots__attribute).
+
+TypeError
+
+__dict__
+
+__slots__
+
+Changed in version 3.13:The result of calling this function without an argument has been
+updated as described for thelocals()builtin.
+
+locals()
+
+Iterate over several iterables in parallel, producing tuples with an item
+from each one.
+
+Example:
+
+>>>foriteminzip([1,2,3],['sugar','spice','everything nice']):...print(item)...(1, 'sugar')(2, 'spice')(3, 'everything nice')
+
+More formally:zip()returns an iterator of tuples, where thei-th
+tuple contains thei-th element from each of the argument iterables.
+
+zip()
+
+Another way to think ofzip()is that it turns rows into columns, and
+columns into rows.  This is similar totransposing a matrix.
+
+zip()
+
+zip()is lazy: The elements wonât be processed until the iterable is
+iterated on, e.g. by aforloop or by wrapping in alist.
+
+zip()
+
+for
+
+list
+
+One thing to consider is that the iterables passed tozip()could have
+different lengths; sometimes by design, and sometimes because of a bug in
+the code that prepared these iterables.  Python offers three different
+approaches to dealing with this issue:
+
+zip()
+
+By default,zip()stops when the shortest iterable is exhausted.
+It will ignore the remaining items in the longer iterables, cutting off
+the result to the length of the shortest iterable:>>>list(zip(range(3),['fee','fi','fo','fum']))[(0, 'fee'), (1, 'fi'), (2, 'fo')]
+
+By default,zip()stops when the shortest iterable is exhausted.
+It will ignore the remaining items in the longer iterables, cutting off
+the result to the length of the shortest iterable:
+
+zip()
+
+>>>list(zip(range(3),['fee','fi','fo','fum']))[(0, 'fee'), (1, 'fi'), (2, 'fo')]
+
+zip()is often used in cases where the iterables are assumed to be
+of equal length.  In such cases, itâs recommended to use thestrict=Trueoption. Its output is the same as regularzip():>>>list(zip(('a','b','c'),(1,2,3),strict=True))[('a', 1), ('b', 2), ('c', 3)]Unlike the default behavior, it raises aValueErrorif one iterable
+is exhausted before the others:>>>foriteminzip(range(3),['fee','fi','fo','fum'],strict=True):...print(item)...(0, 'fee')(1, 'fi')(2, 'fo')Traceback (most recent call last):...ValueError:zip() argument 2 is longer than argument 1Without thestrict=Trueargument, any bug that results in iterables of
+different lengths will be silenced, possibly manifesting as a hard-to-find
+bug in another part of the program.
+
+zip()is often used in cases where the iterables are assumed to be
+of equal length.  In such cases, itâs recommended to use thestrict=Trueoption. Its output is the same as regularzip():
+
+zip()
+
+strict=True
+
+zip()
+
+>>>list(zip(('a','b','c'),(1,2,3),strict=True))[('a', 1), ('b', 2), ('c', 3)]
+
+Unlike the default behavior, it raises aValueErrorif one iterable
+is exhausted before the others:
+
+ValueError
+
+>>>foriteminzip(range(3),['fee','fi','fo','fum'],strict=True):...print(item)...(0, 'fee')(1, 'fi')(2, 'fo')Traceback (most recent call last):...ValueError:zip() argument 2 is longer than argument 1
+
+Without thestrict=Trueargument, any bug that results in iterables of
+different lengths will be silenced, possibly manifesting as a hard-to-find
+bug in another part of the program.
+
+strict=True
+
+Shorter iterables can be padded with a constant value to make all the
+iterables have the same length.  This is done byitertools.zip_longest().
+
+Shorter iterables can be padded with a constant value to make all the
+iterables have the same length.  This is done byitertools.zip_longest().
+
+itertools.zip_longest()
+
+Edge cases: With a single iterable argument,zip()returns an
+iterator of 1-tuples.  With no arguments, it returns an empty iterator.
+
+zip()
+
+Tips and tricks:
+
+The left-to-right evaluation order of the iterables is guaranteed. This
+makes possible an idiom for clustering a data series into n-length groups
+usingzip(*[iter(s)]*n,strict=True).  This repeats thesameiteratorntimes so that each output tuple has the result ofncalls to the
+iterator. This has the effect of dividing the input into n-length chunks.
+
+The left-to-right evaluation order of the iterables is guaranteed. This
+makes possible an idiom for clustering a data series into n-length groups
+usingzip(*[iter(s)]*n,strict=True).  This repeats thesameiteratorntimes so that each output tuple has the result ofncalls to the
+iterator. This has the effect of dividing the input into n-length chunks.
+
+zip(*[iter(s)]*n,strict=True)
+
+n
+
+n
+
+zip()in conjunction with the*operator can be used to unzip a
+list:>>>x=[1,2,3]>>>y=[4,5,6]>>>list(zip(x,y))[(1, 4), (2, 5), (3, 6)]>>>x2,y2=zip(*zip(x,y))>>>x==list(x2)andy==list(y2)True
+
+zip()in conjunction with the*operator can be used to unzip a
+list:
+
+zip()
+
+*
+
+>>>x=[1,2,3]>>>y=[4,5,6]>>>list(zip(x,y))[(1, 4), (2, 5), (3, 6)]>>>x2,y2=zip(*zip(x,y))>>>x==list(x2)andy==list(y2)True
+
+Changed in version 3.10:Added thestrictargument.
+
+strict
+
+Note
+
+This is an advanced function that is not needed in everyday Python
+programming, unlikeimportlib.import_module().
+
+importlib.import_module()
+
+This function is invoked by theimportstatement.  It can be
+replaced (by importing thebuiltinsmodule and assigning tobuiltins.__import__) in order to change semantics of theimportstatement, but doing so isstronglydiscouraged as it
+is usually simpler to use import hooks (seePEP 302) to attain the same
+goals and does not cause issues with code which assumes the default import
+implementation is in use.  Direct use of__import__()is also
+discouraged in favor ofimportlib.import_module().
+
+import
+
+builtins
+
+builtins.__import__
+
+import
+
+__import__()
+
+importlib.import_module()
+
+The function imports the modulename, potentially using the givenglobalsandlocalsto determine how to interpret the name in a package context.
+Thefromlistgives the names of objects or submodules that should be
+imported from the module given byname.  The standard implementation does
+not use itslocalsargument at all and uses itsglobalsonly to
+determine the package context of theimportstatement.
+
+import
+
+levelspecifies whether to use absolute or relative imports.0(the
+default) means only perform absolute imports.  Positive values forlevelindicate the number of parent directories to search relative to the
+directory of the module calling__import__()(seePEP 328for the
+details).
+
+0
+
+__import__()
+
+When thenamevariable is of the formpackage.module, normally, the
+top-level package (the name up till the first dot) is returned,notthe
+module named byname.  However, when a non-emptyfromlistargument is
+given, the module named bynameis returned.
+
+package.module
+
+For example, the statementimportspamresults in bytecode resembling the
+following code:
+
+importspam
+
+spam=__import__('spam',globals(),locals(),[],0)
+
+The statementimportspam.hamresults in this call:
+
+importspam.ham
+
+spam=__import__('spam.ham',globals(),locals(),[],0)
+
+Note how__import__()returns the toplevel module here because this is
+the object that is bound to a name by theimportstatement.
+
+__import__()
+
+import
+
+On the other hand, the statementfromspam.hamimporteggs,sausageassausresults in
+
+fromspam.hamimporteggs,sausageassaus
+
+_temp=__import__('spam.ham',globals(),locals(),['eggs','sausage'],0)eggs=_temp.eggssaus=_temp.sausage
+
+Here, thespam.hammodule is returned from__import__().  From this
+object, the names to import are retrieved and assigned to their respective
+names.
+
+spam.ham
+
+__import__()
+
+If you simply want to import a module (potentially within a package) by name,
+useimportlib.import_module().
+
+importlib.import_module()
+
+Changed in version 3.3:Negative values forlevelare no longer supported (which also changes
+the default value to 0).
+
+Changed in version 3.9:When the command line options-Eor-Iare being used,
+the environment variablePYTHONCASEOKis now ignored.
+
+-E
+
+-I
+
+PYTHONCASEOK
+
+Footnotes
+
+Note that the parser only accepts the Unix-style end of line convention.
+If you are reading the code from a file, make sure to use newline conversion
+mode to convert Windows or Mac-style newlines.

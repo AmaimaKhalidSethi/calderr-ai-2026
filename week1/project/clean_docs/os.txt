@@ -1,0 +1,7678 @@
+osâ Miscellaneous operating system interfaces
+
+os
+
+Source code:Lib/os.py
+
+This module provides a portable way of using operating system dependent
+functionality.  If you just want to read or write a file seeopen(), if
+you want to manipulate paths, see theos.pathmodule, and if you want to
+read all the lines in all the files on the command line see thefileinputmodule.  For creating temporary files and directories see thetempfilemodule, and for high-level file and directory handling see theshutilmodule.
+
+open()
+
+os.path
+
+fileinput
+
+tempfile
+
+shutil
+
+Notes on the availability of these functions:
+
+The design of all built-in operating system dependent modules of Python is
+such that as long as the same functionality is available, it uses the same
+interface; for example, the functionos.stat(path)returns stat
+information aboutpathin the same format (which happens to have originated
+with the POSIX interface).
+
+The design of all built-in operating system dependent modules of Python is
+such that as long as the same functionality is available, it uses the same
+interface; for example, the functionos.stat(path)returns stat
+information aboutpathin the same format (which happens to have originated
+with the POSIX interface).
+
+os.stat(path)
+
+Extensions peculiar to a particular operating system are also available
+through theosmodule, but using them is of course a threat to
+portability.
+
+Extensions peculiar to a particular operating system are also available
+through theosmodule, but using them is of course a threat to
+portability.
+
+os
+
+All functions accepting path or file names accept both bytes and string
+objects, and result in an object of the same type, if a path or file name is
+returned.
+
+All functions accepting path or file names accept both bytes and string
+objects, and result in an object of the same type, if a path or file name is
+returned.
+
+On VxWorks, os.popen, os.fork, os.execv and os.spawn*p* are not supported.
+
+On VxWorks, os.popen, os.fork, os.execv and os.spawn*p* are not supported.
+
+On WebAssembly platforms, Android and iOS, large parts of theosmodule are
+not available or behave differently. APIs related to processes (e.g.fork(),execve()) and resources (e.g.nice())
+are not available. Others likegetuid()andgetpid()are
+emulated or stubs. WebAssembly platforms also lack support for signals (e.g.kill(),wait()).
+
+On WebAssembly platforms, Android and iOS, large parts of theosmodule are
+not available or behave differently. APIs related to processes (e.g.fork(),execve()) and resources (e.g.nice())
+are not available. Others likegetuid()andgetpid()are
+emulated or stubs. WebAssembly platforms also lack support for signals (e.g.kill(),wait()).
+
+os
+
+fork()
+
+execve()
+
+nice()
+
+getuid()
+
+getpid()
+
+kill()
+
+wait()
+
+Note
+
+All functions in this module raiseOSError(or subclasses thereof) in
+the case of invalid or inaccessible file names and paths, or other arguments
+that have the correct type, but are not accepted by the operating system.
+
+OSError
+
+An alias for the built-inOSErrorexception.
+
+OSError
+
+The name of the operating system dependent module imported.  The following
+names have currently been registered:'posix','nt','java'.
+
+'posix'
+
+'nt'
+
+'java'
+
+See also
+
+sys.platformhas a finer granularity.os.uname()gives
+system-dependent version information.
+
+sys.platform
+
+os.uname()
+
+Theplatformmodule provides detailed checks for the
+systemâs identity.
+
+platform
+
+File Names, Command Line Arguments, and Environment Variables
+
+In Python, file names, command line arguments, and environment variables are
+represented using the string type. On some systems, decoding these strings to
+and from bytes is necessary before passing them to the operating system. Python
+uses thefilesystem encoding and error handlerto perform this
+conversion (seesys.getfilesystemencoding()).
+
+sys.getfilesystemencoding()
+
+Thefilesystem encoding and error handlerare configured at Python
+startup by thePyConfig_Read()function: seefilesystem_encodingandfilesystem_errorsmembers ofPyConfig.
+
+PyConfig_Read()
+
+filesystem_encoding
+
+filesystem_errors
+
+PyConfig
+
+Changed in version 3.1:On some systems, conversion using the file system encoding may fail. In this
+case, Python uses thesurrogateescape encoding error handler, which means that undecodable bytes are replaced by a
+Unicode character U+DCxxon decoding, and these are again
+translated to the original byte on encoding.
+
+Thefile system encodingmust
+guarantee to successfully decode all bytes below 128. If the file system
+encoding fails to provide this guarantee, API functions can raiseUnicodeError.
+
+UnicodeError
+
+See also thelocale encoding.
+
+Python UTF-8 Mode
+
+Added in version 3.7:SeePEP 540for more details.
+
+The Python UTF-8 Mode ignores thelocale encodingand forces the usage
+of the UTF-8 encoding:
+
+Use UTF-8 as thefilesystem encoding.
+
+Use UTF-8 as thefilesystem encoding.
+
+sys.getfilesystemencoding()returns'utf-8'.
+
+sys.getfilesystemencoding()returns'utf-8'.
+
+sys.getfilesystemencoding()
+
+'utf-8'
+
+locale.getpreferredencoding()returns'utf-8'(thedo_setlocaleargument has no effect).
+
+locale.getpreferredencoding()returns'utf-8'(thedo_setlocaleargument has no effect).
+
+locale.getpreferredencoding()
+
+'utf-8'
+
+sys.stdin,sys.stdout, andsys.stderrall use
+UTF-8 as their text encoding, with thesurrogateescapeerror handlerbeing enabled forsys.stdinandsys.stdout(sys.stderrcontinues to usebackslashreplaceas it does in the default locale-aware mode)
+
+sys.stdin,sys.stdout, andsys.stderrall use
+UTF-8 as their text encoding, with thesurrogateescapeerror handlerbeing enabled forsys.stdinandsys.stdout(sys.stderrcontinues to usebackslashreplaceas it does in the default locale-aware mode)
+
+sys.stdin
+
+sys.stdout
+
+sys.stderr
+
+surrogateescape
+
+sys.stdin
+
+sys.stdout
+
+sys.stderr
+
+backslashreplace
+
+On Unix,os.device_encoding()returns'utf-8'rather than the
+device encoding.
+
+On Unix,os.device_encoding()returns'utf-8'rather than the
+device encoding.
+
+os.device_encoding()
+
+'utf-8'
+
+Note that the standard stream settings in UTF-8 mode can be overridden byPYTHONIOENCODING(just as they can be in the default locale-aware
+mode).
+
+PYTHONIOENCODING
+
+As a consequence of the changes in those lower level APIs, other higher
+level APIs also exhibit different default behaviours:
+
+Command line arguments, environment variables and filenames are decoded
+to text using the UTF-8 encoding.
+
+Command line arguments, environment variables and filenames are decoded
+to text using the UTF-8 encoding.
+
+os.fsdecode()andos.fsencode()use the UTF-8 encoding.
+
+os.fsdecode()andos.fsencode()use the UTF-8 encoding.
+
+os.fsdecode()
+
+os.fsencode()
+
+open(),io.open(), andcodecs.open()use the UTF-8
+encoding by default. However, they still use the strict error handler by
+default so that attempting to open a binary file in text mode is likely
+to raise an exception rather than producing nonsense data.
+
+open(),io.open(), andcodecs.open()use the UTF-8
+encoding by default. However, they still use the strict error handler by
+default so that attempting to open a binary file in text mode is likely
+to raise an exception rather than producing nonsense data.
+
+open()
+
+io.open()
+
+codecs.open()
+
+ThePython UTF-8 Modeis enabled if the LC_CTYPE locale isCorPOSIXat Python startup (see thePyConfig_Read()function).
+
+C
+
+POSIX
+
+PyConfig_Read()
+
+It can be enabled or disabled using the-Xutf8command line
+option and thePYTHONUTF8environment variable.
+
+-Xutf8
+
+PYTHONUTF8
+
+If thePYTHONUTF8environment variable is not set at all, then the
+interpreter defaults to using the current locale settings,unlessthe current
+locale is identified as a legacy ASCII-based locale (as described forPYTHONCOERCECLOCALE), and locale coercion is either disabled or
+fails. In such legacy locales, the interpreter will default to enabling UTF-8
+mode unless explicitly instructed not to do so.
+
+PYTHONUTF8
+
+PYTHONCOERCECLOCALE
+
+The Python UTF-8 Mode can only be enabled at the Python startup. Its value
+can be read fromsys.flags.utf8_mode.
+
+sys.flags.utf8_mode
+
+See also theUTF-8 mode on Windowsand thefilesystem encoding and error handler.
+
+See also
+
+Python 3.15 will makePython UTF-8 Modedefault.
+
+Process Parameters
+
+These functions and data items provide information and operate on the current
+process and user.
+
+Return the filename corresponding to the controlling terminal of the process.
+
+Availability: Unix, not WASI.
+
+Amappingobject where keys and values are strings that represent
+the process environment.  For example,environ['HOME']is the pathname
+of your home directory (on some platforms), and is equivalent togetenv("HOME")in C.
+
+environ['HOME']
+
+getenv("HOME")
+
+This mapping is captured the first time theosmodule is imported,
+typically during Python startup as part of processingsite.py.  Changes
+to the environment made after this time are not reflected inos.environ,
+except for changes made by modifyingos.environdirectly.
+
+os
+
+site.py
+
+os.environ
+
+os.environ
+
+This mapping may be used to modify the environment as well as query the
+environment.putenv()will be called automatically when the mapping
+is modified.
+
+putenv()
+
+On Unix, keys and values usesys.getfilesystemencoding()and'surrogateescape'error handler. Useenvironbif you would like
+to use a different encoding.
+
+sys.getfilesystemencoding()
+
+'surrogateescape'
+
+environb
+
+On Windows, the keys are converted to uppercase. This also applies when
+getting, setting, or deleting an item. For example,environ['monty']='python'maps the key'MONTY'to the value'python'.
+
+environ['monty']='python'
+
+'MONTY'
+
+'python'
+
+Note
+
+Callingputenv()directly does not changeos.environ, so itâs better
+to modifyos.environ.
+
+putenv()
+
+os.environ
+
+os.environ
+
+Note
+
+On some platforms, including FreeBSD and macOS, settingenvironmay
+cause memory leaks.  Refer to the system documentation forputenv().
+
+environ
+
+putenv()
+
+You can delete items in this mapping to unset environment variables.unsetenv()will be called automatically when an item is deleted fromos.environ, and when one of thepop()orclear()methods is
+called.
+
+unsetenv()
+
+os.environ
+
+pop()
+
+clear()
+
+See also
+
+Theos.reload_environ()function.
+
+os.reload_environ()
+
+Changed in version 3.9:Updated to supportPEP 584âs merge (|) and update (|=) operators.
+
+|
+
+|=
+
+Bytes version ofenviron: amappingobject where both keys
+and values arebytesobjects representing the process environment.environandenvironbare synchronized (modifyingenvironbupdatesenviron, and vice versa).
+
+environ
+
+bytes
+
+environ
+
+environb
+
+environb
+
+environ
+
+environbis only available ifsupports_bytes_environisTrue.
+
+environb
+
+supports_bytes_environ
+
+True
+
+Added in version 3.2.
+
+Changed in version 3.9:Updated to supportPEP 584âs merge (|) and update (|=) operators.
+
+|
+
+|=
+
+Theos.environandos.environbmappings are a cache of
+environment variables at the time that Python started.
+As such, changes to the current process environment are not reflected
+if made outside Python, or byos.putenv()oros.unsetenv().
+Useos.reload_environ()to updateos.environandos.environbwith any such changes to the current process environment.
+
+os.environ
+
+os.environb
+
+os.putenv()
+
+os.unsetenv()
+
+os.reload_environ()
+
+os.environ
+
+os.environb
+
+Warning
+
+This function is not thread-safe. Calling it while the environment is
+being modified in another thread is an undefined behavior. Reading fromos.environoros.environb, or callingos.getenv()while reloading, may return an empty result.
+
+os.environ
+
+os.environb
+
+os.getenv()
+
+Added in version 3.14.
+
+These functions are described inFiles and Directories.
+
+Encodepath-likefilenameto thefilesystem encoding and error handler; returnbytesunchanged.
+
+bytes
+
+fsdecode()is the reverse function.
+
+fsdecode()
+
+Added in version 3.2.
+
+Changed in version 3.6:Support added to accept objects implementing theos.PathLikeinterface.
+
+os.PathLike
+
+Decode thepath-likefilenamefrom thefilesystem encoding and error handler; returnstrunchanged.
+
+str
+
+fsencode()is the reverse function.
+
+fsencode()
+
+Added in version 3.2.
+
+Changed in version 3.6:Support added to accept objects implementing theos.PathLikeinterface.
+
+os.PathLike
+
+Return the file system representation of the path.
+
+Ifstrorbytesis passed in, it is returned unchanged.
+Otherwise__fspath__()is called and its value is
+returned as long as it is astrorbytesobject.
+In all other cases,TypeErroris raised.
+
+str
+
+bytes
+
+__fspath__()
+
+str
+
+bytes
+
+TypeError
+
+Added in version 3.6.
+
+Anabstract base classfor objects representing a file system path,
+e.g.pathlib.PurePath.
+
+pathlib.PurePath
+
+Added in version 3.6.
+
+Return the file system path representation of the object.
+
+The method should only return astrorbytesobject,
+with the preference being forstr.
+
+str
+
+bytes
+
+str
+
+Return the value of the environment variablekeyas a string if it exists, ordefaultif it doesnât.keyis a string. Note that
+sincegetenv()usesos.environ, the mapping ofgetenv()is
+similarly also captured on import, and the function may not reflect
+future environment changes.
+
+getenv()
+
+os.environ
+
+getenv()
+
+On Unix, keys and values are decoded withsys.getfilesystemencoding()and'surrogateescape'error handler. Useos.getenvb()if you
+would like to use a different encoding.
+
+sys.getfilesystemencoding()
+
+'surrogateescape'
+
+os.getenvb()
+
+Availability: Unix, Windows.
+
+Return the value of the environment variablekeyas bytes if it exists, ordefaultif it doesnât.keymust be bytes. Note that
+sincegetenvb()usesos.environb, the mapping ofgetenvb()is
+similarly also captured on import, and the function may not reflect
+future environment changes.
+
+getenvb()
+
+os.environb
+
+getenvb()
+
+getenvb()is only available ifsupports_bytes_environisTrue.
+
+getenvb()
+
+supports_bytes_environ
+
+True
+
+Availability: Unix.
+
+Added in version 3.2.
+
+Returns the list of directories that will be searched for a named
+executable, similar to a shell, when launching a process.env, when specified, should be an environment variable dictionary
+to lookup the PATH in.
+By default, whenenvisNone,environis used.
+
+None
+
+environ
+
+Added in version 3.2.
+
+Return the effective group id of the current process.  This corresponds to the
+âset idâ bit on the file being executed in the current process.
+
+Availability: Unix, not WASI.
+
+Return the current processâs effective user id.
+
+Availability: Unix, not WASI.
+
+Return the real group id of the current process.
+
+Availability: Unix.
+
+The function is a stub on WASI, seeWebAssembly platformsfor more
+information.
+
+Return list of group ids thatuserbelongs to. Ifgroupis not in the
+list, it is included; typically,groupis specified as the group ID
+field from the password record foruser, because that group ID will
+otherwise be potentially omitted.
+
+Availability: Unix, not WASI.
+
+Added in version 3.3.
+
+Return list of supplemental group ids associated with the current process.
+
+Availability: Unix, not WASI.
+
+Note
+
+On macOS,getgroups()behavior differs somewhat from
+other Unix platforms. If the Python interpreter was built with a
+deployment target of10.5or earlier,getgroups()returns
+the list of effective group ids associated with the current user process;
+this list is limited to a system-defined number of entries, typically 16,
+and may be modified by calls tosetgroups()if suitably privileged.
+If built with a deployment target greater than10.5,getgroups()returns the current group access list for the user
+associated with the effective user id of the process; the group access
+list may change over the lifetime of the process, it is not affected by
+calls tosetgroups(), and its length is not limited to 16.  The
+deployment target value,MACOSX_DEPLOYMENT_TARGET, can be
+obtained withsysconfig.get_config_var().
+
+getgroups()
+
+10.5
+
+getgroups()
+
+setgroups()
+
+10.5
+
+getgroups()
+
+setgroups()
+
+MACOSX_DEPLOYMENT_TARGET
+
+sysconfig.get_config_var()
+
+Return the name of the user logged in on the controlling terminal of the
+process.  For most purposes, it is more useful to usegetpass.getuser()since the latter checks the environment variablesLOGNAMEorUSERNAMEto find out who the user is, and
+falls back topwd.getpwuid(os.getuid())[0]to get the login name of the
+current real user id.
+
+getpass.getuser()
+
+LOGNAME
+
+USERNAME
+
+pwd.getpwuid(os.getuid())[0]
+
+Availability: Unix, Windows, not WASI.
+
+Return the process group id of the process with process idpid. Ifpidis 0,
+the process group id of the current process is returned.
+
+Availability: Unix, not WASI.
+
+Return the id of the current process group.
+
+Availability: Unix, not WASI.
+
+Return the current process id.
+
+The function is a stub on WASI, seeWebAssembly platformsfor more
+information.
+
+Return the parentâs process id.  When the parent process has exited, on Unix
+the id returned is the one of the init process (1), on Windows it is still
+the same id, which may be already reused by another process.
+
+Availability: Unix, Windows, not WASI.
+
+Changed in version 3.2:Added support for Windows.
+
+Get program scheduling priority.  The valuewhichis one ofPRIO_PROCESS,PRIO_PGRP, orPRIO_USER, andwhois interpreted relative towhich(a process identifier forPRIO_PROCESS, process group identifier forPRIO_PGRP, and a
+user ID forPRIO_USER).  A zero value forwhodenotes
+(respectively) the calling process, the process group of the calling process,
+or the real user ID of the calling process.
+
+PRIO_PROCESS
+
+PRIO_PGRP
+
+PRIO_USER
+
+PRIO_PROCESS
+
+PRIO_PGRP
+
+PRIO_USER
+
+Availability: Unix, not WASI.
+
+Added in version 3.3.
+
+Parameters for thegetpriority()andsetpriority()functions.
+
+getpriority()
+
+setpriority()
+
+Availability: Unix, not WASI.
+
+Added in version 3.3.
+
+Parameters for thegetpriority()andsetpriority()functions.
+
+getpriority()
+
+setpriority()
+
+Availability: macOS
+
+Added in version 3.12.
+
+Return a tuple (ruid, euid, suid) denoting the current processâs
+real, effective, and saved user ids.
+
+Availability: Unix, not WASI, not macOS, not iOS.
+
+Added in version 3.2.
+
+Return a tuple (rgid, egid, sgid) denoting the current processâs
+real, effective, and saved group ids.
+
+Availability: Unix, not WASI, not macOS, not iOS.
+
+Added in version 3.2.
+
+Return the current processâs real user id.
+
+Availability: Unix.
+
+The function is a stub on WASI, seeWebAssembly platformsfor more
+information.
+
+Call the systeminitgroups()to initialize the group access list with all of
+the groups of which the specified username is a member, plus the specified
+group id.
+
+initgroups()
+
+Availability: Unix, not WASI, not Android.
+
+Added in version 3.2.
+
+Set the environment variable namedkeyto the stringvalue.  Such
+changes to the environment affect subprocesses started withos.system(),popen()orfork()andexecv().
+
+os.system()
+
+popen()
+
+fork()
+
+execv()
+
+Assignments to items inos.environare automatically translated into
+corresponding calls toputenv(); however, calls toputenv()donât updateos.environ, so it is actually preferable to assign to items
+ofos.environ. This also applies togetenv()andgetenvb(), which
+respectively useos.environandos.environbin their implementations.
+
+os.environ
+
+putenv()
+
+putenv()
+
+os.environ
+
+os.environ
+
+getenv()
+
+getenvb()
+
+os.environ
+
+os.environb
+
+See also theos.reload_environ()function.
+
+os.reload_environ()
+
+Note
+
+On some platforms, including FreeBSD and macOS, settingenvironmay
+cause memory leaks. Refer to the system documentation forputenv().
+
+environ
+
+putenv()
+
+Raises anauditing eventos.putenvwith argumentskey,value.
+
+os.putenv
+
+key
+
+value
+
+Changed in version 3.9:The function is now always available.
+
+Set the current processâs effective group id.
+
+Availability: Unix, not WASI, not Android.
+
+Set the current processâs effective user id.
+
+Availability: Unix, not WASI, not Android.
+
+Set the current processâ group id.
+
+Availability: Unix, not WASI, not Android.
+
+Set the list of supplemental group ids associated with the current process togroups.groupsmust be a sequence, and each element must be an integer
+identifying a group. This operation is typically available only to the superuser.
+
+Availability: Unix, not WASI.
+
+Note
+
+On macOS, the length ofgroupsmay not exceed the
+system-defined maximum number of effective group ids, typically 16.
+See the documentation forgetgroups()for cases where it may not
+return the same group list set by calling setgroups().
+
+getgroups()
+
+Reassociate the current thread with a Linux namespace.
+See thesetns(2)andnamespaces(7)man pages for more
+details.
+
+Iffdrefers to a/proc/pid/ns/link,setns()reassociates the
+calling thread with the namespace associated with that link,
+andnstypemay be set to one of theCLONE_NEW* constantsto impose constraints on the operation
+(0means no constraints).
+
+/proc/pid/ns/
+
+setns()
+
+0
+
+Since Linux 5.8,fdmay refer to a PID file descriptor obtained frompidfd_open(). In this case,setns()reassociates the calling thread
+into one or more of the same namespaces as the thread referred to byfd.
+This is subject to any constraints imposed bynstype,
+which is a bit mask combining one or more of theCLONE_NEW* constants,
+e.g.setns(fd,os.CLONE_NEWUTS|os.CLONE_NEWPID).
+The callerâs memberships in unspecified namespaces are left unchanged.
+
+pidfd_open()
+
+setns()
+
+setns(fd,os.CLONE_NEWUTS|os.CLONE_NEWPID)
+
+fdcan be any object with afileno()method, or a raw file descriptor.
+
+fileno()
+
+This example reassociates the thread with theinitprocessâs network namespace:
+
+init
+
+fd=os.open("/proc/1/ns/net",os.O_RDONLY)os.setns(fd,os.CLONE_NEWNET)os.close(fd)
+
+Availability: Linux >= 3.0 with glibc >= 2.14.
+
+Added in version 3.12.
+
+See also
+
+Theunshare()function.
+
+unshare()
+
+Call the system callsetpgrp()orsetpgrp(0,0)depending on
+which version is implemented (if any).  See the Unix manual for the semantics.
+
+setpgrp()
+
+setpgrp(0,0)
+
+Availability: Unix, not WASI.
+
+Call the system callsetpgid()to set the process group id of the
+process with idpidto the process group with idpgrp.  See the Unix manual
+for the semantics.
+
+setpgid()
+
+Availability: Unix, not WASI.
+
+Set program scheduling priority. The valuewhichis one ofPRIO_PROCESS,PRIO_PGRP, orPRIO_USER, andwhois interpreted relative towhich(a process identifier forPRIO_PROCESS, process group identifier forPRIO_PGRP, and a
+user ID forPRIO_USER). A zero value forwhodenotes
+(respectively) the calling process, the process group of the calling process,
+or the real user ID of the calling process.priorityis a value in the range -20 to 19. The default priority is 0;
+lower priorities cause more favorable scheduling.
+
+PRIO_PROCESS
+
+PRIO_PGRP
+
+PRIO_USER
+
+PRIO_PROCESS
+
+PRIO_PGRP
+
+PRIO_USER
+
+Availability: Unix, not WASI.
+
+Added in version 3.3.
+
+Set the current processâs real and effective group ids.
+
+Availability: Unix, not WASI, not Android.
+
+Set the current processâs real, effective, and saved group ids.
+
+Availability: Unix, not WASI, not Android, not macOS, not iOS.
+
+Added in version 3.2.
+
+Set the current processâs real, effective, and saved user ids.
+
+Availability: Unix, not WASI, not Android, not macOS, not iOS.
+
+Added in version 3.2.
+
+Set the current processâs real and effective user ids.
+
+Availability: Unix, not WASI, not Android.
+
+Call the system callgetsid().  See the Unix manual for the semantics.
+
+getsid()
+
+Availability: Unix, not WASI.
+
+Call the system callsetsid().  See the Unix manual for the semantics.
+
+setsid()
+
+Availability: Unix, not WASI.
+
+Set the current processâs user id.
+
+Availability: Unix, not WASI, not Android.
+
+Return the error message corresponding to the error code incode.
+On platforms wherestrerror()returnsNULLwhen given an unknown
+error number,ValueErroris raised.
+
+strerror()
+
+NULL
+
+ValueError
+
+Trueif the native OS type of the environment is bytes (eg.Falseon
+Windows).
+
+True
+
+False
+
+Added in version 3.2.
+
+Set the current numeric umask and return the previous umask.
+
+The function is a stub on WASI, seeWebAssembly platformsfor more
+information.
+
+Returns information identifying the current operating system.
+The return value is auname_result.
+
+uname_result
+
+On macOS, iOS and Android, this returns thekernelname and version (i.e.,'Darwin'on macOS and iOS;'Linux'on Android).platform.uname()can be used to get the user-facing operating system name and version on iOS and
+Android.
+
+'Darwin'
+
+'Linux'
+
+platform.uname()
+
+See also
+
+sys.platformwhich has finer granularity.
+
+sys.platform
+
+Theplatformmodule provides detailed checks for the
+systemâs identity.
+
+platform
+
+Availability: Unix.
+
+Changed in version 3.3:Return type changed from a tuple to a tuple-like object
+with named attributes.
+
+Name and information about the system returned byos.uname().
+These attributes correspond to the members described inuname(2).
+
+os.uname()
+
+For backwards compatibility, this object is also iterable, behaving
+like a five-tuple containingsysname,nodename,release,version, andmachinein that order.
+
+sysname
+
+nodename
+
+release
+
+version
+
+machine
+
+Operating system name.
+
+Name of machine on network. Some systems truncatenodenameto 8 characters or to the leading
+component; a better way to get the hostname issocket.gethostname()or evensocket.gethostbyaddr(socket.gethostname()).
+
+nodename
+
+socket.gethostname()
+
+socket.gethostbyaddr(socket.gethostname())
+
+Operating system release.
+
+Operating system version.
+
+Hardware identifier.
+
+Unset (delete) the environment variable namedkey. Such changes to the
+environment affect subprocesses started withos.system(),popen()orfork()andexecv().
+
+os.system()
+
+popen()
+
+fork()
+
+execv()
+
+Deletion of items inos.environis automatically translated into a
+corresponding call tounsetenv(); however, calls tounsetenv()donât updateos.environ, so it is actually preferable to delete items ofos.environ.
+
+os.environ
+
+unsetenv()
+
+unsetenv()
+
+os.environ
+
+os.environ
+
+See also theos.reload_environ()function.
+
+os.reload_environ()
+
+Raises anauditing eventos.unsetenvwith argumentkey.
+
+os.unsetenv
+
+key
+
+Changed in version 3.9:The function is now always available and is also available on Windows.
+
+Disassociate parts of the process execution context, and move them into a
+newly created namespace.
+See theunshare(2)man page for more details.
+Theflagsargument is a bit mask, combining zero or more of theCLONE_* constants,
+that specifies which parts of the execution context should be
+unshared from their existing associations and moved to a new namespace.
+If theflagsargument is0, no changes are made to the calling processâs
+execution context.
+
+0
+
+Availability: Linux >= 2.6.16.
+
+Added in version 3.12.
+
+See also
+
+Thesetns()function.
+
+setns()
+
+Flags to theunshare()function, if the implementation supports them.
+Seeunshare(2)in the Linux manual
+for their exact effect and availability.
+
+unshare()
+
+File Object Creation
+
+These functions create newfile objects.  (See alsoopen()for opening file descriptors.)
+
+open()
+
+Return an open file object connected to the file descriptorfd.  This is an
+alias of theopen()built-in function and accepts the same arguments.
+The only difference is that the first argument offdopen()must always
+be an integer.
+
+open()
+
+fdopen()
+
+File Descriptor Operations
+
+These functions operate on I/O streams referenced using file descriptors.
+
+File descriptors are small integers corresponding to a file that has been opened
+by the current process.  For example, standard input is usually file descriptor
+0, standard output is 1, and standard error is 2.  Further files opened by a
+process will then be assigned 3, 4, 5, and so forth.  The name âfile descriptorâ
+is slightly deceptive; on Unix platforms, sockets and pipes are also referenced
+by file descriptors.
+
+Thefileno()method can be used to obtain the file descriptor
+associated with afile objectwhen required.  Note that using the file
+descriptor directly will bypass the file object methods, ignoring aspects such
+as internal buffering of data.
+
+fileno()
+
+Close file descriptorfd.
+
+Note
+
+This function is intended for low-level I/O and must be applied to a file
+descriptor as returned byos.open()orpipe().  To close a âfile
+objectâ returned by the built-in functionopen()or bypopen()orfdopen(), use itsclose()method.
+
+os.open()
+
+pipe()
+
+open()
+
+popen()
+
+fdopen()
+
+close()
+
+Close all file descriptors fromfd_low(inclusive) tofd_high(exclusive),
+ignoring errors. Equivalent to (but much faster than):
+
+forfdinrange(fd_low,fd_high):try:os.close(fd)exceptOSError:pass
+
+Copycountbytes from file descriptorsrc, starting from offsetoffset_src, to file descriptordst, starting from offsetoffset_dst.
+Ifoffset_srcisNone, thensrcis read from the current position;
+respectively foroffset_dst.
+
+None
+
+In Linux kernel older than 5.3, the files pointed to bysrcanddstmust reside in the same filesystem, otherwise anOSErroris
+raised witherrnoset toerrno.EXDEV.
+
+OSError
+
+errno
+
+errno.EXDEV
+
+This copy is done without the additional cost of transferring data
+from the kernel to user space and then back into the kernel. Additionally,
+some filesystems could implement extra optimizations, such as the use of
+reflinks (i.e., two or more inodes that share pointers to the same
+copy-on-write disk blocks; supported file systems include btrfs and XFS)
+and server-side copy (in the case of NFS).
+
+The function copies bytes between two file descriptors. Text options, like
+the encoding and the line ending, are ignored.
+
+The return value is the amount of bytes copied. This could be less than the
+amount requested.
+
+Note
+
+On Linux,os.copy_file_range()should not be used for copying a
+range of a pseudo file from a special filesystem like procfs and sysfs.
+It will always copy no bytes and return 0 as if the file was empty
+because of a known Linux kernel issue.
+
+os.copy_file_range()
+
+Availability: Linux >= 4.5 with glibc >= 2.27.
+
+Added in version 3.8.
+
+Return a string describing the encoding of the device associated withfdif it is connected to a terminal; else returnNone.
+
+None
+
+On Unix, if thePython UTF-8 Modeis enabled, return'UTF-8'rather than the device encoding.
+
+'UTF-8'
+
+Changed in version 3.10:On Unix, the function now implements the Python UTF-8 Mode.
+
+Return a duplicate of file descriptorfd. The new file descriptor isnon-inheritable.
+
+On Windows, when duplicating a standard stream (0: stdin, 1: stdout,
+2: stderr), the new file descriptor isinheritable.
+
+Availability: not WASI.
+
+Changed in version 3.4:The new file descriptor is now non-inheritable.
+
+Duplicate file descriptorfdtofd2, closing the latter first if
+necessary. Returnfd2. The new file descriptor isinheritableby default or non-inheritable ifinheritableisFalse.
+
+False
+
+Availability: not WASI.
+
+Changed in version 3.4:Add the optionalinheritableparameter.
+
+Changed in version 3.7:Returnfd2on success. Previously,Nonewas always returned.
+
+None
+
+Change the mode of the file given byfdto the numericmode.  See the
+docs forchmod()for possible values ofmode.  As of Python 3.3, this
+is equivalent toos.chmod(fd,mode).
+
+chmod()
+
+os.chmod(fd,mode)
+
+Raises anauditing eventos.chmodwith argumentspath,mode,dir_fd.
+
+os.chmod
+
+path
+
+mode
+
+dir_fd
+
+Availability: Unix, Windows.
+
+The function is limited on WASI, seeWebAssembly platformsfor more
+information.
+
+Changed in version 3.13:Added support on Windows.
+
+Change the owner and group id of the file given byfdto the numericuidandgid.  To leave one of the ids unchanged, set it to -1.  Seechown().  As of Python 3.3, this is equivalent toos.chown(fd,uid,gid).
+
+chown()
+
+os.chown(fd,uid,gid)
+
+Raises anauditing eventos.chownwith argumentspath,uid,gid,dir_fd.
+
+os.chown
+
+path
+
+uid
+
+gid
+
+dir_fd
+
+Availability: Unix.
+
+The function is limited on WASI, seeWebAssembly platformsfor more
+information.
+
+Force write of file with filedescriptorfdto disk. Does not force update of
+metadata.
+
+Availability: Unix, not macOS, not iOS.
+
+Return system configuration information relevant to an open file.namespecifies the configuration value to retrieve; it may be a string which is the
+name of a defined system value; these names are specified in a number of
+standards (POSIX.1, Unix 95, Unix 98, and others).  Some platforms define
+additional names as well.  The names known to the host operating system are
+given in thepathconf_namesdictionary.  For configuration variables not
+included in that mapping, passing an integer fornameis also accepted.
+
+pathconf_names
+
+Ifnameis a string and is not known,ValueErroris raised.  If a
+specific value fornameis not supported by the host system, even if it is
+included inpathconf_names, anOSErroris raised witherrno.EINVALfor the error number.
+
+ValueError
+
+pathconf_names
+
+OSError
+
+errno.EINVAL
+
+As of Python 3.3, this is equivalent toos.pathconf(fd,name).
+
+os.pathconf(fd,name)
+
+Availability: Unix.
+
+Get the status of the file descriptorfd. Return astat_resultobject.
+
+stat_result
+
+As of Python 3.3, this is equivalent toos.stat(fd).
+
+os.stat(fd)
+
+See also
+
+Thestat()function.
+
+stat()
+
+Return information about the filesystem containing the file associated with
+file descriptorfdin astatvfs_result, likestatvfs().
+As of Python 3.3, this is equivalent toos.statvfs(fd).
+
+statvfs_result
+
+statvfs()
+
+os.statvfs(fd)
+
+Availability: Unix.
+
+Force write of file with filedescriptorfdto disk.  On Unix, this calls the
+nativefsync()function; on Windows, the MS_commit()function.
+
+fsync()
+
+_commit()
+
+If youâre starting with a buffered Pythonfile objectf, first dof.flush(), and then doos.fsync(f.fileno()), to ensure that all internal
+buffers associated withfare written to disk.
+
+f.flush()
+
+os.fsync(f.fileno())
+
+Availability: Unix, Windows.
+
+Truncate the file corresponding to file descriptorfd, so that it is at
+mostlengthbytes in size.  As of Python 3.3, this is equivalent toos.truncate(fd,length).
+
+os.truncate(fd,length)
+
+Raises anauditing eventos.truncatewith argumentsfd,length.
+
+os.truncate
+
+fd
+
+length
+
+Availability: Unix, Windows.
+
+Changed in version 3.5:Added support for Windows
+
+Get the blocking mode of the file descriptor:Falseif theO_NONBLOCKflag is set,Trueif the flag is cleared.
+
+False
+
+O_NONBLOCK
+
+True
+
+See alsoset_blocking()andsocket.socket.setblocking().
+
+set_blocking()
+
+socket.socket.setblocking()
+
+Availability: Unix, Windows.
+
+The function is limited on WASI, seeWebAssembly platformsfor more
+information.
+
+On Windows, this function is limited to pipes.
+
+Added in version 3.5.
+
+Changed in version 3.12:Added support for pipes on Windows.
+
+Grant access to the slave pseudo-terminal device associated with the
+master pseudo-terminal device to which the file descriptorfdrefers.
+The file descriptorfdis not closed upon failure.
+
+Calls the C standard library functiongrantpt().
+
+grantpt()
+
+Availability: Unix, not WASI.
+
+Added in version 3.13.
+
+ReturnTrueif the file descriptorfdis open and connected to a
+tty(-like) device, elseFalse.
+
+True
+
+False
+
+Apply, test or remove a POSIX lock on an open file descriptor.fdis an open file descriptor.cmdspecifies the command to use - one ofF_LOCK,F_TLOCK,F_ULOCKorF_TEST.lenspecifies the section of the file to lock.
+
+F_LOCK
+
+F_TLOCK
+
+F_ULOCK
+
+F_TEST
+
+Raises anauditing eventos.lockfwith argumentsfd,cmd,len.
+
+os.lockf
+
+fd
+
+cmd
+
+len
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Flags that specify what actionlockf()will take.
+
+lockf()
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Prepare the tty of which fd is a file descriptor for a new login session.
+Make the calling process a session leader; make the tty the controlling tty,
+the stdin, the stdout, and the stderr of the calling process; close fd.
+
+Availability: Unix, not WASI.
+
+Added in version 3.11.
+
+Set the current position of file descriptorfdto positionpos, modified
+bywhence, and return the new position in bytes relative to
+the start of the file.
+Valid values forwhenceare:
+
+SEEK_SETor0â setposrelative to the beginning of the file
+
+SEEK_SETor0â setposrelative to the beginning of the file
+
+SEEK_SET
+
+0
+
+SEEK_CURor1â setposrelative to the current file position
+
+SEEK_CURor1â setposrelative to the current file position
+
+SEEK_CUR
+
+1
+
+SEEK_ENDor2â setposrelative to the end of the file
+
+SEEK_ENDor2â setposrelative to the end of the file
+
+SEEK_END
+
+2
+
+SEEK_HOLEâ setposto the next data location, relative topos
+
+SEEK_HOLEâ setposto the next data location, relative topos
+
+SEEK_HOLE
+
+SEEK_DATAâ setposto the next data hole, relative topos
+
+SEEK_DATAâ setposto the next data hole, relative topos
+
+SEEK_DATA
+
+Changed in version 3.3:Add support forSEEK_HOLEandSEEK_DATA.
+
+SEEK_HOLE
+
+SEEK_DATA
+
+Parameters to thelseek()function and theseek()method onfile-like objects,
+for whence to adjust the file position indicator.
+
+lseek()
+
+seek()
+
+SEEK_SET
+
+Adjust the file position relative to the beginning of the file.
+
+SEEK_CUR
+
+Adjust the file position relative to the current file position.
+
+SEEK_END
+
+Adjust the file position relative to the end of the file.
+
+Their values are 0, 1, and 2, respectively.
+
+Parameters to thelseek()function and theseek()method onfile-like objects,
+for seeking file data and holes on sparsely allocated files.
+
+lseek()
+
+seek()
+
+SEEK_DATA
+
+Adjust the file offset to the next location containing data,
+relative to the seek position.
+
+SEEK_HOLE
+
+Adjust the file offset to the next location containing a hole,
+relative to the seek position.
+A hole is defined as a sequence of zeros.
+
+Note
+
+These operations only make sense for filesystems that support them.
+
+Availability: Linux >= 3.1, macOS, Unix
+
+Added in version 3.3.
+
+Open the filepathand set various flags according toflagsand possibly
+its mode according tomode.  When computingmode, the current umask value
+is first masked out.  Return the file descriptor for the newly opened file.
+The new file descriptor isnon-inheritable.
+
+For a description of the flag and mode values, see the C run-time documentation;
+flag constants (likeO_RDONLYandO_WRONLY) are defined in
+theosmodule.  In particular, on Windows addingO_BINARYis needed to open files in binary mode.
+
+O_RDONLY
+
+O_WRONLY
+
+os
+
+O_BINARY
+
+This function can supportpaths relative to directory descriptorswith thedir_fdparameter.
+
+Raises anauditing eventopenwith argumentspath,mode,flags.
+
+open
+
+path
+
+mode
+
+flags
+
+Changed in version 3.4:The new file descriptor is now non-inheritable.
+
+Note
+
+This function is intended for low-level I/O.  For normal usage, use the
+built-in functionopen(), which returns afile objectwithread()andwrite()methods.
+To wrap a file descriptor in a file object, usefdopen().
+
+open()
+
+read()
+
+write()
+
+fdopen()
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.5:If the system call is interrupted and the signal handler does not raise an
+exception, the function now retries the system call instead of raising anInterruptedErrorexception (seePEP 475for the rationale).
+
+InterruptedError
+
+Changed in version 3.6:Accepts apath-like object.
+
+The following constants are options for theflagsparameter to theopen()function.  They can be combined using the bitwise OR operator|.  Some of them are not available on all platforms.  For descriptions of
+their availability and use, consult theopen(2)manual page on Unix
+orthe MSDNon Windows.
+
+open()
+
+|
+
+The above constants are available on Unix and Windows.
+
+The above constants are only available on Unix.
+
+Changed in version 3.3:AddO_CLOEXECconstant.
+
+O_CLOEXEC
+
+The above constants are only available on Windows.
+
+The above constants are only available on macOS.
+
+Changed in version 3.10:AddO_EVTONLY,O_FSYNC,O_SYMLINKandO_NOFOLLOW_ANYconstants.
+
+O_EVTONLY
+
+O_FSYNC
+
+O_SYMLINK
+
+O_NOFOLLOW_ANY
+
+The above constants are extensions and not present if they are not defined by
+the C library.
+
+Changed in version 3.4:AddO_PATHon systems that support it.
+AddO_TMPFILE, only available on Linux Kernel 3.11
+  or newer.
+
+O_PATH
+
+O_TMPFILE
+
+Open a new pseudo-terminal pair. Return a pair of file descriptors(master,slave)for the pty and the tty, respectively. The new file
+descriptors arenon-inheritable. For a (slightly) more
+portable approach, use theptymodule.
+
+(master,slave)
+
+pty
+
+Availability: Unix, not WASI.
+
+Changed in version 3.4:The new file descriptors are now non-inheritable.
+
+Create a pipe.  Return a pair of file descriptors(r,w)usable for
+reading and writing, respectively. The new file descriptor isnon-inheritable.
+
+(r,w)
+
+Availability: Unix, Windows.
+
+Changed in version 3.4:The new file descriptors are now non-inheritable.
+
+Create a pipe withflagsset atomically.flagscan be constructed by ORing together one or more of these values:O_NONBLOCK,O_CLOEXEC.
+Return a pair of file descriptors(r,w)usable for reading and writing,
+respectively.
+
+O_NONBLOCK
+
+O_CLOEXEC
+
+(r,w)
+
+Availability: Unix, not WASI, not macOS, not iOS.
+
+Added in version 3.3.
+
+Ensures that enough disk space is allocated for the file specified byfdstarting fromoffsetand continuing forlenbytes.
+
+Availability: Unix, not macOS, not iOS.
+
+Added in version 3.3.
+
+Announces an intention to access data in a specific pattern thus allowing
+the kernel to make optimizations.
+The advice applies to the region of the file specified byfdstarting atoffsetand continuing forlenbytes.adviceis one ofPOSIX_FADV_NORMAL,POSIX_FADV_SEQUENTIAL,POSIX_FADV_RANDOM,POSIX_FADV_NOREUSE,POSIX_FADV_WILLNEEDorPOSIX_FADV_DONTNEED.
+
+POSIX_FADV_NORMAL
+
+POSIX_FADV_SEQUENTIAL
+
+POSIX_FADV_RANDOM
+
+POSIX_FADV_NOREUSE
+
+POSIX_FADV_WILLNEED
+
+POSIX_FADV_DONTNEED
+
+Availability: Unix, not macOS, not iOS.
+
+Added in version 3.3.
+
+Flags that can be used inadviceinposix_fadvise()that specify
+the access pattern that is likely to be used.
+
+posix_fadvise()
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Read at mostnbytes from file descriptorfdat a position ofoffset,
+leaving the file offset unchanged.
+
+Return a bytestring containing the bytes read. If the end of the file
+referred to byfdhas been reached, an empty bytes object is returned.
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Open and return a file descriptor for a master pseudo-terminal device.
+
+Calls the C standard library functionposix_openpt(). Theoflagargument is used to set file status flags and file access modes as
+specified in the manual page ofposix_openpt()of your system.
+
+posix_openpt()
+
+posix_openpt()
+
+The returned file descriptor isnon-inheritable.
+If the valueO_CLOEXECis available on the system, it is added tooflag.
+
+O_CLOEXEC
+
+Availability: Unix, not WASI.
+
+Added in version 3.13.
+
+Read from a file descriptorfdat a position ofoffsetinto mutablebytes-like objectsbuffers, leaving the file
+offset unchanged.  Transfer data into each buffer until it is full and then
+move on to the next buffer in the sequence to hold the rest of the data.
+
+The flags argument contains a bitwise OR of zero or more of the following
+flags:
+
+RWF_HIPRI
+
+RWF_HIPRI
+
+RWF_HIPRI
+
+RWF_NOWAIT
+
+RWF_NOWAIT
+
+RWF_NOWAIT
+
+Return the total number of bytes actually read which can be less than the
+total capacity of all the objects.
+
+The operating system may set a limit (sysconf()value'SC_IOV_MAX') on the number of buffers that can be used.
+
+sysconf()
+
+'SC_IOV_MAX'
+
+Combine the functionality ofos.readv()andos.pread().
+
+os.readv()
+
+os.pread()
+
+Availability: Linux >= 2.6.30, FreeBSD >= 6.0, OpenBSD >= 2.7, AIX >= 7.1.
+
+Using flags requires Linux >= 4.6.
+
+Added in version 3.7.
+
+Do not wait for data which is not immediately available. If this flag is
+specified, the system call will return instantly if it would have to read
+data from the backing storage or wait for a lock.
+
+If some data was successfully read, it will return the number of bytes read.
+If no bytes were read, it will return-1and set errno toerrno.EAGAIN.
+
+-1
+
+errno.EAGAIN
+
+Availability: Linux >= 4.14.
+
+Added in version 3.7.
+
+High priority read/write. Allows block-based filesystems to use polling
+of the device, which provides lower latency, but may use additional
+resources.
+
+Currently, on Linux, this feature is usable only on a file descriptor opened
+using theO_DIRECTflag.
+
+O_DIRECT
+
+Availability: Linux >= 4.6.
+
+Added in version 3.7.
+
+Return the name of the slave pseudo-terminal device associated with the
+master pseudo-terminal device to which the file descriptorfdrefers.
+The file descriptorfdis not closed upon failure.
+
+Calls the reentrant C standard library functionptsname_r()if
+it is available; otherwise, the C standard library functionptsname(), which is not guaranteed to be thread-safe, is called.
+
+ptsname_r()
+
+ptsname()
+
+Availability: Unix, not WASI.
+
+Added in version 3.13.
+
+Write the bytestring instrto file descriptorfdat position ofoffset, leaving the file offset unchanged.
+
+Return the number of bytes actually written.
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Write thebufferscontents to file descriptorfdat an offsetoffset,
+leaving the file offset unchanged.buffersmust be a sequence ofbytes-like objects. Buffers are processed in
+array order. Entire contents of the first buffer is written before
+proceeding to the second, and so on.
+
+The flags argument contains a bitwise OR of zero or more of the following
+flags:
+
+RWF_DSYNC
+
+RWF_DSYNC
+
+RWF_DSYNC
+
+RWF_SYNC
+
+RWF_SYNC
+
+RWF_SYNC
+
+RWF_APPEND
+
+RWF_APPEND
+
+RWF_APPEND
+
+Return the total number of bytes actually written.
+
+The operating system may set a limit (sysconf()value'SC_IOV_MAX') on the number of buffers that can be used.
+
+sysconf()
+
+'SC_IOV_MAX'
+
+Combine the functionality ofos.writev()andos.pwrite().
+
+os.writev()
+
+os.pwrite()
+
+Availability: Linux >= 2.6.30, FreeBSD >= 6.0, OpenBSD >= 2.7, AIX >= 7.1.
+
+Using flags requires Linux >= 4.6.
+
+Added in version 3.7.
+
+Provide a per-write equivalent of theO_DSYNCos.open()flag.
+This flag effect applies only to the data range written by the system call.
+
+O_DSYNC
+
+os.open()
+
+Availability: Linux >= 4.7.
+
+Added in version 3.7.
+
+Provide a per-write equivalent of theO_SYNCos.open()flag.
+This flag effect applies only to the data range written by the system call.
+
+O_SYNC
+
+os.open()
+
+Availability: Linux >= 4.7.
+
+Added in version 3.7.
+
+Provide a per-write equivalent of theO_APPENDos.open()flag. This flag is meaningful only foros.pwritev(), and its
+effect applies only to the data range written by the system call. Theoffsetargument does not affect the write operation; the data is always
+appended to the end of the file. However, if theoffsetargument is-1, the current fileoffsetis updated.
+
+O_APPEND
+
+os.open()
+
+os.pwritev()
+
+-1
+
+Availability: Linux >= 4.16.
+
+Added in version 3.10.
+
+Read at mostnbytes from file descriptorfd.
+
+Return a bytestring containing the bytes read. If the end of the file
+referred to byfdhas been reached, an empty bytes object is returned.
+
+Note
+
+This function is intended for low-level I/O and must be applied to a file
+descriptor as returned byos.open()orpipe().  To read a
+âfile objectâ returned by the built-in functionopen()or bypopen()orfdopen(), orsys.stdin, use itsread()orreadline()methods.
+
+os.open()
+
+pipe()
+
+open()
+
+popen()
+
+fdopen()
+
+sys.stdin
+
+read()
+
+readline()
+
+Changed in version 3.5:If the system call is interrupted and the signal handler does not raise an
+exception, the function now retries the system call instead of raising anInterruptedErrorexception (seePEP 475for the rationale).
+
+InterruptedError
+
+Read from a file descriptorfdinto a mutablebuffer objectbuffer.
+
+Thebuffershould be mutable andbytes-like. On
+success, returns the number of bytes read. Less bytes may be read than the
+size of the buffer. The underlying system call will be retried when
+interrupted by a signal, unless the signal handler raises an exception.
+Other errors will not be retried and an error will be raised.
+
+Returns 0 iffdis at end of file or if the providedbufferhas
+length 0 (which can be used to check for errors without reading data).
+Never returns negative.
+
+Note
+
+This function is intended for low-level I/O and must be applied to a file
+descriptor as returned byos.open()oros.pipe().  To read a
+âfile objectâ returned by the built-in functionopen(), orsys.stdin, use its member functions, for exampleio.BufferedIOBase.readinto(),io.BufferedIOBase.read(), orio.TextIOBase.read()
+
+os.open()
+
+os.pipe()
+
+open()
+
+sys.stdin
+
+io.BufferedIOBase.readinto()
+
+io.BufferedIOBase.read()
+
+io.TextIOBase.read()
+
+Added in version 3.14.
+
+Copycountbytes from file descriptorin_fdto file descriptorout_fdstarting atoffset.
+Return the number of bytes sent. When EOF is reached return0.
+
+0
+
+The first function notation is supported by all platforms that definesendfile().
+
+sendfile()
+
+On Linux, ifoffsetis given asNone, the bytes are read from the
+current position ofin_fdand the position ofin_fdis updated.
+
+None
+
+The second case may be used on macOS and FreeBSD whereheadersandtrailersare arbitrary sequences of buffers that are written before and
+after the data fromin_fdis written. It returns the same as the first case.
+
+On macOS and FreeBSD, a value of0forcountspecifies to send until
+the end ofin_fdis reached.
+
+0
+
+All platforms support sockets asout_fdfile descriptor, and some platforms
+allow other types (e.g. regular file, pipe) as well.
+
+Cross-platform applications should not useheaders,trailersandflagsarguments.
+
+Availability: Unix, not WASI.
+
+Note
+
+For a higher-level wrapper ofsendfile(), seesocket.socket.sendfile().
+
+sendfile()
+
+socket.socket.sendfile()
+
+Added in version 3.3.
+
+Changed in version 3.9:Parametersoutandinwas renamed toout_fdandin_fd.
+
+Parameters to thesendfile()function, if the implementation supports
+them.
+
+sendfile()
+
+Availability: Unix, not WASI.
+
+Added in version 3.3.
+
+Parameter to thesendfile()function, if the implementation supports
+it. The data wonât be cached in the virtual memory and will be freed afterwards.
+
+sendfile()
+
+Availability: Unix, not WASI.
+
+Added in version 3.11.
+
+Set the blocking mode of the specified file descriptor. Set theO_NONBLOCKflag if blocking isFalse, clear the flag otherwise.
+
+O_NONBLOCK
+
+False
+
+See alsoget_blocking()andsocket.socket.setblocking().
+
+get_blocking()
+
+socket.socket.setblocking()
+
+Availability: Unix, Windows.
+
+The function is limited on WASI, seeWebAssembly platformsfor more
+information.
+
+On Windows, this function is limited to pipes.
+
+Added in version 3.5.
+
+Changed in version 3.12:Added support for pipes on Windows.
+
+Transfercountbytes from file descriptorsrc, starting from offsetoffset_src, to file descriptordst, starting from offsetoffset_dst.
+
+The splicing behaviour can be modified by specifying aflagsvalue.
+Any of the following variables may used, combined using bitwise OR
+(the|operator):
+
+|
+
+IfSPLICE_F_MOVEis specified,
+the kernel is asked to move pages instead of copying,
+but pages may still be copied if the kernel cannot move the pages from the pipe.
+
+IfSPLICE_F_MOVEis specified,
+the kernel is asked to move pages instead of copying,
+but pages may still be copied if the kernel cannot move the pages from the pipe.
+
+SPLICE_F_MOVE
+
+IfSPLICE_F_NONBLOCKis specified,
+the kernel is asked to not block on I/O.
+This makes the splice pipe operations nonblocking,
+but splice may nevertheless block because the spliced file descriptors may block.
+
+IfSPLICE_F_NONBLOCKis specified,
+the kernel is asked to not block on I/O.
+This makes the splice pipe operations nonblocking,
+but splice may nevertheless block because the spliced file descriptors may block.
+
+SPLICE_F_NONBLOCK
+
+IfSPLICE_F_MOREis specified,
+it hints to the kernel that more data will be coming in a subsequent splice.
+
+IfSPLICE_F_MOREis specified,
+it hints to the kernel that more data will be coming in a subsequent splice.
+
+SPLICE_F_MORE
+
+At least one of the file descriptors must refer to a pipe. Ifoffset_srcisNone, thensrcis read from the current position; respectively foroffset_dst. The offset associated to the file descriptor that refers to a
+pipe must beNone. The files pointed to bysrcanddstmust reside in
+the same filesystem, otherwise anOSErroris raised witherrnoset toerrno.EXDEV.
+
+None
+
+None
+
+OSError
+
+errno
+
+errno.EXDEV
+
+This copy is done without the additional cost of transferring data
+from the kernel to user space and then back into the kernel. Additionally,
+some filesystems could implement extra optimizations. The copy is done as if
+both files are opened as binary.
+
+Upon successful completion, returns the number of bytes spliced to or from
+the pipe. A return value of 0 means end of input. Ifsrcrefers to a
+pipe, then this means that there was no data to transfer, and it would not
+make sense to block because there are no writers connected to the write end
+of the pipe.
+
+See also
+
+Thesplice(2)man page.
+
+Availability: Linux >= 2.6.17 with glibc >= 2.5
+
+Added in version 3.10.
+
+Added in version 3.10.
+
+Read from a file descriptorfdinto a number of mutablebytes-like
+objectsbuffers. Transfer data into each buffer until
+it is full and then move on to the next buffer in the sequence to hold the
+rest of the data.
+
+Return the total number of bytes actually read which can be less than the
+total capacity of all the objects.
+
+The operating system may set a limit (sysconf()value'SC_IOV_MAX') on the number of buffers that can be used.
+
+sysconf()
+
+'SC_IOV_MAX'
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Return the process group associated with the terminal given byfd(an open
+file descriptor as returned byos.open()).
+
+os.open()
+
+Availability: Unix, not WASI.
+
+Set the process group associated with the terminal given byfd(an open file
+descriptor as returned byos.open()) topg.
+
+os.open()
+
+Availability: Unix, not WASI.
+
+Return a string which specifies the terminal device associated with
+file descriptorfd.  Iffdis not associated with a terminal device, an
+exception is raised.
+
+Availability: Unix.
+
+Unlock the slave pseudo-terminal device associated with the master
+pseudo-terminal device to which the file descriptorfdrefers.
+The file descriptorfdis not closed upon failure.
+
+Calls the C standard library functionunlockpt().
+
+unlockpt()
+
+Availability: Unix, not WASI.
+
+Added in version 3.13.
+
+Write the bytestring instrto file descriptorfd.
+
+Return the number of bytes actually written.
+
+Note
+
+This function is intended for low-level I/O and must be applied to a file
+descriptor as returned byos.open()orpipe().  To write a âfile
+objectâ returned by the built-in functionopen()or bypopen()orfdopen(), orsys.stdoutorsys.stderr, use itswrite()method.
+
+os.open()
+
+pipe()
+
+open()
+
+popen()
+
+fdopen()
+
+sys.stdout
+
+sys.stderr
+
+write()
+
+Changed in version 3.5:If the system call is interrupted and the signal handler does not raise an
+exception, the function now retries the system call instead of raising anInterruptedErrorexception (seePEP 475for the rationale).
+
+InterruptedError
+
+Write the contents ofbuffersto file descriptorfd.buffersmust be
+a sequence ofbytes-like objects. Buffers are
+processed in array order. Entire contents of the first buffer is written
+before proceeding to the second, and so on.
+
+Returns the total number of bytes actually written.
+
+The operating system may set a limit (sysconf()value'SC_IOV_MAX') on the number of buffers that can be used.
+
+sysconf()
+
+'SC_IOV_MAX'
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Querying the size of a terminal
+
+Added in version 3.3.
+
+Return the size of the terminal window as(columns,lines),
+tuple of typeterminal_size.
+
+(columns,lines)
+
+terminal_size
+
+The optional argumentfd(defaultSTDOUT_FILENO, or standard
+output) specifies which file descriptor should be queried.
+
+fd
+
+STDOUT_FILENO
+
+If the file descriptor is not connected to a terminal, anOSErroris raised.
+
+OSError
+
+shutil.get_terminal_size()is the high-level function which
+should normally be used,os.get_terminal_sizeis the low-level
+implementation.
+
+shutil.get_terminal_size()
+
+os.get_terminal_size
+
+Availability: Unix, Windows.
+
+A subclass of tuple, holding(columns,lines)of the terminal window size.
+
+(columns,lines)
+
+Width of the terminal window in characters.
+
+Height of the terminal window in characters.
+
+Inheritance of File Descriptors
+
+Added in version 3.4.
+
+A file descriptor has an âinheritableâ flag which indicates if the file descriptor
+can be inherited by child processes.  Since Python 3.4, file descriptors
+created by Python are non-inheritable by default.
+
+On UNIX, non-inheritable file descriptors are closed in child processes at the
+execution of a new program, other file descriptors are inherited. Note that
+non-inheritable file descriptors are stillinheritedby child processes onos.fork().
+
+os.fork()
+
+On Windows, non-inheritable handles and file descriptors are closed in child
+processes, except for standard streams (file descriptors 0, 1 and 2: stdin, stdout
+and stderr), which are always inherited.  Usingspawn*functions,
+all inheritable handles and all inheritable file descriptors are inherited.
+Using thesubprocessmodule, all file descriptors except standard
+streams are closed, and inheritable handles are only inherited if theclose_fdsparameter isFalse.
+
+spawn*
+
+subprocess
+
+False
+
+On WebAssembly platforms, the file descriptor cannot be modified.
+
+Get the âinheritableâ flag of the specified file descriptor (a boolean).
+
+Set the âinheritableâ flag of the specified file descriptor.
+
+Get the âinheritableâ flag of the specified handle (a boolean).
+
+Availability: Windows.
+
+Set the âinheritableâ flag of the specified handle.
+
+Availability: Windows.
+
+Files and Directories
+
+On some Unix platforms, many of these functions support one or more of these
+features:
+
+specifying a file descriptor:Normally thepathargument provided to functions in theosmodule
+must be a string specifying a file path.  However, some functions now
+alternatively accept an open file descriptor for theirpathargument.
+The function will then operate on the file referred to by the descriptor.
+For POSIX systems, Python will call the variant of the function prefixed
+withf(e.g. callfchdirinstead ofchdir).You can check whether or notpathcan be specified as a file descriptor
+for a particular function on your platform usingos.supports_fd.
+If this functionality is unavailable, using it will raise aNotImplementedError.If the function also supportsdir_fdorfollow_symlinksarguments, itâs
+an error to specify one of those when supplyingpathas a file descriptor.
+
+specifying a file descriptor:Normally thepathargument provided to functions in theosmodule
+must be a string specifying a file path.  However, some functions now
+alternatively accept an open file descriptor for theirpathargument.
+The function will then operate on the file referred to by the descriptor.
+For POSIX systems, Python will call the variant of the function prefixed
+withf(e.g. callfchdirinstead ofchdir).
+
+os
+
+f
+
+fchdir
+
+chdir
+
+You can check whether or notpathcan be specified as a file descriptor
+for a particular function on your platform usingos.supports_fd.
+If this functionality is unavailable, using it will raise aNotImplementedError.
+
+os.supports_fd
+
+NotImplementedError
+
+If the function also supportsdir_fdorfollow_symlinksarguments, itâs
+an error to specify one of those when supplyingpathas a file descriptor.
+
+paths relative to directory descriptors:Ifdir_fdis notNone, it
+should be a file descriptor referring to a directory, and the path to operate
+on should be relative; path will then be relative to that directory.  If the
+path is absolute,dir_fdis ignored.  For POSIX systems, Python will call
+the variant of the function with anatsuffix and possibly prefixed withf(e.g. callfaccessatinstead ofaccess).You can check whether or notdir_fdis supported for a particular function
+on your platform usingos.supports_dir_fd.  If itâs unavailable,
+using it will raise aNotImplementedError.
+
+paths relative to directory descriptors:Ifdir_fdis notNone, it
+should be a file descriptor referring to a directory, and the path to operate
+on should be relative; path will then be relative to that directory.  If the
+path is absolute,dir_fdis ignored.  For POSIX systems, Python will call
+the variant of the function with anatsuffix and possibly prefixed withf(e.g. callfaccessatinstead ofaccess).
+
+None
+
+at
+
+f
+
+faccessat
+
+access
+
+You can check whether or notdir_fdis supported for a particular function
+on your platform usingos.supports_dir_fd.  If itâs unavailable,
+using it will raise aNotImplementedError.
+
+os.supports_dir_fd
+
+NotImplementedError
+
+not following symlinks:Iffollow_symlinksisFalse, and the last element of the path to operate on is a symbolic link,
+the function will operate on the symbolic link itself rather than the file
+pointed to by the link.  For POSIX systems, Python will call thel...variant of the function.You can check whether or notfollow_symlinksis supported for a particular
+function on your platform usingos.supports_follow_symlinks.
+If itâs unavailable, using it will raise aNotImplementedError.
+
+not following symlinks:Iffollow_symlinksisFalse, and the last element of the path to operate on is a symbolic link,
+the function will operate on the symbolic link itself rather than the file
+pointed to by the link.  For POSIX systems, Python will call thel...variant of the function.
+
+False
+
+l...
+
+You can check whether or notfollow_symlinksis supported for a particular
+function on your platform usingos.supports_follow_symlinks.
+If itâs unavailable, using it will raise aNotImplementedError.
+
+os.supports_follow_symlinks
+
+NotImplementedError
+
+Use the real uid/gid to test for access topath.  Note that most operations
+will use the effective uid/gid, therefore this routine can be used in a
+suid/sgid environment to test if the invoking user has the specified access topath.modeshould beF_OKto test the existence ofpath, or it
+can be the inclusive OR of one or more ofR_OK,W_OK, andX_OKto test permissions.  ReturnTrueif access is allowed,Falseif not. See the Unix man pageaccess(2)for more
+information.
+
+F_OK
+
+R_OK
+
+W_OK
+
+X_OK
+
+True
+
+False
+
+This function can support specifyingpaths relative to directory
+descriptorsandnot following symlinks.
+
+Ifeffective_idsisTrue,access()will perform its access
+checks using the effective uid/gid instead of the real uid/gid.effective_idsmay not be supported on your platform; you can check whether
+or not it is available usingos.supports_effective_ids.  If it is
+unavailable, using it will raise aNotImplementedError.
+
+True
+
+access()
+
+os.supports_effective_ids
+
+NotImplementedError
+
+Note
+
+Usingaccess()to check if a user is authorized to e.g. open a file
+before actually doing so usingopen()creates a security hole,
+because the user might exploit the short time interval between checking
+and opening the file to manipulate it. Itâs preferable to useEAFPtechniques. For example:
+
+access()
+
+open()
+
+ifos.access("myfile",os.R_OK):withopen("myfile")asfp:returnfp.read()return"some default data"
+
+is better written as:
+
+try:fp=open("myfile")exceptPermissionError:return"some default data"else:withfp:returnfp.read()
+
+Note
+
+I/O operations may fail even whenaccess()indicates that they would
+succeed, particularly for operations on network filesystems which may have
+permissions semantics beyond the usual POSIX permission-bit model.
+
+access()
+
+Changed in version 3.3:Added thedir_fd,effective_ids, andfollow_symlinksparameters.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Values to pass as themodeparameter ofaccess()to test the
+existence, readability, writability and executability ofpath,
+respectively.
+
+access()
+
+Change the current working directory topath.
+
+This function can supportspecifying a file descriptor.  The
+descriptor must refer to an opened directory, not an open file.
+
+This function can raiseOSErrorand subclasses such asFileNotFoundError,PermissionError, andNotADirectoryError.
+
+OSError
+
+FileNotFoundError
+
+PermissionError
+
+NotADirectoryError
+
+Raises anauditing eventos.chdirwith argumentpath.
+
+os.chdir
+
+path
+
+Changed in version 3.3:Added support for specifyingpathas a file descriptor
+on some platforms.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Set the flags ofpathto the numericflags.flagsmay take a combination
+(bitwise OR) of the following values (as defined in thestatmodule):
+
+stat
+
+stat.UF_NODUMP
+
+stat.UF_NODUMP
+
+stat.UF_NODUMP
+
+stat.UF_IMMUTABLE
+
+stat.UF_IMMUTABLE
+
+stat.UF_IMMUTABLE
+
+stat.UF_APPEND
+
+stat.UF_APPEND
+
+stat.UF_APPEND
+
+stat.UF_OPAQUE
+
+stat.UF_OPAQUE
+
+stat.UF_OPAQUE
+
+stat.UF_NOUNLINK
+
+stat.UF_NOUNLINK
+
+stat.UF_NOUNLINK
+
+stat.UF_COMPRESSED
+
+stat.UF_COMPRESSED
+
+stat.UF_COMPRESSED
+
+stat.UF_HIDDEN
+
+stat.UF_HIDDEN
+
+stat.UF_HIDDEN
+
+stat.SF_ARCHIVED
+
+stat.SF_ARCHIVED
+
+stat.SF_ARCHIVED
+
+stat.SF_IMMUTABLE
+
+stat.SF_IMMUTABLE
+
+stat.SF_IMMUTABLE
+
+stat.SF_APPEND
+
+stat.SF_APPEND
+
+stat.SF_APPEND
+
+stat.SF_NOUNLINK
+
+stat.SF_NOUNLINK
+
+stat.SF_NOUNLINK
+
+stat.SF_SNAPSHOT
+
+stat.SF_SNAPSHOT
+
+stat.SF_SNAPSHOT
+
+This function can supportnot following symlinks.
+
+Raises anauditing eventos.chflagswith argumentspath,flags.
+
+os.chflags
+
+path
+
+flags
+
+Availability: Unix, not WASI.
+
+Changed in version 3.3:Added thefollow_symlinksparameter.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Change the mode ofpathto the numericmode.modemay take one of the
+following values (as defined in thestatmodule) or bitwise ORed
+combinations of them:
+
+stat
+
+stat.S_ISUID
+
+stat.S_ISUID
+
+stat.S_ISUID
+
+stat.S_ISGID
+
+stat.S_ISGID
+
+stat.S_ISGID
+
+stat.S_ENFMT
+
+stat.S_ENFMT
+
+stat.S_ENFMT
+
+stat.S_ISVTX
+
+stat.S_ISVTX
+
+stat.S_ISVTX
+
+stat.S_IREAD
+
+stat.S_IREAD
+
+stat.S_IREAD
+
+stat.S_IWRITE
+
+stat.S_IWRITE
+
+stat.S_IWRITE
+
+stat.S_IEXEC
+
+stat.S_IEXEC
+
+stat.S_IEXEC
+
+stat.S_IRWXU
+
+stat.S_IRWXU
+
+stat.S_IRWXU
+
+stat.S_IRUSR
+
+stat.S_IRUSR
+
+stat.S_IRUSR
+
+stat.S_IWUSR
+
+stat.S_IWUSR
+
+stat.S_IWUSR
+
+stat.S_IXUSR
+
+stat.S_IXUSR
+
+stat.S_IXUSR
+
+stat.S_IRWXG
+
+stat.S_IRWXG
+
+stat.S_IRWXG
+
+stat.S_IRGRP
+
+stat.S_IRGRP
+
+stat.S_IRGRP
+
+stat.S_IWGRP
+
+stat.S_IWGRP
+
+stat.S_IWGRP
+
+stat.S_IXGRP
+
+stat.S_IXGRP
+
+stat.S_IXGRP
+
+stat.S_IRWXO
+
+stat.S_IRWXO
+
+stat.S_IRWXO
+
+stat.S_IROTH
+
+stat.S_IROTH
+
+stat.S_IROTH
+
+stat.S_IWOTH
+
+stat.S_IWOTH
+
+stat.S_IWOTH
+
+stat.S_IXOTH
+
+stat.S_IXOTH
+
+stat.S_IXOTH
+
+This function can supportspecifying a file descriptor,paths relative to directory descriptorsandnot
+following symlinks.
+
+Note
+
+Although Windows supportschmod(), you can only set the fileâs
+read-only flag with it (via thestat.S_IWRITEandstat.S_IREADconstants or a corresponding integer value).  All other bits are ignored.
+The default value offollow_symlinksisFalseon Windows.
+
+chmod()
+
+stat.S_IWRITE
+
+stat.S_IREAD
+
+False
+
+The function is limited on WASI, seeWebAssembly platformsfor more
+information.
+
+Raises anauditing eventos.chmodwith argumentspath,mode,dir_fd.
+
+os.chmod
+
+path
+
+mode
+
+dir_fd
+
+Changed in version 3.3:Added support for specifyingpathas an open file descriptor,
+and thedir_fdandfollow_symlinksarguments.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Changed in version 3.13:Added support for a file descriptor and thefollow_symlinksargument
+on Windows.
+
+Change the owner and group id ofpathto the numericuidandgid.  To
+leave one of the ids unchanged, set it to -1.
+
+This function can supportspecifying a file descriptor,paths relative to directory descriptorsandnot
+following symlinks.
+
+Seeshutil.chown()for a higher-level function that accepts names in
+addition to numeric ids.
+
+shutil.chown()
+
+Raises anauditing eventos.chownwith argumentspath,uid,gid,dir_fd.
+
+os.chown
+
+path
+
+uid
+
+gid
+
+dir_fd
+
+Availability: Unix.
+
+The function is limited on WASI, seeWebAssembly platformsfor more
+information.
+
+Changed in version 3.3:Added support for specifyingpathas an open file descriptor,
+and thedir_fdandfollow_symlinksarguments.
+
+Changed in version 3.6:Supports apath-like object.
+
+Change the root directory of the current process topath.
+
+Availability: Unix, not WASI, not Android.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Change the current working directory to the directory represented by the file
+descriptorfd.  The descriptor must refer to an opened directory, not an
+open file.  As of Python 3.3, this is equivalent toos.chdir(fd).
+
+os.chdir(fd)
+
+Raises anauditing eventos.chdirwith argumentpath.
+
+os.chdir
+
+path
+
+Availability: Unix.
+
+Return a string representing the current working directory.
+
+Return a bytestring representing the current working directory.
+
+Changed in version 3.8:The function now uses the UTF-8 encoding on Windows, rather than the ANSI
+code page: seePEP 529for the rationale. The function is no longer
+deprecated on Windows.
+
+Set the flags ofpathto the numericflags, likechflags(), but do
+not follow symbolic links.  As of Python 3.3, this is equivalent toos.chflags(path,flags,follow_symlinks=False).
+
+chflags()
+
+os.chflags(path,flags,follow_symlinks=False)
+
+Raises anauditing eventos.chflagswith argumentspath,flags.
+
+os.chflags
+
+path
+
+flags
+
+Availability: Unix, not WASI.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Change the mode ofpathto the numericmode. If path is a symlink, this
+affects the symlink rather than the target.  See the docs forchmod()for possible values ofmode.  As of Python 3.3, this is equivalent toos.chmod(path,mode,follow_symlinks=False).
+
+chmod()
+
+os.chmod(path,mode,follow_symlinks=False)
+
+lchmod()is not part of POSIX, but Unix implementations may have it if
+changing the mode of symbolic links is supported.
+
+lchmod()
+
+Raises anauditing eventos.chmodwith argumentspath,mode,dir_fd.
+
+os.chmod
+
+path
+
+mode
+
+dir_fd
+
+Availability: Unix, Windows, not Linux, FreeBSD >= 1.3, NetBSD >= 1.3, not OpenBSD
+
+Changed in version 3.6:Accepts apath-like object.
+
+Changed in version 3.13:Added support on Windows.
+
+Change the owner and group id ofpathto the numericuidandgid.  This
+function will not follow symbolic links.  As of Python 3.3, this is equivalent
+toos.chown(path,uid,gid,follow_symlinks=False).
+
+os.chown(path,uid,gid,follow_symlinks=False)
+
+Raises anauditing eventos.chownwith argumentspath,uid,gid,dir_fd.
+
+os.chown
+
+path
+
+uid
+
+gid
+
+dir_fd
+
+Availability: Unix.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Create a hard link pointing tosrcnameddst.
+
+This function can support specifyingsrc_dir_fdand/ordst_dir_fdto
+supplypaths relative to directory descriptors, andnot
+following symlinks.
+The default value offollow_symlinksisFalseon Windows.
+
+False
+
+Raises anauditing eventos.linkwith argumentssrc,dst,src_dir_fd,dst_dir_fd.
+
+os.link
+
+src
+
+dst
+
+src_dir_fd
+
+dst_dir_fd
+
+Availability: Unix, Windows.
+
+Changed in version 3.2:Added Windows support.
+
+Changed in version 3.3:Added thesrc_dir_fd,dst_dir_fd, andfollow_symlinksparameters.
+
+Changed in version 3.6:Accepts apath-like objectforsrcanddst.
+
+Return a list containing the names of the entries in the directory given bypath.  The list is in arbitrary order, and does not include the special
+entries'.'and'..'even if they are present in the directory.
+If a file is removed from or added to the directory during the call of
+this function, whether a name for that file be included is unspecified.
+
+'.'
+
+'..'
+
+pathmay be apath-like object.  Ifpathis of typebytes(directly or indirectly through thePathLikeinterface),
+the filenames returned will also be of typebytes;
+in all other circumstances, they will be of typestr.
+
+bytes
+
+PathLike
+
+bytes
+
+str
+
+This function can also supportspecifying a file descriptor; the file descriptor must refer to a directory.
+
+Raises anauditing eventos.listdirwith argumentpath.
+
+os.listdir
+
+path
+
+Note
+
+To encodestrfilenames tobytes, usefsencode().
+
+str
+
+bytes
+
+fsencode()
+
+See also
+
+Thescandir()function returns directory entries along with
+file attribute information, giving better performance for many
+common use cases.
+
+scandir()
+
+Changed in version 3.2:Thepathparameter became optional.
+
+Changed in version 3.3:Added support for specifyingpathas an open file descriptor.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Return a list containing the names of drives on a Windows system.
+
+A drive name typically looks like'C:\\'. Not every drive name
+will be associated with a volume, and some may be inaccessible for
+a variety of reasons, including permissions, network connectivity
+or missing media. This function does not test for access.
+
+'C:\\'
+
+May raiseOSErrorif an error occurs collecting the drive
+names.
+
+OSError
+
+Raises anauditing eventos.listdriveswith no arguments.
+
+os.listdrives
+
+Availability: Windows
+
+Added in version 3.12.
+
+Return a list containing the mount points for a volume on a Windows
+system.
+
+volumemust be represented as a GUID path, like those returned byos.listvolumes(). Volumes may be mounted in multiple locations
+or not at all. In the latter case, the list will be empty. Mount
+points that are not associated with a volume will not be returned by
+this function.
+
+os.listvolumes()
+
+The mount points return by this function will be absolute paths, and
+may be longer than the drive name.
+
+RaisesOSErrorif the volume is not recognized or if an error
+occurs collecting the paths.
+
+OSError
+
+Raises anauditing eventos.listmountswith argumentvolume.
+
+os.listmounts
+
+volume
+
+Availability: Windows
+
+Added in version 3.12.
+
+Return a list containing the volumes in the system.
+
+Volumes are typically represented as a GUID path that looks like\\?\Volume{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\. Files can
+usually be accessed through a GUID path, permissions allowing.
+However, users are generally not familiar with them, and so the
+recommended use of this function is to retrieve mount points
+usingos.listmounts().
+
+\\?\Volume{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\
+
+os.listmounts()
+
+May raiseOSErrorif an error occurs collecting the volumes.
+
+OSError
+
+Raises anauditing eventos.listvolumeswith no arguments.
+
+os.listvolumes
+
+Availability: Windows
+
+Added in version 3.12.
+
+Perform the equivalent of anlstat()system call on the given path.
+Similar tostat(), but does not follow symbolic links. Return astat_resultobject.
+
+lstat()
+
+stat()
+
+stat_result
+
+On platforms that do not support symbolic links, this is an alias forstat().
+
+stat()
+
+As of Python 3.3, this is equivalent toos.stat(path,dir_fd=dir_fd,follow_symlinks=False).
+
+os.stat(path,dir_fd=dir_fd,follow_symlinks=False)
+
+This function can also supportpaths relative to directory descriptors.
+
+See also
+
+Thestat()function.
+
+stat()
+
+Changed in version 3.2:Added support for Windows 6.0 (Vista) symbolic links.
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Changed in version 3.8:On Windows, now opens reparse points that represent another path
+(name surrogates), including symbolic links and directory junctions.
+Other kinds of reparse points are resolved by the operating system as
+forstat().
+
+stat()
+
+Create a directory namedpathwith numeric modemode.
+
+If the directory already exists,FileExistsErroris raised. If a parent
+directory in the path does not exist,FileNotFoundErroris raised.
+
+FileExistsError
+
+FileNotFoundError
+
+On some systems,modeis ignored.  Where it is used, the current umask
+value is first masked out.  If bits other than the last 9 (i.e. the last 3
+digits of the octal representation of themode) are set, their meaning is
+platform-dependent.  On some platforms, they are ignored and you should callchmod()explicitly to set them.
+
+chmod()
+
+On Windows, amodeof0o700is specifically handled to apply access
+control to the new directory such that only the current user and
+administrators have access. Other values ofmodeare ignored.
+
+0o700
+
+This function can also supportpaths relative to directory descriptors.
+
+It is also possible to create temporary directories; see thetempfilemoduleâstempfile.mkdtemp()function.
+
+tempfile
+
+tempfile.mkdtemp()
+
+Raises anauditing eventos.mkdirwith argumentspath,mode,dir_fd.
+
+os.mkdir
+
+path
+
+mode
+
+dir_fd
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Changed in version 3.13:Windows now handles amodeof0o700.
+
+0o700
+
+Recursive directory creation function.  Likemkdir(), but makes all
+intermediate-level directories needed to contain the leaf directory.
+
+mkdir()
+
+Themodeparameter is passed tomkdir()for creating the leaf
+directory; seethe mkdir() descriptionfor how it
+is interpreted.  To set the file permission bits of any newly created parent
+directories you can set the umask before invokingmakedirs().  The
+file permission bits of existing parent directories are not changed.
+
+mkdir()
+
+makedirs()
+
+Ifexist_okisFalse(the default), aFileExistsErroris
+raised if the target directory already exists.
+
+False
+
+FileExistsError
+
+Note
+
+makedirs()will become confused if the path elements to create
+includepardir(eg. â..â on UNIX systems).
+
+makedirs()
+
+pardir
+
+This function handles UNC paths correctly.
+
+Raises anauditing eventos.mkdirwith argumentspath,mode,dir_fd.
+
+os.mkdir
+
+path
+
+mode
+
+dir_fd
+
+Changed in version 3.2:Added theexist_okparameter.
+
+Changed in version 3.4.1:Before Python 3.4.1, ifexist_okwasTrueand the directory existed,makedirs()would still raise an error ifmodedid not match the
+mode of the existing directory. Since this behavior was impossible to
+implement safely, it was removed in Python 3.4.1. Seebpo-21082.
+
+True
+
+makedirs()
+
+Changed in version 3.6:Accepts apath-like object.
+
+Changed in version 3.7:Themodeargument no longer affects the file permission bits of
+newly created intermediate-level directories.
+
+Create a FIFO (a named pipe) namedpathwith numeric modemode.
+The current umask value is first masked out from the mode.
+
+This function can also supportpaths relative to directory descriptors.
+
+FIFOs are pipes that can be accessed like regular files.  FIFOs exist until they
+are deleted (for example withos.unlink()). Generally, FIFOs are used as
+rendezvous between âclientâ and âserverâ type processes: the server opens the
+FIFO for reading, and the client opens it for writing.  Note thatmkfifo()doesnât open the FIFO â it just creates the rendezvous point.
+
+os.unlink()
+
+mkfifo()
+
+Availability: Unix, not WASI.
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Create a filesystem node (file, device special file or named pipe) namedpath.modespecifies both the permissions to use and the type of node
+to be created, being combined (bitwise OR) with one ofstat.S_IFREG,stat.S_IFCHR,stat.S_IFBLK, andstat.S_IFIFO(those constants are
+available instat).  Forstat.S_IFCHRandstat.S_IFBLK,devicedefines the newly created device special file (probably usingos.makedev()), otherwise it is ignored.
+
+stat.S_IFREG
+
+stat.S_IFCHR
+
+stat.S_IFBLK
+
+stat.S_IFIFO
+
+stat
+
+stat.S_IFCHR
+
+stat.S_IFBLK
+
+os.makedev()
+
+This function can also supportpaths relative to directory descriptors.
+
+Availability: Unix, not WASI.
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Extract the device major number from a raw device number (usually thest_devorst_rdevfield fromstat).
+
+st_dev
+
+st_rdev
+
+stat
+
+Extract the device minor number from a raw device number (usually thest_devorst_rdevfield fromstat).
+
+st_dev
+
+st_rdev
+
+stat
+
+Compose a raw device number from the major and minor device numbers.
+
+Return system configuration information relevant to a named file.namespecifies the configuration value to retrieve; it may be a string which is the
+name of a defined system value; these names are specified in a number of
+standards (POSIX.1, Unix 95, Unix 98, and others).  Some platforms define
+additional names as well.  The names known to the host operating system are
+given in thepathconf_namesdictionary.  For configuration variables not
+included in that mapping, passing an integer fornameis also accepted.
+
+pathconf_names
+
+Ifnameis a string and is not known,ValueErroris raised.  If a
+specific value fornameis not supported by the host system, even if it is
+included inpathconf_names, anOSErroris raised witherrno.EINVALfor the error number.
+
+ValueError
+
+pathconf_names
+
+OSError
+
+errno.EINVAL
+
+This function can supportspecifying a file descriptor.
+
+Availability: Unix.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Dictionary mapping names accepted bypathconf()andfpathconf()to
+the integer values defined for those names by the host operating system.  This
+can be used to determine the set of names known to the system.
+
+pathconf()
+
+fpathconf()
+
+Availability: Unix.
+
+Return a string representing the path to which the symbolic link points.  The
+result may be either an absolute or relative pathname; if it is relative, it
+may be converted to an absolute pathname usingos.path.join(os.path.dirname(path),result).
+
+os.path.join(os.path.dirname(path),result)
+
+If thepathis a string object (directly or indirectly through aPathLikeinterface), the result will also be a string object,
+and the call may raise a UnicodeDecodeError. If thepathis a bytes
+object (direct or indirectly), the result will be a bytes object.
+
+PathLike
+
+This function can also supportpaths relative to directory descriptors.
+
+When trying to resolve a path that may contain links, userealpath()to properly handle recursion and platform
+differences.
+
+realpath()
+
+Availability: Unix, Windows.
+
+Changed in version 3.2:Added support for Windows 6.0 (Vista) symbolic links.
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.6:Accepts apath-like objecton Unix.
+
+Changed in version 3.8:Accepts apath-like objectand a bytes object on Windows.
+
+Added support for directory junctions, and changed to return the
+substitution path (which typically includes\\?\prefix) rather
+than the optional âprint nameâ field that was previously returned.
+
+\\?\
+
+Remove (delete) the filepath.  Ifpathis a directory, anOSErroris raised.  Usermdir()to remove directories.
+If the file does not exist, aFileNotFoundErroris raised.
+
+OSError
+
+rmdir()
+
+FileNotFoundError
+
+This function can supportpaths relative to directory descriptors.
+
+On Windows, attempting to remove a file that is in use causes an exception to
+be raised; on Unix, the directory entry is removed but the storage allocated
+to the file is not made available until the original file is no longer in use.
+
+This function is semantically identical tounlink().
+
+unlink()
+
+Raises anauditing eventos.removewith argumentspath,dir_fd.
+
+os.remove
+
+path
+
+dir_fd
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Remove directories recursively.  Works likermdir()except that, if the
+leaf directory is successfully removed,removedirs()tries to
+successively remove every parent directory mentioned inpathuntil an error
+is raised (which is ignored, because it generally means that a parent directory
+is not empty). For example,os.removedirs('foo/bar/baz')will first remove
+the directory'foo/bar/baz', and then remove'foo/bar'and'foo'if
+they are empty. RaisesOSErrorif the leaf directory could not be
+successfully removed.
+
+rmdir()
+
+removedirs()
+
+os.removedirs('foo/bar/baz')
+
+'foo/bar/baz'
+
+'foo/bar'
+
+'foo'
+
+OSError
+
+Raises anauditing eventos.removewith argumentspath,dir_fd.
+
+os.remove
+
+path
+
+dir_fd
+
+Changed in version 3.6:Accepts apath-like object.
+
+Rename the file or directorysrctodst. Ifdstexists, the operation
+will fail with anOSErrorsubclass in a number of cases:
+
+OSError
+
+On Windows, ifdstexists aFileExistsErroris always raised.
+The operation may fail ifsrcanddstare on different filesystems. Useshutil.move()to support moves to a different filesystem.
+
+FileExistsError
+
+shutil.move()
+
+On Unix, ifsrcis a file anddstis a directory or vice-versa, anIsADirectoryErroror aNotADirectoryErrorwill be raised
+respectively.  If both are directories anddstis empty,dstwill be
+silently replaced.  Ifdstis a non-empty directory, anOSErroris raised. If both are files,dstwill be replaced silently if the user
+has permission.  The operation may fail on some Unix flavors ifsrcanddstare on different filesystems.  If successful, the renaming will be an
+atomic operation (this is a POSIX requirement).
+
+IsADirectoryError
+
+NotADirectoryError
+
+OSError
+
+This function can support specifyingsrc_dir_fdand/ordst_dir_fdto
+supplypaths relative to directory descriptors.
+
+If you want cross-platform overwriting of the destination, usereplace().
+
+replace()
+
+Raises anauditing eventos.renamewith argumentssrc,dst,src_dir_fd,dst_dir_fd.
+
+os.rename
+
+src
+
+dst
+
+src_dir_fd
+
+dst_dir_fd
+
+Changed in version 3.3:Added thesrc_dir_fdanddst_dir_fdparameters.
+
+Changed in version 3.6:Accepts apath-like objectforsrcanddst.
+
+Recursive directory or file renaming function. Works likerename(), except
+creation of any intermediate directories needed to make the new pathname good is
+attempted first. After the rename, directories corresponding to rightmost path
+segments of the old name will be pruned away usingremovedirs().
+
+rename()
+
+removedirs()
+
+Note
+
+This function can fail with the new directory structure made if you lack
+permissions needed to remove the leaf directory or file.
+
+Raises anauditing eventos.renamewith argumentssrc,dst,src_dir_fd,dst_dir_fd.
+
+os.rename
+
+src
+
+dst
+
+src_dir_fd
+
+dst_dir_fd
+
+Changed in version 3.6:Accepts apath-like objectforoldandnew.
+
+Rename the file or directorysrctodst.  Ifdstis a non-empty directory,OSErrorwill be raised.  Ifdstexists and is a file, it will
+be replaced silently if the user has permission.  The operation may fail
+ifsrcanddstare on different filesystems.  If successful,
+the renaming will be an atomic operation (this is a POSIX requirement).
+
+OSError
+
+This function can support specifyingsrc_dir_fdand/ordst_dir_fdto
+supplypaths relative to directory descriptors.
+
+Raises anauditing eventos.renamewith argumentssrc,dst,src_dir_fd,dst_dir_fd.
+
+os.rename
+
+src
+
+dst
+
+src_dir_fd
+
+dst_dir_fd
+
+Added in version 3.3.
+
+Changed in version 3.6:Accepts apath-like objectforsrcanddst.
+
+Remove (delete) the directorypath.  If the directory does not exist or is
+not empty, aFileNotFoundErroror anOSErroris raised
+respectively.  In order to remove whole directory trees,shutil.rmtree()can be used.
+
+FileNotFoundError
+
+OSError
+
+shutil.rmtree()
+
+This function can supportpaths relative to directory descriptors.
+
+Raises anauditing eventos.rmdirwith argumentspath,dir_fd.
+
+os.rmdir
+
+path
+
+dir_fd
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Return an iterator ofos.DirEntryobjects corresponding to the
+entries in the directory given bypath. The entries are yielded in
+arbitrary order, and the special entries'.'and'..'are not
+included.  If a file is removed from or added to the directory after
+creating the iterator, whether an entry for that file be included is
+unspecified.
+
+os.DirEntry
+
+'.'
+
+'..'
+
+Usingscandir()instead oflistdir()can significantly
+increase the performance of code that also needs file type or file
+attribute information, becauseos.DirEntryobjects expose this
+information if the operating system provides it when scanning a directory.
+Allos.DirEntrymethods may perform a system call, butis_dir()andis_file()usually only
+require a system call for symbolic links;os.DirEntry.stat()always requires a system call on Unix but only requires one for
+symbolic links on Windows.
+
+scandir()
+
+listdir()
+
+os.DirEntry
+
+os.DirEntry
+
+is_dir()
+
+is_file()
+
+os.DirEntry.stat()
+
+pathmay be apath-like object.  Ifpathis of typebytes(directly or indirectly through thePathLikeinterface),
+the type of thenameandpathattributes of eachos.DirEntrywill bebytes; in all other
+circumstances, they will be of typestr.
+
+bytes
+
+PathLike
+
+name
+
+path
+
+os.DirEntry
+
+bytes
+
+str
+
+This function can also supportspecifying a file descriptor; the file descriptor must refer to a directory.
+
+Raises anauditing eventos.scandirwith argumentpath.
+
+os.scandir
+
+path
+
+Thescandir()iterator supports thecontext managerprotocol
+and has the following method:
+
+scandir()
+
+Close the iterator and free acquired resources.
+
+This is called automatically when the iterator is exhausted or garbage
+collected, or when an error happens during iterating.  However it
+is advisable to call it explicitly or use thewithstatement.
+
+with
+
+Added in version 3.6.
+
+The following example shows a simple use ofscandir()to display all
+the files (excluding directories) in the givenpaththat donât start with'.'. Theentry.is_file()call will generally not make an additional
+system call:
+
+scandir()
+
+'.'
+
+entry.is_file()
+
+withos.scandir(path)asit:forentryinit:ifnotentry.name.startswith('.')andentry.is_file():print(entry.name)
+
+Note
+
+On Unix-based systems,scandir()uses the systemâsopendir()andreaddir()functions. On Windows, it uses the Win32FindFirstFileWandFindNextFileWfunctions.
+
+scandir()
+
+Added in version 3.5.
+
+Changed in version 3.6:Added support for thecontext managerprotocol and theclose()method.  If ascandir()iterator is neither
+exhausted nor explicitly closed aResourceWarningwill be emitted
+in its destructor.
+
+close()
+
+scandir()
+
+ResourceWarning
+
+The function accepts apath-like object.
+
+Changed in version 3.7:Added support forfile descriptorson Unix.
+
+Object yielded byscandir()to expose the file path and other file
+attributes of a directory entry.
+
+scandir()
+
+scandir()will provide as much of this information as possible without
+making additional system calls. When astat()orlstat()system call
+is made, theos.DirEntryobject will cache the result.
+
+scandir()
+
+stat()
+
+lstat()
+
+os.DirEntry
+
+os.DirEntryinstances are not intended to be stored in long-lived data
+structures; if you know the file metadata has changed or if a long time has
+elapsed since callingscandir(), callos.stat(entry.path)to fetch
+up-to-date information.
+
+os.DirEntry
+
+scandir()
+
+os.stat(entry.path)
+
+Because theos.DirEntrymethods can make operating system calls, they may
+also raiseOSError. If you need very fine-grained
+control over errors, you can catchOSErrorwhen calling one of theos.DirEntrymethods and handle as appropriate.
+
+os.DirEntry
+
+OSError
+
+OSError
+
+os.DirEntry
+
+To be directly usable as apath-like object,os.DirEntryimplements thePathLikeinterface.
+
+os.DirEntry
+
+PathLike
+
+DirEntryobjects aregenericover the type of the
+path (strorbytes).
+
+DirEntry
+
+str
+
+bytes
+
+Attributes and methods on aos.DirEntryinstance are as follows:
+
+os.DirEntry
+
+The entryâs base filename, relative to thescandir()pathargument.
+
+scandir()
+
+Thenameattribute will bebytesif thescandir()pathargument is of typebytesandstrotherwise.  Usefsdecode()to decode byte filenames.
+
+name
+
+bytes
+
+scandir()
+
+bytes
+
+str
+
+fsdecode()
+
+The entryâs full path name: equivalent toos.path.join(scandir_path,entry.name)wherescandir_pathis thescandir()pathargument.  The path is only absolute if thescandir()pathargument was absolute.  If thescandir()pathargument was afile descriptor, thepathattribute is the same as thenameattribute.
+
+os.path.join(scandir_path,entry.name)
+
+scandir()
+
+scandir()
+
+scandir()
+
+path
+
+name
+
+Thepathattribute will bebytesif thescandir()pathargument is of typebytesandstrotherwise.  Usefsdecode()to decode byte filenames.
+
+path
+
+bytes
+
+scandir()
+
+bytes
+
+str
+
+fsdecode()
+
+Return the inode number of the entry.
+
+The result is cached on theos.DirEntryobject. Useos.stat(entry.path,follow_symlinks=False).st_inoto fetch up-to-date
+information.
+
+os.DirEntry
+
+os.stat(entry.path,follow_symlinks=False).st_ino
+
+On the first, uncached call, a system call is required on Windows but
+not on Unix.
+
+ReturnTrueif this entry is a directory or a symbolic link pointing
+to a directory; returnFalseif the entry is or points to any other
+kind of file, or if it doesnât exist anymore.
+
+True
+
+False
+
+Iffollow_symlinksisFalse, returnTrueonly if this entry
+is a directory (without following symlinks); returnFalseif the
+entry is any other kind of file or if it doesnât exist anymore.
+
+False
+
+True
+
+False
+
+The result is cached on theos.DirEntryobject, with a separate cache
+forfollow_symlinksTrueandFalse. Callos.stat()along
+withstat.S_ISDIR()to fetch up-to-date information.
+
+os.DirEntry
+
+True
+
+False
+
+os.stat()
+
+stat.S_ISDIR()
+
+On the first, uncached call, no system call is required in most cases.
+Specifically, for non-symlinks, neither Windows or Unix require a system
+call, except on certain Unix file systems, such as network file systems,
+that returndirent.d_type==DT_UNKNOWN. If the entry is a symlink,
+a system call will be required to follow the symlink unlessfollow_symlinksisFalse.
+
+dirent.d_type==DT_UNKNOWN
+
+False
+
+This method can raiseOSError, such asPermissionError,
+butFileNotFoundErroris caught and not raised.
+
+OSError
+
+PermissionError
+
+FileNotFoundError
+
+ReturnTrueif this entry is a file or a symbolic link pointing to a
+file; returnFalseif the entry is or points to a directory or other
+non-file entry, or if it doesnât exist anymore.
+
+True
+
+False
+
+Iffollow_symlinksisFalse, returnTrueonly if this entry
+is a file (without following symlinks); returnFalseif the entry is
+a directory or other non-file entry, or if it doesnât exist anymore.
+
+False
+
+True
+
+False
+
+The result is cached on theos.DirEntryobject. Caching, system calls
+made, and exceptions raised are as peris_dir().
+
+os.DirEntry
+
+is_dir()
+
+ReturnTrueif this entry is a symbolic link (even if broken);
+returnFalseif the entry points to a directory or any kind of file,
+or if it doesnât exist anymore.
+
+True
+
+False
+
+The result is cached on theos.DirEntryobject. Callos.path.islink()to fetch up-to-date information.
+
+os.DirEntry
+
+os.path.islink()
+
+On the first, uncached call, no system call is required in most cases.
+Specifically, neither Windows or Unix require a system call, except on
+certain Unix file systems, such as network file systems, that returndirent.d_type==DT_UNKNOWN.
+
+dirent.d_type==DT_UNKNOWN
+
+This method can raiseOSError, such asPermissionError,
+butFileNotFoundErroris caught and not raised.
+
+OSError
+
+PermissionError
+
+FileNotFoundError
+
+ReturnTrueif this entry is a junction (even if broken);
+returnFalseif the entry points to a regular directory, any kind
+of file, a symlink, or if it doesnât exist anymore.
+
+True
+
+False
+
+The result is cached on theos.DirEntryobject. Callos.path.isjunction()to fetch up-to-date information.
+
+os.DirEntry
+
+os.path.isjunction()
+
+Added in version 3.12.
+
+Return astat_resultobject for this entry. This method
+follows symbolic links by default; to stat a symbolic link add thefollow_symlinks=Falseargument.
+
+stat_result
+
+follow_symlinks=False
+
+On Unix, this method always requires a system call. On Windows, it
+only requires a system call iffollow_symlinksisTrueand the
+entry is a reparse point (for example, a symbolic link or directory
+junction).
+
+True
+
+On Windows, thest_ino,st_devandst_nlinkattributes of thestat_resultare always set to zero. Callos.stat()to
+get these attributes.
+
+st_ino
+
+st_dev
+
+st_nlink
+
+stat_result
+
+os.stat()
+
+The result is cached on theos.DirEntryobject, with a separate cache
+forfollow_symlinksTrueandFalse. Callos.stat()to
+fetch up-to-date information.
+
+os.DirEntry
+
+True
+
+False
+
+os.stat()
+
+Note that there is a nice correspondence between several attributes
+and methods ofos.DirEntryand ofpathlib.Path.  In
+particular, thenameattribute has the same
+meaning, as do theis_dir(),is_file(),is_symlink(),is_junction(), andstat()methods.
+
+os.DirEntry
+
+pathlib.Path
+
+name
+
+is_dir()
+
+is_file()
+
+is_symlink()
+
+is_junction()
+
+stat()
+
+Added in version 3.5.
+
+Changed in version 3.6:Added support for thePathLikeinterface.  Added support
+forbytespaths on Windows.
+
+PathLike
+
+bytes
+
+Changed in version 3.12:Thest_ctimeattribute of a stat result is deprecated on Windows.
+The file creation time is properly available asst_birthtime, and
+in the futurest_ctimemay be changed to return zero or the
+metadata change time, if available.
+
+st_ctime
+
+st_birthtime
+
+st_ctime
+
+Get the status of a file or a file descriptor. Perform the equivalent of astat()system call on the given path.pathmay be specified as
+either a string or bytes â directly or indirectly through thePathLikeinterface â or as an open file descriptor. Return astat_resultobject.
+
+stat()
+
+PathLike
+
+stat_result
+
+This function normally follows symlinks; to stat a symlink add the argumentfollow_symlinks=False, or uselstat().
+
+follow_symlinks=False
+
+lstat()
+
+This function can supportspecifying a file descriptorandnot following symlinks.
+
+On Windows, passingfollow_symlinks=Falsewill disable following all
+name-surrogate reparse points, which includes symlinks and directory
+junctions. Other types of reparse points that do not resemble links or that
+the operating system is unable to follow will be opened directly. When
+following a chain of multiple links, this may result in the original link
+being returned instead of the non-link that prevented full traversal. To
+obtain stat results for the final path in this case, use theos.path.realpath()function to resolve the path name as far as
+possible and calllstat()on the result. This does not apply to
+dangling symlinks or junction points, which will raise the usual exceptions.
+
+follow_symlinks=False
+
+os.path.realpath()
+
+lstat()
+
+Example:
+
+>>>importos>>>statinfo=os.stat('somefile.txt')>>>statinfoos.stat_result(st_mode=33188, st_ino=7876932, st_dev=234881026,st_nlink=1, st_uid=501, st_gid=501, st_size=264, st_atime=1297230295,st_mtime=1297230027, st_ctime=1297230027)>>>statinfo.st_size264
+
+See also
+
+fstat()andlstat()functions.
+
+fstat()
+
+lstat()
+
+Changed in version 3.3:Added thedir_fdandfollow_symlinksparameters,
+specifying a file descriptor instead of a path.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Changed in version 3.8:On Windows, all reparse points that can be resolved by the operating
+system are now followed, and passingfollow_symlinks=Falsedisables following all name surrogate reparse points. If the operating
+system reaches a reparse point that it is not able to follow,statnow
+returns the information for the original path as iffollow_symlinks=Falsehad been specified instead of raising an error.
+
+follow_symlinks=False
+
+follow_symlinks=False
+
+Object whose attributes correspond roughly to the members of thestatstructure. It is used for the result ofos.stat(),os.fstat()andos.lstat().
+
+stat
+
+os.stat()
+
+os.fstat()
+
+os.lstat()
+
+Attributes:
+
+File mode: file type and file mode bits (permissions).
+
+Platform dependent, but if non-zero, uniquely identifies the
+file for a given value ofst_dev. Typically:
+
+st_dev
+
+the inode number on Unix,
+
+the inode number on Unix,
+
+thefile indexon
+Windows
+
+thefile indexon
+Windows
+
+Identifier of the device on which this file resides.
+
+Number of hard links.
+
+User identifier of the file owner.
+
+Group identifier of the file owner.
+
+Size of the file in bytes, if it is a regular file or a symbolic link.
+The size of a symbolic link is the length of the pathname it contains,
+without a terminating null byte.
+
+Timestamps:
+
+Time of most recent access expressed in seconds.
+
+Time of most recent content modification expressed in seconds.
+
+Time of most recent metadata change expressed in seconds.
+
+Changed in version 3.12:st_ctimeis deprecated on Windows. Usest_birthtimefor
+the file creation time. In the future,st_ctimewill contain
+the time of the most recent metadata change, as for other platforms.
+
+st_ctime
+
+st_birthtime
+
+st_ctime
+
+Time of most recent access expressed in nanoseconds as an integer.
+
+Added in version 3.3.
+
+Time of most recent content modification expressed in nanoseconds as an
+integer.
+
+Added in version 3.3.
+
+Time of most recent metadata change expressed in nanoseconds as an
+integer.
+
+Added in version 3.3.
+
+Changed in version 3.12:st_ctime_nsis deprecated on Windows. Usest_birthtime_nsfor the file creation time. In the future,st_ctimewill contain
+the time of the most recent metadata change, as for other platforms.
+
+st_ctime_ns
+
+st_birthtime_ns
+
+st_ctime
+
+Time of file creation expressed in seconds. This attribute is not
+always available, and may raiseAttributeError.
+
+AttributeError
+
+Changed in version 3.12:st_birthtimeis now available on Windows.
+
+st_birthtime
+
+Time of file creation expressed in nanoseconds as an integer.
+This attribute is not always available, and may raiseAttributeError.
+
+AttributeError
+
+Added in version 3.12.
+
+Note
+
+The exact meaning and resolution of thest_atime,st_mtime,st_ctimeandst_birthtimeattributes
+depend on the operating system and the file system. For example, on
+Windows systems using the FAT32 file systems,st_mtimehas
+2-second resolution, andst_atimehas only 1-day resolution.
+See your operating system documentation for details.
+
+st_atime
+
+st_mtime
+
+st_ctime
+
+st_birthtime
+
+st_mtime
+
+st_atime
+
+Similarly, althoughst_atime_ns,st_mtime_ns,st_ctime_nsandst_birthtime_nsare always expressed in
+nanoseconds, many systems do not provide nanosecond precision.  On
+systems that do provide nanosecond precision, the floating-point object
+used to storest_atime,st_mtime,st_ctimeandst_birthtimecannot preserve all of it, and as such will be
+slightly inexact. If you need the exact timestamps you should always usest_atime_ns,st_mtime_ns,st_ctime_nsandst_birthtime_ns.
+
+st_atime_ns
+
+st_mtime_ns
+
+st_ctime_ns
+
+st_birthtime_ns
+
+st_atime
+
+st_mtime
+
+st_ctime
+
+st_birthtime
+
+st_atime_ns
+
+st_mtime_ns
+
+st_ctime_ns
+
+st_birthtime_ns
+
+On some Unix systems (such as Linux), the following attributes may also be
+available:
+
+Number of 512-byte blocks allocated for file.
+This may be smaller thanst_size/512 when the file has holes.
+
+st_size
+
+âPreferredâ blocksize for efficient file system I/O. Writing to a file in
+smaller chunks may cause an inefficient read-modify-rewrite.
+
+Type of device if an inode device.
+
+User defined flags for file.
+
+On other Unix systems (such as FreeBSD), the following attributes may be
+available (but may be only filled out if root tries to use them):
+
+File generation number.
+
+On Solaris and derivatives, the following attributes may also be
+available:
+
+String that uniquely identifies the type of the filesystem that
+contains the file.
+
+On macOS systems, the following attributes may also be available:
+
+Real size of the file.
+
+Creator of the file.
+
+File type.
+
+On Windows systems, the following attributes are also available:
+
+Windows file attributes:dwFileAttributesmember of theBY_HANDLE_FILE_INFORMATIONstructure returned byGetFileInformationByHandle().
+See theFILE_ATTRIBUTE_*<stat.FILE_ATTRIBUTE_ARCHIVE>constants in thestatmodule.
+
+dwFileAttributes
+
+BY_HANDLE_FILE_INFORMATION
+
+GetFileInformationByHandle()
+
+FILE_ATTRIBUTE_*<stat.FILE_ATTRIBUTE_ARCHIVE>
+
+stat
+
+Added in version 3.5.
+
+Whenst_file_attributeshas theFILE_ATTRIBUTE_REPARSE_POINTset, this field contains the tag identifying the type of reparse point.
+See theIO_REPARSE_TAG_*constants in thestatmodule.
+
+st_file_attributes
+
+FILE_ATTRIBUTE_REPARSE_POINT
+
+IO_REPARSE_TAG_*
+
+stat
+
+The standard modulestatdefines functions and constants that are
+useful for extracting information from astatstructure. (On
+Windows, some items are filled with dummy values.)
+
+stat
+
+stat
+
+For backward compatibility, astat_resultinstance is also
+accessible as a tuple of at least 10 integers giving the most important (and
+portable) members of thestatstructure, in the orderst_mode,st_ino,st_dev,st_nlink,st_uid,st_gid,st_size,st_atime,st_mtime,st_ctime. More items may be added at the end by
+some implementations. For compatibility with older Python versions,
+accessingstat_resultas a tuple always returns integers.
+
+stat_result
+
+stat
+
+st_mode
+
+st_ino
+
+st_dev
+
+st_nlink
+
+st_uid
+
+st_gid
+
+st_size
+
+st_atime
+
+st_mtime
+
+st_ctime
+
+stat_result
+
+Changed in version 3.5:Windows now returns the file index asst_inowhen
+available.
+
+st_ino
+
+Changed in version 3.7:Added thest_fstypemember to Solaris/derivatives.
+
+st_fstype
+
+Changed in version 3.8:Added thest_reparse_tagmember on Windows.
+
+st_reparse_tag
+
+Changed in version 3.8:On Windows, thest_modemember now identifies special
+files asS_IFCHR,S_IFIFOorS_IFBLKas appropriate.
+
+st_mode
+
+S_IFCHR
+
+S_IFIFO
+
+S_IFBLK
+
+Changed in version 3.12:On Windows,st_ctimeis deprecated. Eventually, it will
+contain the last metadata change time, for consistency with other
+platforms, but for now still contains creation time.
+Usest_birthtimefor the creation time.
+
+st_ctime
+
+st_birthtime
+
+On Windows,st_inomay now be up to 128 bits, depending
+on the file system. Previously it would not be above 64 bits, and
+larger file identifiers would be arbitrarily packed.
+
+st_ino
+
+On Windows,st_rdevno longer returns a value. Previously
+it would contain the same asst_dev, which was incorrect.
+
+st_rdev
+
+st_dev
+
+Added thest_birthtimemember on Windows.
+
+st_birthtime
+
+Perform astatvfs(3)system call on the given path.  The return value
+is astatvfs_resultwhose attributes describe the filesystem
+on the given path and correspond to the members of thestatvfsstructure.
+
+statvfs_result
+
+statvfs
+
+This function can supportspecifying a file descriptor.
+
+Availability: Unix.
+
+Changed in version 3.3:Added support for specifyingpathas an open file descriptor.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Filesystem statistics returned byos.statvfs()andos.fstatvfs().
+Seestatvfs(3)for more details.
+
+os.statvfs()
+
+os.fstatvfs()
+
+Block size.
+
+Fragment size.
+
+Number off_frsizesized blocks the filesystem
+can contain.
+
+f_frsize
+
+Number of free blocks.
+
+Number of free blocks for unprivileged users.
+
+Number of file entries, inodes, the filesystem can contain.
+
+Number of free files entries.
+
+Number of free file entries for unprivileged users.
+
+Bit-mask of mount flags.  The following flags are defined:ST_RDONLY,ST_NOSUID,ST_NODEV,ST_NOEXEC,ST_SYNCHRONOUS,ST_MANDLOCK,ST_WRITE,ST_APPEND,ST_IMMUTABLE,ST_NOATIME,ST_NODIRATIME, andST_RELATIME.
+
+ST_RDONLY
+
+ST_NOSUID
+
+ST_NODEV
+
+ST_NOEXEC
+
+ST_SYNCHRONOUS
+
+ST_MANDLOCK
+
+ST_WRITE
+
+ST_APPEND
+
+ST_IMMUTABLE
+
+ST_NOATIME
+
+ST_NODIRATIME
+
+ST_RELATIME
+
+Filesystem max filename length. OS specific limitations such asWindows MAX_PATHand those described in Linuxpathname(7)may exist.
+
+Filesystem ID.
+
+Added in version 3.7.
+
+The following flags are used instatvfs_result.f_flag.
+
+statvfs_result.f_flag
+
+Read-only filesystem.
+
+Added in version 3.2.
+
+Setuid/setgid bits are disabled or not supported.
+
+Added in version 3.2.
+
+Disallow access to device special files.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Disallow program execution.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Writes are synced at once.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Allow mandatory locks on an FS.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Write on file/directory/symlink.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Append-only file.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Immutable file.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Do not update access times.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Do not update directory access times.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Update atime relative to mtime/ctime.
+
+Availability: Linux.
+
+Added in version 3.4.
+
+Asetobject indicating which functions in theosmodule accept an open file descriptor for theirdir_fdparameter.
+Different platforms provide different features, and the underlying
+functionality Python uses to implement thedir_fdparameter is not
+available on all platforms Python supports.  For consistencyâs sake,
+functions that may supportdir_fdalways allow specifying the
+parameter, but will throw an exception if the functionality is used
+when itâs not locally available. (SpecifyingNonefordir_fdis always supported on all platforms.)
+
+set
+
+os
+
+None
+
+To check whether a particular function accepts an open file descriptor
+for itsdir_fdparameter, use theinoperator onsupports_dir_fd.
+As an example, this expression evaluates toTrueifos.stat()accepts open file descriptors fordir_fdon the local platform:
+
+in
+
+supports_dir_fd
+
+True
+
+os.stat()
+
+os.statinos.supports_dir_fd
+
+Currentlydir_fdparameters only work on Unix platforms;
+none of them work on Windows.
+
+Added in version 3.3.
+
+Asetobject indicating whetheros.access()permits
+specifyingTruefor itseffective_idsparameter on the local platform.
+(SpecifyingFalseforeffective_idsis always supported on all
+platforms.)  If the local platform supports it, the collection will containos.access(); otherwise it will be empty.
+
+set
+
+os.access()
+
+True
+
+False
+
+os.access()
+
+This expression evaluates toTrueifos.access()supportseffective_ids=Trueon the local platform:
+
+True
+
+os.access()
+
+effective_ids=True
+
+os.accessinos.supports_effective_ids
+
+Currentlyeffective_idsis only supported on Unix platforms;
+it does not work on Windows.
+
+Added in version 3.3.
+
+Asetobject indicating which functions in theosmodule permit specifying theirpathparameter as an open file
+descriptor on the local platform.  Different platforms provide different
+features, and the underlying functionality Python uses to accept open file
+descriptors aspatharguments is not available on all platforms Python
+supports.
+
+set
+
+os
+
+To determine whether a particular function permits specifying an open file
+descriptor for itspathparameter, use theinoperator onsupports_fd. As an example, this expression evaluates toTrueifos.chdir()accepts open file descriptors forpathon your local
+platform:
+
+in
+
+supports_fd
+
+True
+
+os.chdir()
+
+os.chdirinos.supports_fd
+
+Added in version 3.3.
+
+Asetobject indicating which functions in theosmodule
+acceptFalsefor theirfollow_symlinksparameter on the local platform.
+Different platforms provide different features, and the underlying
+functionality Python uses to implementfollow_symlinksis not available
+on all platforms Python supports.  For consistencyâs sake, functions that
+may supportfollow_symlinksalways allow specifying the parameter, but
+will throw an exception if the functionality is used when itâs not locally
+available.  (SpecifyingTrueforfollow_symlinksis always supported
+on all platforms.)
+
+set
+
+os
+
+False
+
+True
+
+To check whether a particular function acceptsFalsefor itsfollow_symlinksparameter, use theinoperator onsupports_follow_symlinks.  As an example, this expression evaluates
+toTrueif you may specifyfollow_symlinks=Falsewhen callingos.stat()on the local platform:
+
+False
+
+in
+
+supports_follow_symlinks
+
+True
+
+follow_symlinks=False
+
+os.stat()
+
+os.statinos.supports_follow_symlinks
+
+Added in version 3.3.
+
+Create a symbolic link pointing tosrcnameddst.
+
+Thesrcparameter refers to the target of the link (the file or directory being linked to),
+anddstis the name of the link being created.
+
+On Windows, a symlink represents either a file or a directory, and does not
+morph to the target dynamically.  If the target is present, the type of the
+symlink will be created to match. Otherwise, the symlink will be created
+as a directory iftarget_is_directoryisTrueor a file symlink (the
+default) otherwise.  On non-Windows platforms,target_is_directoryis ignored.
+
+True
+
+This function can supportpaths relative to directory descriptors.
+
+Note
+
+On newer versions of Windows 10, unprivileged accounts can create symlinks
+if Developer Mode is enabled. When Developer Mode is not available/enabled,
+theSeCreateSymbolicLinkPrivilegeprivilege is required, or the process
+must be run as an administrator.
+
+OSErroris raised when the function is called by an unprivileged
+user.
+
+OSError
+
+Raises anauditing eventos.symlinkwith argumentssrc,dst,dir_fd.
+
+os.symlink
+
+src
+
+dst
+
+dir_fd
+
+Availability: Unix, Windows.
+
+The function is limited on WASI, seeWebAssembly platformsfor more
+information.
+
+Changed in version 3.2:Added support for Windows 6.0 (Vista) symbolic links.
+
+Changed in version 3.3:Added thedir_fdparameter, and now allowtarget_is_directoryon non-Windows platforms.
+
+Changed in version 3.6:Accepts apath-like objectforsrcanddst.
+
+Changed in version 3.8:Added support for unelevated symlinks on Windows with Developer Mode.
+
+Force write of everything to disk.
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Truncate the file corresponding topath, so that it is at mostlengthbytes in size.
+
+This function can supportspecifying a file descriptor.
+
+Raises anauditing eventos.truncatewith argumentspath,length.
+
+os.truncate
+
+path
+
+length
+
+Availability: Unix, Windows.
+
+Added in version 3.3.
+
+Changed in version 3.5:Added support for Windows
+
+Changed in version 3.6:Accepts apath-like object.
+
+Remove (delete) the filepath.  This function is semantically
+identical toremove(); theunlinkname is its
+traditional Unix name.  Please see the documentation forremove()for further information.
+
+remove()
+
+unlink
+
+remove()
+
+Raises anauditing eventos.removewith argumentspath,dir_fd.
+
+os.remove
+
+path
+
+dir_fd
+
+Changed in version 3.3:Added thedir_fdparameter.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Set the access and modified times of the file specified bypath.
+
+utime()takes two optional parameters,timesandns.
+These specify the times set onpathand are used as follows:
+
+utime()
+
+Ifnsis specified,
+it must be a 2-tuple of the form(atime_ns,mtime_ns)where each member is an int expressing nanoseconds.
+
+Ifnsis specified,
+it must be a 2-tuple of the form(atime_ns,mtime_ns)where each member is an int expressing nanoseconds.
+
+(atime_ns,mtime_ns)
+
+Iftimesis notNone,
+it must be a 2-tuple of the form(atime,mtime)where each member is an int or float expressing seconds.
+
+Iftimesis notNone,
+it must be a 2-tuple of the form(atime,mtime)where each member is an int or float expressing seconds.
+
+None
+
+(atime,mtime)
+
+IftimesisNoneandnsis unspecified,
+this is equivalent to specifyingns=(atime_ns,mtime_ns)where both times are the current time.
+
+IftimesisNoneandnsis unspecified,
+this is equivalent to specifyingns=(atime_ns,mtime_ns)where both times are the current time.
+
+None
+
+ns=(atime_ns,mtime_ns)
+
+It is an error to specify tuples for bothtimesandns.
+
+Note that the exact times you set here may not be returned by a subsequentstat()call, depending on the resolution with which your operating
+system records access and modification times; seestat(). The best
+way to preserve exact times is to use thest_atime_nsandst_mtime_nsfields from theos.stat()result object with thensparameter toutime().
+
+stat()
+
+stat()
+
+os.stat()
+
+utime()
+
+This function can supportspecifying a file descriptor,paths relative to directory descriptorsandnot
+following symlinks.
+
+Raises anauditing eventos.utimewith argumentspath,times,ns,dir_fd.
+
+os.utime
+
+path
+
+times
+
+ns
+
+dir_fd
+
+Changed in version 3.3:Added support for specifyingpathas an open file descriptor,
+and thedir_fd,follow_symlinks, andnsparameters.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Generate the file names in a directory tree by walking the tree
+either top-down or bottom-up. For each directory in the tree rooted at directorytop(includingtopitself), it yields a 3-tuple(dirpath,dirnames,filenames).
+
+(dirpath,dirnames,filenames)
+
+dirpathis a string, the path to the directory.dirnamesis a list of the
+names of the subdirectories indirpath(including symlinks to directories,
+and excluding'.'and'..').filenamesis a list of the names of the non-directory files indirpath.
+Note that the names in the lists contain no path components.  To get a full path
+(which begins withtop) to a file or directory indirpath, doos.path.join(dirpath,name).  Whether or not the lists are sorted
+depends on the file system.  If a file is removed from or added to thedirpathdirectory during generating the lists, whether a name for that
+file be included is unspecified.
+
+'.'
+
+'..'
+
+os.path.join(dirpath,name)
+
+If optional argumenttopdownisTrueor not specified, the triple for a
+directory is generated before the triples for any of its subdirectories
+(directories are generated top-down).  IftopdownisFalse, the triple
+for a directory is generated after the triples for all of its subdirectories
+(directories are generated bottom-up). No matter the value oftopdown, the
+list of subdirectories is retrieved before the tuples for the directory and
+its subdirectories are generated.
+
+True
+
+False
+
+WhentopdownisTrue, the caller can modify thedirnameslist in-place
+(perhaps usingdelor slice assignment), andwalk()will only
+recurse into the subdirectories whose names remain indirnames; this can be
+used to prune the search, impose a specific order of visiting, or even to informwalk()about directories the caller creates or renames before it resumeswalk()again.  ModifyingdirnameswhentopdownisFalsehas
+no effect on the behavior of the walk, because in bottom-up mode the directories
+indirnamesare generated beforedirpathitself is generated.
+
+True
+
+del
+
+walk()
+
+walk()
+
+walk()
+
+False
+
+By default, errors from thescandir()call are ignored.  If optional
+argumentonerroris specified, it should be a function; it will be called with
+one argument, anOSErrorinstance.  It can report the error to continue
+with the walk, or raise the exception to abort the walk.  Note that the filename
+is available as thefilenameattribute of the exception object.
+
+scandir()
+
+OSError
+
+filename
+
+By default,walk()will not walk down into symbolic links that resolve to
+directories. SetfollowlinkstoTrueto visit directories pointed to by
+symlinks, on systems that support them.
+
+walk()
+
+True
+
+Note
+
+Be aware that settingfollowlinkstoTruecan lead to infinite
+recursion if a link points to a parent directory of itself.walk()does not keep track of the directories it visited already.
+
+True
+
+walk()
+
+Note
+
+If you pass a relative pathname, donât change the current working directory
+between resumptions ofwalk().walk()never changes the current
+directory, and assumes that its caller doesnât either.
+
+walk()
+
+walk()
+
+This example displays the number of bytes taken by non-directory files in each
+directory under the starting directory, except that it doesnât look under any__pycache__subdirectory:
+
+__pycache__
+
+importosfromos.pathimportjoin,getsizeforroot,dirs,filesinos.walk('python/Lib/xml'):print(root,"consumes",end=" ")print(sum(getsize(join(root,name))fornameinfiles),end=" ")print("bytes in",len(files),"non-directory files")if'__pycache__'indirs:dirs.remove('__pycache__')# don't visit __pycache__ directories
+
+In the next example (simple implementation ofshutil.rmtree()),
+walking the tree bottom-up is essential,rmdir()doesnât allow
+deleting a directory before the directory is empty:
+
+shutil.rmtree()
+
+rmdir()
+
+# Delete everything reachable from the directory named in "top",# assuming there are no symbolic links.# CAUTION:  This is dangerous!  For example, if top == '/', it# could delete all your disk files.importosforroot,dirs,filesinos.walk(top,topdown=False):fornameinfiles:os.remove(os.path.join(root,name))fornameindirs:os.rmdir(os.path.join(root,name))os.rmdir(top)
+
+Raises anauditing eventos.walkwith argumentstop,topdown,onerror,followlinks.
+
+os.walk
+
+top
+
+topdown
+
+onerror
+
+followlinks
+
+Changed in version 3.5:This function now callsos.scandir()instead ofos.listdir(),
+making it faster by reducing the number of calls toos.stat().
+
+os.scandir()
+
+os.listdir()
+
+os.stat()
+
+Changed in version 3.6:Accepts apath-like object.
+
+This behaves exactly likewalk(), except that it yields a 4-tuple(dirpath,dirnames,filenames,dirfd), and it supportsdir_fd.
+
+walk()
+
+(dirpath,dirnames,filenames,dirfd)
+
+dir_fd
+
+dirpath,dirnamesandfilenamesare identical towalk()output,
+anddirfdis a file descriptor referring to the directorydirpath.
+
+walk()
+
+This function always supportspaths relative to directory descriptorsandnot following symlinks.  Note however
+that, unlike other functions, thefwalk()default value forfollow_symlinksisFalse.
+
+fwalk()
+
+False
+
+Note
+
+Sincefwalk()yields file descriptors, those are only valid until
+the next iteration step, so you should duplicate them (e.g. withdup()) if you want to keep them longer.
+
+fwalk()
+
+dup()
+
+This example displays the number of bytes taken by non-directory files in each
+directory under the starting directory, except that it doesnât look under any__pycache__subdirectory:
+
+__pycache__
+
+importosforroot,dirs,files,rootfdinos.fwalk('python/Lib/xml'):print(root,"consumes",end=" ")print(sum([os.stat(name,dir_fd=rootfd).st_sizefornameinfiles]),end=" ")print("bytes in",len(files),"non-directory files")if'__pycache__'indirs:dirs.remove('__pycache__')# don't visit __pycache__ directories
+
+In the next example, walking the tree bottom-up is essential:rmdir()doesnât allow deleting a directory before the directory is
+empty:
+
+rmdir()
+
+# Delete everything reachable from the directory named in "top",# assuming there are no symbolic links.# CAUTION:  This is dangerous!  For example, if top == '/', it# could delete all your disk files.importosforroot,dirs,files,rootfdinos.fwalk(top,topdown=False):fornameinfiles:os.unlink(name,dir_fd=rootfd)fornameindirs:os.rmdir(name,dir_fd=rootfd)
+
+Raises anauditing eventos.fwalkwith argumentstop,topdown,onerror,follow_symlinks,dir_fd.
+
+os.fwalk
+
+top
+
+topdown
+
+onerror
+
+follow_symlinks
+
+dir_fd
+
+Availability: Unix.
+
+Added in version 3.3.
+
+Changed in version 3.6:Accepts apath-like object.
+
+Changed in version 3.7:Added support forbytespaths.
+
+bytes
+
+Create an anonymous file and return a file descriptor that refers to it.flagsmust be one of theos.MFD_*constants available on the system
+(or a bitwise ORed combination of them).  By default, the new file
+descriptor isnon-inheritable.
+
+os.MFD_*
+
+The name supplied innameis used as a filename and will be displayed as
+the target of the corresponding symbolic link in the directory/proc/self/fd/. The displayed name is always prefixed withmemfd:and serves only for debugging purposes. Names do not affect the behavior of
+the file descriptor, and as such multiple files can have the same name
+without any side effects.
+
+/proc/self/fd/
+
+memfd:
+
+Availability: Linux >= 3.17 with glibc >= 2.27.
+
+Added in version 3.8.
+
+These flags can be passed tomemfd_create().
+
+memfd_create()
+
+Availability: Linux >= 3.17 with glibc >= 2.27
+
+TheMFD_HUGE*flags are only available since Linux 4.14.
+
+MFD_HUGE*
+
+Added in version 3.8.
+
+Create and return an event file descriptor. The file descriptors supports
+rawread()andwrite()with a buffer size of 8,select(),poll()and similar. See man pageeventfd(2)for more information.  By default, the
+new file descriptor isnon-inheritable.
+
+read()
+
+write()
+
+select()
+
+poll()
+
+initvalis the initial value of the event counter. The initial value
+must be a 32 bit unsigned integer. Please note that the initial value is
+limited to a 32 bit unsigned int although the event counter is an unsigned
+64 bit integer with a maximum value of 264-2.
+
+flagscan be constructed fromEFD_CLOEXEC,EFD_NONBLOCK, andEFD_SEMAPHORE.
+
+EFD_CLOEXEC
+
+EFD_NONBLOCK
+
+EFD_SEMAPHORE
+
+IfEFD_SEMAPHOREis specified and the event counter is non-zero,eventfd_read()returns 1 and decrements the counter by one.
+
+EFD_SEMAPHORE
+
+eventfd_read()
+
+IfEFD_SEMAPHOREis not specified and the event counter is
+non-zero,eventfd_read()returns the current event counter value and
+resets the counter to zero.
+
+EFD_SEMAPHORE
+
+eventfd_read()
+
+If the event counter is zero andEFD_NONBLOCKis not
+specified,eventfd_read()blocks.
+
+EFD_NONBLOCK
+
+eventfd_read()
+
+eventfd_write()increments the event counter. Write blocks if the
+write operation would increment the counter to a value larger than
+264-2.
+
+eventfd_write()
+
+Example:
+
+importos# semaphore with start value '1'fd=os.eventfd(1,os.EFD_SEMAPHORE|os.EFD_CLOEXEC)try:# acquire semaphorev=os.eventfd_read(fd)try:do_work()finally:# release semaphoreos.eventfd_write(fd,v)finally:os.close(fd)
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.10.
+
+Read value from aneventfd()file descriptor and return a 64 bit
+unsigned int. The function does not verify thatfdis aneventfd().
+
+eventfd()
+
+eventfd()
+
+Availability: Linux >= 2.6.27
+
+Added in version 3.10.
+
+Add value to aneventfd()file descriptor.valuemust be a 64 bit
+unsigned int. The function does not verify thatfdis aneventfd().
+
+eventfd()
+
+eventfd()
+
+Availability: Linux >= 2.6.27
+
+Added in version 3.10.
+
+Set close-on-exec flag for neweventfd()file descriptor.
+
+eventfd()
+
+Availability: Linux >= 2.6.27
+
+Added in version 3.10.
+
+SetO_NONBLOCKstatus flag for neweventfd()file
+descriptor.
+
+O_NONBLOCK
+
+eventfd()
+
+Availability: Linux >= 2.6.27
+
+Added in version 3.10.
+
+Provide semaphore-like semantics for reads from aneventfd()file
+descriptor. On read the internal counter is decremented by one.
+
+eventfd()
+
+Availability: Linux >= 2.6.30
+
+Added in version 3.10.
+
+Timer File Descriptors
+
+Added in version 3.13.
+
+These functions provide support for Linuxâstimer file descriptorAPI.
+Naturally, they are all only available on Linux.
+
+Create and return a timer file descriptor (timerfd).
+
+The file descriptor returned bytimerfd_create()supports:
+
+timerfd_create()
+
+read()
+
+read()
+
+read()
+
+select()
+
+select()
+
+select()
+
+poll()
+
+poll()
+
+poll()
+
+The file descriptorâsread()method can be called with a buffer size
+of 8. If the timer has already expired one or more times,read()returns the number of expirations with the hostâs endianness, which may be
+converted to anintbyint.from_bytes(x,byteorder=sys.byteorder).
+
+read()
+
+read()
+
+int
+
+int.from_bytes(x,byteorder=sys.byteorder)
+
+select()andpoll()can be used to wait until
+timer expires and the file descriptor is readable.
+
+select()
+
+poll()
+
+clockidmust be a validclock ID,
+as defined in thetimemodule:
+
+time
+
+time.CLOCK_REALTIME
+
+time.CLOCK_REALTIME
+
+time.CLOCK_REALTIME
+
+time.CLOCK_MONOTONIC
+
+time.CLOCK_MONOTONIC
+
+time.CLOCK_MONOTONIC
+
+time.CLOCK_BOOTTIME(Since Linux 3.15 for timerfd_create)
+
+time.CLOCK_BOOTTIME(Since Linux 3.15 for timerfd_create)
+
+time.CLOCK_BOOTTIME
+
+Ifclockidistime.CLOCK_REALTIME, a settable system-wide
+real-time clock is used. If system clock is changed, timer setting need
+to be updated. To cancel timer when system clock is changed, seeTFD_TIMER_CANCEL_ON_SET.
+
+time.CLOCK_REALTIME
+
+TFD_TIMER_CANCEL_ON_SET
+
+Ifclockidistime.CLOCK_MONOTONIC, a non-settable monotonically
+increasing clock is used. Even if the system clock is changed, the timer
+setting will not be affected.
+
+time.CLOCK_MONOTONIC
+
+Ifclockidistime.CLOCK_BOOTTIME, same astime.CLOCK_MONOTONICexcept it includes any time that the system is suspended.
+
+time.CLOCK_BOOTTIME
+
+time.CLOCK_MONOTONIC
+
+The file descriptorâs behaviour can be modified by specifying aflagsvalue.
+Any of the following variables may be used, combined using bitwise OR
+(the|operator):
+
+|
+
+TFD_NONBLOCK
+
+TFD_NONBLOCK
+
+TFD_NONBLOCK
+
+TFD_CLOEXEC
+
+TFD_CLOEXEC
+
+TFD_CLOEXEC
+
+IfTFD_NONBLOCKis not set as a flag,read()blocks until
+the timer expires. If it is set as a flag,read()doesnât block, but
+If there hasnât been an expiration since the last call to read,read()raisesOSErrorwitherrnois set toerrno.EAGAIN.
+
+TFD_NONBLOCK
+
+read()
+
+read()
+
+read()
+
+OSError
+
+errno
+
+errno.EAGAIN
+
+TFD_CLOEXECis always set by Python automatically.
+
+TFD_CLOEXEC
+
+The file descriptor must be closed withos.close()when it is no
+longer needed, or else the file descriptor will be leaked.
+
+os.close()
+
+See also
+
+Thetimerfd_create(2)man page.
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+Alter a timer file descriptorâs internal timer.
+This function operates the same interval timer astimerfd_settime_ns().
+
+timerfd_settime_ns()
+
+fdmust be a valid timer file descriptor.
+
+The timerâs behaviour can be modified by specifying aflagsvalue.
+Any of the following variables may be used, combined using bitwise OR
+(the|operator):
+
+|
+
+TFD_TIMER_ABSTIME
+
+TFD_TIMER_ABSTIME
+
+TFD_TIMER_ABSTIME
+
+TFD_TIMER_CANCEL_ON_SET
+
+TFD_TIMER_CANCEL_ON_SET
+
+TFD_TIMER_CANCEL_ON_SET
+
+The timer is disabled by settinginitialto zero (0).
+Ifinitialis equal to or greater than zero, the timer is enabled.
+Ifinitialis less than zero, it raises anOSErrorexception
+witherrnoset toerrno.EINVAL
+
+0
+
+OSError
+
+errno
+
+errno.EINVAL
+
+By default the timer will fire wheninitialseconds have elapsed.
+(Ifinitialis zero, timer will fire immediately.)
+
+However, if theTFD_TIMER_ABSTIMEflag is set,
+the timer will fire when the timerâs clock
+(set byclockidintimerfd_create()) reachesinitialseconds.
+
+TFD_TIMER_ABSTIME
+
+timerfd_create()
+
+The timerâs interval is set by theintervalfloat.
+Ifintervalis zero, the timer only fires once, on the initial expiration.
+Ifintervalis greater than zero, the timer fires every timeintervalseconds have elapsed since the previous expiration.
+Ifintervalis less than zero, it raisesOSErrorwitherrnoset toerrno.EINVAL
+
+float
+
+OSError
+
+errno
+
+errno.EINVAL
+
+If theTFD_TIMER_CANCEL_ON_SETflag is set along withTFD_TIMER_ABSTIMEand the clock for this timer istime.CLOCK_REALTIME, the timer is marked as cancelable if the
+real-time clock is changed discontinuously. Reading the descriptor is
+aborted with the error ECANCELED.
+
+TFD_TIMER_CANCEL_ON_SET
+
+TFD_TIMER_ABSTIME
+
+time.CLOCK_REALTIME
+
+Linux manages system clock as UTC. A daylight-savings time transition is
+done by changing time offset only and doesnât cause discontinuous system
+clock change.
+
+Discontinuous system clock change will be caused by the following events:
+
+settimeofday
+
+settimeofday
+
+settimeofday
+
+clock_settime
+
+clock_settime
+
+clock_settime
+
+set the system date and time bydatecommand
+
+set the system date and time bydatecommand
+
+date
+
+Return a two-item tuple of (next_expiration,interval) from
+the previous timer state, before this function executed.
+
+next_expiration
+
+interval
+
+See also
+
+timerfd_create(2),timerfd_settime(2),settimeofday(2),clock_settime(2),
+anddate(1).
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+Similar totimerfd_settime(), but use time as nanoseconds.
+This function operates the same interval timer astimerfd_settime().
+
+timerfd_settime()
+
+timerfd_settime()
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+Return a two-item tuple of floats (next_expiration,interval).
+
+next_expiration
+
+interval
+
+next_expirationdenotes the relative time until the timer next fires,
+regardless of if theTFD_TIMER_ABSTIMEflag is set.
+
+next_expiration
+
+TFD_TIMER_ABSTIME
+
+intervaldenotes the timerâs interval.
+If zero, the timer will only fire once, afternext_expirationseconds
+have elapsed.
+
+interval
+
+next_expiration
+
+See also
+
+timerfd_gettime(2)
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+Similar totimerfd_gettime(), but return time as nanoseconds.
+
+timerfd_gettime()
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+A flag for thetimerfd_create()function,
+which sets theO_NONBLOCKstatus flag for the new timer file
+descriptor. IfTFD_NONBLOCKis not set as a flag,read()blocks.
+
+timerfd_create()
+
+O_NONBLOCK
+
+TFD_NONBLOCK
+
+read()
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+A flag for thetimerfd_create()function,
+IfTFD_CLOEXECis set as a flag, set close-on-exec flag for new file
+descriptor.
+
+timerfd_create()
+
+TFD_CLOEXEC
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+A flag for thetimerfd_settime()andtimerfd_settime_ns()functions.
+If this flag is set,initialis interpreted as an absolute value on the
+timerâs clock (in UTC seconds or nanoseconds since the Unix Epoch).
+
+timerfd_settime()
+
+timerfd_settime_ns()
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+A flag for thetimerfd_settime()andtimerfd_settime_ns()functions along withTFD_TIMER_ABSTIME.
+The timer is cancelled when the time of the underlying clock changes
+discontinuously.
+
+timerfd_settime()
+
+timerfd_settime_ns()
+
+TFD_TIMER_ABSTIME
+
+Availability: Linux >= 2.6.27 with glibc >= 2.8
+
+Added in version 3.13.
+
+Linux extended attributes
+
+Added in version 3.3.
+
+These functions are all available on Linux only.
+
+Return the value of the extended filesystem attributeattributeforpath.attributecan be bytes or str (directly or indirectly through thePathLikeinterface). If it is str, it is encoded with the filesystem
+encoding.
+
+PathLike
+
+This function can supportspecifying a file descriptorandnot following symlinks.
+
+Raises anauditing eventos.getxattrwith argumentspath,attribute.
+
+os.getxattr
+
+path
+
+attribute
+
+Changed in version 3.6:Accepts apath-like objectforpathandattribute.
+
+Return a list of the extended filesystem attributes onpath.  The
+attributes in the list are represented as strings decoded with the filesystem
+encoding.  IfpathisNone,listxattr()will examine the current
+directory.
+
+None
+
+listxattr()
+
+This function can supportspecifying a file descriptorandnot following symlinks.
+
+Raises anauditing eventos.listxattrwith argumentpath.
+
+os.listxattr
+
+path
+
+Changed in version 3.6:Accepts apath-like object.
+
+Removes the extended filesystem attributeattributefrompath.attributeshould be bytes or str (directly or indirectly through thePathLikeinterface). If it is a string, it is encoded
+with thefilesystem encoding and error handler.
+
+PathLike
+
+This function can supportspecifying a file descriptorandnot following symlinks.
+
+Raises anauditing eventos.removexattrwith argumentspath,attribute.
+
+os.removexattr
+
+path
+
+attribute
+
+Changed in version 3.6:Accepts apath-like objectforpathandattribute.
+
+Set the extended filesystem attributeattributeonpathtovalue.attributemust be a bytes or str with no embedded NULs (directly or
+indirectly through thePathLikeinterface). If it is a str,
+it is encoded with thefilesystem encoding and error handler.flagsmay beXATTR_REPLACEorXATTR_CREATE. IfXATTR_REPLACEis
+given and the attribute does not exist,ENODATAwill be raised.
+IfXATTR_CREATEis given and the attribute already exists, the
+attribute will not be created andEEXISTSwill be raised.
+
+PathLike
+
+XATTR_REPLACE
+
+XATTR_CREATE
+
+XATTR_REPLACE
+
+ENODATA
+
+XATTR_CREATE
+
+EEXISTS
+
+This function can supportspecifying a file descriptorandnot following symlinks.
+
+Note
+
+A bug in Linux kernel versions less than 2.6.39 caused the flags argument
+to be ignored on some filesystems.
+
+Raises anauditing eventos.setxattrwith argumentspath,attribute,value,flags.
+
+os.setxattr
+
+path
+
+attribute
+
+value
+
+flags
+
+Changed in version 3.6:Accepts apath-like objectforpathandattribute.
+
+The maximum size the value of an extended attribute can be. Currently, this
+is 64 KiB on Linux.
+
+This is a possible value for the flags argument insetxattr(). It
+indicates the operation must create an attribute.
+
+setxattr()
+
+This is a possible value for the flags argument insetxattr(). It
+indicates the operation must replace an existing attribute.
+
+setxattr()
+
+Process Management
+
+These functions may be used to create and manage processes.
+
+The variousexec*functions take a list of arguments for the new
+program loaded into the process.  In each case, the first of these arguments is
+passed to the new program as its own name rather than as an argument a user may
+have typed on a command line.  For the C programmer, this is theargv[0]passed to a programâsmain().  For example,os.execv('/bin/echo',['foo','bar'])will only printbaron standard output;foowill seem
+to be ignored.
+
+exec*
+
+argv[0]
+
+main()
+
+os.execv('/bin/echo',['foo','bar'])
+
+bar
+
+foo
+
+Generate aSIGABRTsignal to the current process.  On Unix, the default
+behavior is to produce a core dump; on Windows, the process immediately returns
+an exit code of3.  Be aware that calling this function will not call the
+Python signal handler registered forSIGABRTwithsignal.signal().
+
+SIGABRT
+
+3
+
+SIGABRT
+
+signal.signal()
+
+Add a path to the DLL search path.
+
+This search path is used when resolving dependencies for imported
+extension modules (the module itself is resolved throughsys.path), and also byctypes.
+
+sys.path
+
+ctypes
+
+Remove the directory by callingclose()on the returned object
+or using it in awithstatement.
+
+with
+
+See theMicrosoft documentationfor more information about how DLLs are loaded.
+
+Raises anauditing eventos.add_dll_directorywith argumentpath.
+
+os.add_dll_directory
+
+path
+
+Availability: Windows.
+
+Added in version 3.8:Previous versions of CPython would resolve DLLs using the default
+behavior for the current process. This led to inconsistencies,
+such as only sometimes searchingPATHor the current
+working directory, and OS functions such asAddDllDirectoryhaving no effect.
+
+PATH
+
+AddDllDirectory
+
+In 3.8, the two primary ways DLLs are loaded now explicitly
+override the process-wide behavior to ensure consistency. See theporting notesfor information on
+updating libraries.
+
+These functions all execute a new program, replacing the current process; they
+do not return.  On Unix, the new executable is loaded into the current process,
+and will have the same process id as the caller.  Errors will be reported asOSErrorexceptions.
+
+OSError
+
+The current process is replaced immediately. Open file objects and
+descriptors are not flushed, so if there may be data buffered
+on these open files, you should flush them usingflush()oros.fsync()before calling anexec*function.
+
+flush()
+
+os.fsync()
+
+exec*
+
+The âlâ and âvâ variants of theexec*functions differ in how
+command-line arguments are passed.  The âlâ variants are perhaps the easiest
+to work with if the number of parameters is fixed when the code is written; the
+individual parameters simply become additional parameters to theexecl*()functions.  The âvâ variants are good when the number of parameters is
+variable, with the arguments being passed in a list or tuple as theargsparameter.  In either case, the arguments to the child process should start with
+the name of the command being run, but this is not enforced.
+
+exec*
+
+execl*()
+
+The variants which include a âpâ near the end (execlp(),execlpe(),execvp(), andexecvpe()) will use thePATHenvironment variable to locate the programfile.  When the
+environment is being replaced (using one of theexec*evariants,
+discussed in the next paragraph), the new environment is used as the source of
+thePATHvariable. The other variants,execl(),execle(),execv(), andexecve(), will not use thePATHvariable to
+locate the executable;pathmust contain an appropriate absolute or relative
+path. Relative paths must include at least one slash, even on Windows, as
+plain names will not be resolved.
+
+execlp()
+
+execlpe()
+
+execvp()
+
+execvpe()
+
+PATH
+
+exec*e
+
+PATH
+
+execl()
+
+execle()
+
+execv()
+
+execve()
+
+PATH
+
+Forexecle(),execlpe(),execve(), andexecvpe()(note
+that these all end in âeâ), theenvparameter must be a mapping which is
+used to define the environment variables for the new process (these are used
+instead of the current processâ environment); the functionsexecl(),execlp(),execv(), andexecvp()all cause the new process to
+inherit the environment of the current process.
+
+execle()
+
+execlpe()
+
+execve()
+
+execvpe()
+
+execl()
+
+execlp()
+
+execv()
+
+execvp()
+
+Forexecve()on some platforms,pathmay also be specified as an open
+file descriptor.  This functionality may not be supported on your platform;
+you can check whether or not it is available usingos.supports_fd.
+If it is unavailable, using it will raise aNotImplementedError.
+
+execve()
+
+os.supports_fd
+
+NotImplementedError
+
+Raises anauditing eventos.execwith argumentspath,args,env.
+
+os.exec
+
+path
+
+args
+
+env
+
+Availability: Unix, Windows, not WASI, not Android, not iOS.
+
+Changed in version 3.3:Added support for specifyingpathas an open file descriptor
+forexecve().
+
+execve()
+
+Changed in version 3.6:Accepts apath-like object.
+
+Exit the process with statusn, without calling cleanup handlers, flushing
+stdio buffers, etc.
+
+Note
+
+The standard way to exit issys.exit(n)._exit()should
+normally only be used in the child process after afork().
+
+sys.exit(n)
+
+_exit()
+
+fork()
+
+The following exit codes are defined and can be used with_exit(),
+although they are not required.  These are typically used for system programs
+written in Python, such as a mail serverâs external command delivery program.
+
+_exit()
+
+Note
+
+Some of these may not be available on all Unix platforms, since there is some
+variation.  These constants are defined where they are defined by the underlying
+platform.
+
+Exit code that means no error occurred. May be taken from the defined value ofEXIT_SUCCESSon some platforms. Generally has a value of zero.
+
+EXIT_SUCCESS
+
+Availability: Unix, Windows.
+
+Exit code that means the command was used incorrectly, such as when the wrong
+number of arguments are given.
+
+Availability: Unix, not WASI.
+
+Exit code that means the input data was incorrect.
+
+Availability: Unix, not WASI.
+
+Exit code that means an input file did not exist or was not readable.
+
+Availability: Unix, not WASI.
+
+Exit code that means a specified user did not exist.
+
+Availability: Unix, not WASI.
+
+Exit code that means a specified host did not exist.
+
+Availability: Unix, not WASI.
+
+Exit code that means that a required service is unavailable.
+
+Availability: Unix, not WASI.
+
+Exit code that means an internal software error was detected.
+
+Availability: Unix, not WASI.
+
+Exit code that means an operating system error was detected, such as the
+inability to fork or create a pipe.
+
+Availability: Unix, not WASI.
+
+Exit code that means some system file did not exist, could not be opened, or had
+some other kind of error.
+
+Availability: Unix, not WASI.
+
+Exit code that means a user specified output file could not be created.
+
+Availability: Unix, not WASI.
+
+Exit code that means that an error occurred while doing I/O on some file.
+
+Availability: Unix, not WASI.
+
+Exit code that means a temporary failure occurred.  This indicates something
+that may not really be an error, such as a network connection that couldnât be
+made during a retryable operation.
+
+Availability: Unix, not WASI.
+
+Exit code that means that a protocol exchange was illegal, invalid, or not
+understood.
+
+Availability: Unix, not WASI.
+
+Exit code that means that there were insufficient permissions to perform the
+operation (but not intended for file system problems).
+
+Availability: Unix, not WASI.
+
+Exit code that means that some kind of configuration error occurred.
+
+Availability: Unix, not WASI.
+
+Exit code that means something like âan entry was not foundâ.
+
+Availability: Unix, not WASI.
+
+Fork a child process.  Return0in the child and the childâs process id in the
+parent.  If an error occursOSErroris raised.
+
+0
+
+OSError
+
+Note that some platforms including FreeBSD <= 6.3 and Cygwin have
+known issues when usingfork()from a thread.
+
+fork()
+
+Raises anauditing eventos.forkwith no arguments.
+
+os.fork
+
+Warning
+
+If you use TLS sockets in an application callingfork(), see
+the warning in thessldocumentation.
+
+fork()
+
+ssl
+
+Warning
+
+On macOS the use of this function is unsafe when mixed with using
+higher-level system APIs, and that includes usingurllib.request.
+
+urllib.request
+
+Changed in version 3.8:Callingfork()in a subinterpreter is no longer supported
+(RuntimeErroris raised).
+
+fork()
+
+RuntimeError
+
+Changed in version 3.12:If Python is able to detect that your process has multiple
+threads,os.fork()now raises aDeprecationWarning.
+
+os.fork()
+
+DeprecationWarning
+
+We chose to surface this as a warning, when detectable, to better
+inform developers of a design problem that the POSIX platform
+specifically notes as not supported. Even in code thatappearsto work, it has never been safe to mix threading withos.fork()on POSIX platforms. The CPython runtime itself has
+always made API calls that are not safe for use in the child
+process when threads existed in the parent (such asmallocandfree).
+
+os.fork()
+
+malloc
+
+free
+
+Users of macOS or users of libc or malloc implementations other
+than those typically found in glibc to date are among those
+already more likely to experience deadlocks running such code.
+
+Seethis discussion on fork being incompatible with threadsfor technical details of why weâre surfacing this longstanding
+platform compatibility problem to developers.
+
+Availability: POSIX, not WASI, not Android, not iOS.
+
+Fork a child process, using a new pseudo-terminal as the childâs controlling
+terminal. Return a pair of(pid,fd), wherepidis0in the child, the
+new childâs process id in the parent, andfdis the file descriptor of the
+master end of the pseudo-terminal.  For a more portable approach, use theptymodule.  If an error occursOSErroris raised.
+
+(pid,fd)
+
+0
+
+pty
+
+OSError
+
+Raises anauditing eventos.forkptywith no arguments.
+
+os.forkpty
+
+Warning
+
+On macOS the use of this function is unsafe when mixed with using
+higher-level system APIs, and that includes usingurllib.request.
+
+urllib.request
+
+Changed in version 3.8:Callingforkpty()in a subinterpreter is no longer supported
+(RuntimeErroris raised).
+
+forkpty()
+
+RuntimeError
+
+Changed in version 3.12:If Python is able to detect that your process has multiple
+threads, this now raises aDeprecationWarning. See the
+longer explanation onos.fork().
+
+DeprecationWarning
+
+os.fork()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Send signalsigto the processpid.  Constants for the specific signals
+available on the host platform are defined in thesignalmodule.
+
+signal
+
+Windows: Thesignal.CTRL_C_EVENTandsignal.CTRL_BREAK_EVENTsignals are special signals which can
+only be sent to console processes which share a common console window,
+e.g., some subprocesses. Any other value forsigwill cause the process
+to be unconditionally killed by the TerminateProcess API, and the exit code
+will be set tosig.
+
+signal.CTRL_C_EVENT
+
+signal.CTRL_BREAK_EVENT
+
+See alsosignal.pthread_kill().
+
+signal.pthread_kill()
+
+Raises anauditing eventos.killwith argumentspid,sig.
+
+os.kill
+
+pid
+
+sig
+
+Availability: Unix, Windows, not WASI, not iOS.
+
+Changed in version 3.2:Added Windows support.
+
+Send the signalsigto the process grouppgid.
+
+Raises anauditing eventos.killpgwith argumentspgid,sig.
+
+os.killpg
+
+pgid
+
+sig
+
+Availability: Unix, not WASI, not iOS.
+
+Addincrementto the processâs ânicenessâ.  Return the new niceness.
+
+Availability: Unix, not WASI.
+
+Return a file descriptor referring to the processpidwithflagsset.
+This descriptor can be used to perform process management without races
+and signals.
+
+See thepidfd_open(2)man page for more details.
+
+Availability: Linux >= 5.3, Android >=build-timeAPI level 31
+
+build-time
+
+Added in version 3.9.
+
+This flag indicates that the file descriptor will be non-blocking.
+If the process referred to by the file descriptor has not yet terminated,
+then an attempt to wait on the file descriptor usingwaitid(2)will immediately return the errorEAGAINrather than blocking.
+
+EAGAIN
+
+Availability: Linux >= 5.10
+
+Added in version 3.12.
+
+Lock program segments into memory.  The value ofop(defined in<sys/lock.h>) determines which segments are locked.
+
+<sys/lock.h>
+
+Availability: Unix, not WASI, not macOS, not iOS.
+
+Open a pipe to or from commandcmd.
+The return value is an open file object
+connected to the pipe, which can be read or written depending on whethermodeis'r'(default) or'w'.
+Thebufferingargument have the same meaning as
+the corresponding argument to the built-inopen()function. The
+returned file object reads or writes text strings rather than bytes.
+
+'r'
+
+'w'
+
+open()
+
+Theclosemethod returnsNoneif the subprocess exited
+successfully, or the subprocessâs return code if there was an
+error. On POSIX systems, if the return code is positive it
+represents the return value of the process left-shifted by one
+byte.  If the return code is negative, the process was terminated
+by the signal given by the negated value of the return code.  (For
+example, the return value might be-signal.SIGKILLif the
+subprocess was killed.)  On Windows systems, the return value
+contains the signed integer return code from the child process.
+
+close
+
+None
+
+-signal.SIGKILL
+
+On Unix,waitstatus_to_exitcode()can be used to convert theclosemethod result (exit status) into an exit code if it is notNone. On
+Windows, theclosemethod result is directly the exit code
+(orNone).
+
+waitstatus_to_exitcode()
+
+close
+
+None
+
+close
+
+None
+
+This is implemented usingsubprocess.Popen; see that classâs
+documentation for more powerful ways to manage and communicate with
+subprocesses.
+
+subprocess.Popen
+
+Availability: not WASI, not Android, not iOS.
+
+Note
+
+ThePython UTF-8 Modeaffects encodings used
+forcmdand pipe contents.
+
+popen()is a simple wrapper aroundsubprocess.Popen.
+Usesubprocess.Popenorsubprocess.run()to
+control options like encodings.
+
+popen()
+
+subprocess.Popen
+
+subprocess.Popen
+
+subprocess.run()
+
+Soft deprecatedsince version 3.14:Thesubprocessmodule is recommended instead.
+
+subprocess
+
+Wraps theposix_spawn()C library API for use from Python.
+
+posix_spawn()
+
+Most users should usesubprocess.run()instead ofposix_spawn().
+
+subprocess.run()
+
+posix_spawn()
+
+The positional-only argumentspath,args, andenvare similar toexecve().envis allowed to beNone, in which case current
+processâ environment is used.
+
+execve()
+
+None
+
+Thepathparameter is the path to the executable file.  Thepathshould
+contain a directory.  Useposix_spawnp()to pass an executable file
+without directory.
+
+posix_spawnp()
+
+Thefile_actionsargument may be a sequence of tuples describing actions
+to take on specific file descriptors in the child process between the C
+library implementationâsfork()andexec()steps.
+The first item in each tuple must be one of the three type indicator
+listed below describing the remaining tuple elements:
+
+fork()
+
+exec()
+
+(os.POSIX_SPAWN_OPEN,fd,path,flags,mode)
+
+os.POSIX_SPAWN_OPEN
+
+Performsos.dup2(os.open(path,flags,mode),fd).
+
+os.dup2(os.open(path,flags,mode),fd)
+
+(os.POSIX_SPAWN_CLOSE,fd)
+
+os.POSIX_SPAWN_CLOSE
+
+Performsos.close(fd).
+
+os.close(fd)
+
+(os.POSIX_SPAWN_DUP2,fd,new_fd)
+
+os.POSIX_SPAWN_DUP2
+
+Performsos.dup2(fd,new_fd).
+
+os.dup2(fd,new_fd)
+
+(os.POSIX_SPAWN_CLOSEFROM,fd)
+
+os.POSIX_SPAWN_CLOSEFROM
+
+Performsos.closerange(fd,INF).
+
+os.closerange(fd,INF)
+
+These tuples correspond to the C libraryposix_spawn_file_actions_addopen(),posix_spawn_file_actions_addclose(),posix_spawn_file_actions_adddup2(), andposix_spawn_file_actions_addclosefrom_np()API calls used to prepare
+for theposix_spawn()call itself.
+
+posix_spawn_file_actions_addopen()
+
+posix_spawn_file_actions_addclose()
+
+posix_spawn_file_actions_adddup2()
+
+posix_spawn_file_actions_addclosefrom_np()
+
+posix_spawn()
+
+Thesetpgroupargument will set the process group of the child to the value
+specified. If the value specified is 0, the childâs process group ID will be
+made the same as its process ID. If the value ofsetpgroupis not set, the
+child will inherit the parentâs process group ID. This argument corresponds
+to the C libraryPOSIX_SPAWN_SETPGROUPflag.
+
+POSIX_SPAWN_SETPGROUP
+
+If theresetidsargument isTrueit will reset the effective UID and
+GID of the child to the real UID and GID of the parent process. If the
+argument isFalse, then the child retains the effective UID and GID of
+the parent. In either case, if the set-user-ID and set-group-ID permission
+bits are enabled on the executable file, their effect will override the
+setting of the effective UID and GID. This argument corresponds to the C
+libraryPOSIX_SPAWN_RESETIDSflag.
+
+True
+
+False
+
+POSIX_SPAWN_RESETIDS
+
+If thesetsidargument isTrue, it will create a new session ID
+forposix_spawn.setsidrequiresPOSIX_SPAWN_SETSIDorPOSIX_SPAWN_SETSID_NPflag. Otherwise,NotImplementedErroris raised.
+
+True
+
+posix_spawn
+
+POSIX_SPAWN_SETSID
+
+POSIX_SPAWN_SETSID_NP
+
+NotImplementedError
+
+Thesetsigmaskargument will set the signal mask to the signal set
+specified. If the parameter is not used, then the child inherits the
+parentâs signal mask. This argument corresponds to the C libraryPOSIX_SPAWN_SETSIGMASKflag.
+
+POSIX_SPAWN_SETSIGMASK
+
+Thesigdefargument will reset the disposition of all signals in the set
+specified. This argument corresponds to the C libraryPOSIX_SPAWN_SETSIGDEFflag.
+
+POSIX_SPAWN_SETSIGDEF
+
+Theschedulerargument must be a tuple containing the (optional) scheduler
+policy and an instance ofsched_paramwith the scheduler parameters.
+A value ofNonein the place of the scheduler policy indicates that is
+not being provided. This argument is a combination of the C libraryPOSIX_SPAWN_SETSCHEDPARAMandPOSIX_SPAWN_SETSCHEDULERflags.
+
+sched_param
+
+None
+
+POSIX_SPAWN_SETSCHEDPARAM
+
+POSIX_SPAWN_SETSCHEDULER
+
+Raises anauditing eventos.posix_spawnwith argumentspath,argv,env.
+
+os.posix_spawn
+
+path
+
+argv
+
+env
+
+Added in version 3.8.
+
+Changed in version 3.13:envparameter acceptsNone.os.POSIX_SPAWN_CLOSEFROMis available on platforms whereposix_spawn_file_actions_addclosefrom_np()exists.
+
+None
+
+os.POSIX_SPAWN_CLOSEFROM
+
+posix_spawn_file_actions_addclosefrom_np()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Wraps theposix_spawnp()C library API for use from Python.
+
+posix_spawnp()
+
+Similar toposix_spawn()except that the system searches
+for theexecutablefile in the list of directories specified by thePATHenvironment variable (in the same way as forexecvp(3)).
+
+posix_spawn()
+
+PATH
+
+execvp(3)
+
+Raises anauditing eventos.posix_spawnwith argumentspath,argv,env.
+
+os.posix_spawn
+
+path
+
+argv
+
+env
+
+Added in version 3.8.
+
+Availability: POSIX, not WASI, not Android, not iOS.
+
+Seeposix_spawn()documentation.
+
+posix_spawn()
+
+Register callables to be executed when a new child process is forked
+usingos.fork()or similar process cloning APIs.
+The parameters are optional and keyword-only.
+Each specifies a different call point.
+
+os.fork()
+
+beforeis a function called before forking a child process.
+
+beforeis a function called before forking a child process.
+
+after_in_parentis a function called from the parent process
+after forking a child process.
+
+after_in_parentis a function called from the parent process
+after forking a child process.
+
+after_in_childis a function called from the child process.
+
+after_in_childis a function called from the child process.
+
+These calls are only made if control is expected to return to the
+Python interpreter.  A typicalsubprocesslaunch will not
+trigger them as the child is not going to re-enter the interpreter.
+
+subprocess
+
+Functions registered for execution before forking are called in
+reverse registration order.  Functions registered for execution
+after forking (either in the parent or in the child) are called
+in registration order.
+
+Note thatfork()calls made by third-party C code may not
+call those functions, unless it explicitly callsPyOS_BeforeFork(),PyOS_AfterFork_Parent()andPyOS_AfterFork_Child().
+
+fork()
+
+PyOS_BeforeFork()
+
+PyOS_AfterFork_Parent()
+
+PyOS_AfterFork_Child()
+
+There is no way to unregister a function.
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Added in version 3.7.
+
+Execute the programpathin a new process.
+
+(Note that thesubprocessmodule provides more powerful facilities for
+spawning new processes and retrieving their results; using that module is
+preferable to using these functions.  Check especially theReplacing Older Functions with the subprocess Modulesection.)
+
+subprocess
+
+IfmodeisP_NOWAIT, this function returns the process id of the new
+process; ifmodeisP_WAIT, returns the processâs exit code if it
+exits normally, or-signal, wheresignalis the signal that killed the
+process.  On Windows, the process id will actually be the process handle, so can
+be used with thewaitpid()function.
+
+P_NOWAIT
+
+P_WAIT
+
+-signal
+
+waitpid()
+
+Note on VxWorks, this function doesnât return-signalwhen the new process is
+killed. Instead it raises OSError exception.
+
+-signal
+
+The âlâ and âvâ variants of thespawn*functions differ in how
+command-line arguments are passed.  The âlâ variants are perhaps the easiest
+to work with if the number of parameters is fixed when the code is written; the
+individual parameters simply become additional parameters to thespawnl*()functions.  The âvâ variants are good when the number of
+parameters is variable, with the arguments being passed in a list or tuple as
+theargsparameter.  In either case, the arguments to the child process must
+start with the name of the command being run.
+
+spawn*
+
+spawnl*()
+
+The variants which include a second âpâ near the end (spawnlp(),spawnlpe(),spawnvp(), andspawnvpe()) will use thePATHenvironment variable to locate the programfile.  When the
+environment is being replaced (using one of thespawn*evariants,
+discussed in the next paragraph), the new environment is used as the source of
+thePATHvariable.  The other variants,spawnl(),spawnle(),spawnv(), andspawnve(), will not use thePATHvariable to locate the executable;pathmust contain an
+appropriate absolute or relative path.
+
+spawnlp()
+
+spawnlpe()
+
+spawnvp()
+
+spawnvpe()
+
+PATH
+
+spawn*e
+
+PATH
+
+spawnl()
+
+spawnle()
+
+spawnv()
+
+spawnve()
+
+PATH
+
+Forspawnle(),spawnlpe(),spawnve(), andspawnvpe()(note that these all end in âeâ), theenvparameter must be a mapping
+which is used to define the environment variables for the new process (they are
+used instead of the current processâ environment); the functionsspawnl(),spawnlp(),spawnv(), andspawnvp()all cause
+the new process to inherit the environment of the current process.  Note that
+keys and values in theenvdictionary must be strings; invalid keys or
+values will cause the function to fail, with a return value of127.
+
+spawnle()
+
+spawnlpe()
+
+spawnve()
+
+spawnvpe()
+
+spawnl()
+
+spawnlp()
+
+spawnv()
+
+spawnvp()
+
+127
+
+As an example, the following calls tospawnlp()andspawnvpe()are
+equivalent:
+
+spawnlp()
+
+spawnvpe()
+
+importosos.spawnlp(os.P_WAIT,'cp','cp','index.html','/dev/null')L=['cp','index.html','/dev/null']os.spawnvpe(os.P_WAIT,'cp',L,os.environ)
+
+Raises anauditing eventos.spawnwith argumentsmode,path,args,env.
+
+os.spawn
+
+mode
+
+path
+
+args
+
+env
+
+Availability: Unix, Windows, not WASI, not Android, not iOS.
+
+spawnlp(),spawnlpe(),spawnvp()andspawnvpe()are not available on Windows.spawnle()andspawnve()are not thread-safe on Windows; we advise you to use thesubprocessmodule instead.
+
+spawnlp()
+
+spawnlpe()
+
+spawnvp()
+
+spawnvpe()
+
+spawnle()
+
+spawnve()
+
+subprocess
+
+Changed in version 3.6:Accepts apath-like object.
+
+Soft deprecatedsince version 3.14:Thesubprocessmodule is recommended instead.
+
+subprocess
+
+Possible values for themodeparameter to thespawn*family of
+functions.  If either of these values is given, thespawn*functions
+will return as soon as the new process has been created, with the process id as
+the return value.
+
+spawn*
+
+spawn*
+
+Availability: Unix, Windows.
+
+Possible value for themodeparameter to thespawn*family of
+functions.  If this is given asmode, thespawn*functions will not
+return until the new process has run to completion and will return the exit code
+of the process the run is successful, or-signalif a signal kills the
+process.
+
+spawn*
+
+spawn*
+
+-signal
+
+Availability: Unix, Windows.
+
+Possible values for themodeparameter to thespawn*family of
+functions.  These are less portable than those listed above.P_DETACHis similar toP_NOWAIT, but the new process is detached from the
+console of the calling process. IfP_OVERLAYis used, the current
+process will be replaced; thespawn*function will not return.
+
+spawn*
+
+P_DETACH
+
+P_NOWAIT
+
+P_OVERLAY
+
+spawn*
+
+Availability: Windows.
+
+Start a file with its associated application.
+
+Whenoperationis not specified, this acts like double-clicking
+the file in Windows Explorer, or giving the file name as an argument to thestartcommand from the interactive command shell: the file is opened
+with whatever application (if any) its extension is associated.
+
+When anotheroperationis given, it must be a âcommand verbâ that specifies
+what should be done with the file. Common verbs documented by Microsoft are'open','print'and'edit'(to be used on files) as well as'explore'and'find'(to be used on directories).
+
+'open'
+
+'print'
+
+'edit'
+
+'explore'
+
+'find'
+
+When launching an application, specifyargumentsto be passed as a single
+string. This argument may have no effect when using this function to launch a
+document.
+
+The default working directory is inherited, but may be overridden by thecwdargument. This should be an absolute path. A relativepathwill be resolved
+against this argument.
+
+Useshow_cmdto override the default window style. Whether this has any
+effect will depend on the application being launched. Values are integers as
+supported by the Win32ShellExecute()function.
+
+ShellExecute()
+
+startfile()returns as soon as the associated application is launched.
+There is no option to wait for the application to close, and no way to retrieve
+the applicationâs exit status.  Thepathparameter is relative to the current
+directory orcwd.  If you want to use an absolute path, make sure the first
+character is not a slash ('/')  Usepathlibor theos.path.normpath()function to ensure that paths are properly encoded for
+Win32.
+
+startfile()
+
+'/'
+
+pathlib
+
+os.path.normpath()
+
+To reduce interpreter startup overhead, the Win32ShellExecute()function is not resolved until this function is first called.  If the function
+cannot be resolved,NotImplementedErrorwill be raised.
+
+ShellExecute()
+
+NotImplementedError
+
+Raises anauditing eventos.startfilewith argumentspath,operation.
+
+os.startfile
+
+path
+
+operation
+
+Raises anauditing eventos.startfile/2with argumentspath,operation,arguments,cwd,show_cmd.
+
+os.startfile/2
+
+path
+
+operation
+
+arguments
+
+cwd
+
+show_cmd
+
+Availability: Windows.
+
+Changed in version 3.10:Added thearguments,cwdandshow_cmdarguments, and theos.startfile/2audit event.
+
+os.startfile/2
+
+Execute the command (a string) in a subshell.  This is implemented by calling
+the Standard C functionsystem(), and has the same limitations.
+Changes tosys.stdin, etc. are not reflected in the environment of
+the executed command. Ifcommandgenerates any output, it will be sent to
+the interpreter standard output stream. The C standard does not
+specify the meaning of the return value of the C function, so the return
+value of the Python function is system-dependent.
+
+system()
+
+sys.stdin
+
+On Unix, the return value is the exit status of the process encoded in the
+format specified forwait().
+
+wait()
+
+On Windows, the return value is that returned by the system shell after
+runningcommand.  The shell is given by the Windows environment variableCOMSPEC: it is usuallycmd.exe, which returns the exit
+status of the command run; on systems using a non-native shell, consult your
+shell documentation.
+
+COMSPEC
+
+Thesubprocessmodule provides more powerful facilities for spawning
+new processes and retrieving their results; using that module is recommended
+to using this function.  See theReplacing Older Functions with the subprocess Modulesection in
+thesubprocessdocumentation for some helpful recipes.
+
+subprocess
+
+subprocess
+
+On Unix,waitstatus_to_exitcode()can be used to convert the result
+(exit status) into an exit code. On Windows, the result is directly the exit
+code.
+
+waitstatus_to_exitcode()
+
+Raises anauditing eventos.systemwith argumentcommand.
+
+os.system
+
+command
+
+Availability: Unix, Windows, not WASI, not Android, not iOS.
+
+Returns the current global process times.
+The return value is an object with five attributes:
+
+user- user time
+
+user- user time
+
+user
+
+system- system time
+
+system- system time
+
+system
+
+children_user- user time of all child processes
+
+children_user- user time of all child processes
+
+children_user
+
+children_system- system time of all child processes
+
+children_system- system time of all child processes
+
+children_system
+
+elapsed- elapsed real time since a fixed point in the past
+
+elapsed- elapsed real time since a fixed point in the past
+
+elapsed
+
+For backwards compatibility, this object also behaves like a five-tuple
+containinguser,system,children_user,children_system, andelapsedin that order.
+
+user
+
+system
+
+children_user
+
+children_system
+
+elapsed
+
+See the Unix manual pagetimes(2)andtimes(3)manual page on Unix orthe GetProcessTimes MSDNon Windows. On Windows, onlyuserandsystemare known; the other attributes are zero.
+
+user
+
+system
+
+Availability: Unix, Windows.
+
+Changed in version 3.3:Return type changed from a tuple to a tuple-like object
+with named attributes.
+
+Wait for completion of a child process, and return a tuple containing its pid
+and exit status indication: a 16-bit number, whose low byte is the signal number
+that killed the process, and whose high byte is the exit status (if the signal
+number is zero); the high bit of the low byte is set if a core file was
+produced.
+
+If there are no children that could be waited for,ChildProcessErroris raised.
+
+ChildProcessError
+
+waitstatus_to_exitcode()can be used to convert the exit status into an
+exit code.
+
+waitstatus_to_exitcode()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+See also
+
+The otherwait*()functions documented below can be used to wait for the
+completion of a specific child process and have more options.waitpid()is the only one also available on Windows.
+
+wait*()
+
+waitpid()
+
+Wait for the completion of a child process.
+
+idtypecan beP_PID,P_PGID,P_ALL, or (on Linux)P_PIDFD.
+The interpretation ofiddepends on it; see their individual descriptions.
+
+P_PID
+
+P_PGID
+
+P_ALL
+
+P_PIDFD
+
+optionsis an OR combination of flags.  At least one ofWEXITED,WSTOPPEDorWCONTINUEDis required;WNOHANGandWNOWAITare additional optional flags.
+
+WEXITED
+
+WSTOPPED
+
+WCONTINUED
+
+WNOHANG
+
+WNOWAIT
+
+The return value is an object representing the data contained in thesiginfo_tstructure with the following attributes:
+
+siginfo_t
+
+si_pid(process ID)
+
+si_pid(process ID)
+
+si_pid
+
+si_uid(real user ID of the child)
+
+si_uid(real user ID of the child)
+
+si_uid
+
+si_signo(alwaysSIGCHLD)
+
+si_signo(alwaysSIGCHLD)
+
+si_signo
+
+SIGCHLD
+
+si_status(the exit status or signal number, depending onsi_code)
+
+si_status(the exit status or signal number, depending onsi_code)
+
+si_status
+
+si_code
+
+si_code(seeCLD_EXITEDfor possible values)
+
+si_code(seeCLD_EXITEDfor possible values)
+
+si_code
+
+CLD_EXITED
+
+IfWNOHANGis specified and there are no matching children in the
+requested state,Noneis returned.
+Otherwise, if there are no matching children
+that could be waited for,ChildProcessErroris raised.
+
+WNOHANG
+
+None
+
+ChildProcessError
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Added in version 3.3.
+
+Changed in version 3.13:This function is now available on macOS as well.
+
+The details of this function differ on Unix and Windows.
+
+On Unix: Wait for completion of a child process given by process idpid, and
+return a tuple containing its process id and exit status indication (encoded as
+forwait()).  The semantics of the call are affected by the value of the
+integeroptions, which should be0for normal operation.
+
+wait()
+
+0
+
+Ifpidis greater than0,waitpid()requests status information for
+that specific process.  Ifpidis0, the request is for the status of any
+child in the process group of the current process.  Ifpidis-1, the
+request pertains to any child of the current process.  Ifpidis less than-1, status is requested for any process in the process group-pid(the
+absolute value ofpid).
+
+0
+
+waitpid()
+
+0
+
+-1
+
+-1
+
+-pid
+
+optionsis an OR combination of flags.  If it containsWNOHANGand
+there are no matching children in the requested state,(0,0)is
+returned.  Otherwise, if there are no matching children that could be waited
+for,ChildProcessErroris raised.  Other options that can be used areWUNTRACEDandWCONTINUED.
+
+WNOHANG
+
+(0,0)
+
+ChildProcessError
+
+WUNTRACED
+
+WCONTINUED
+
+On Windows: Wait for completion of a process given by process handlepid, and
+return a tuple containingpid, and its exit status shifted left by 8 bits
+(shifting makes cross-platform use of the function easier). Apidless than or
+equal to0has no special meaning on Windows, and raises an exception. The
+value of integeroptionshas no effect.pidcan refer to any process whose
+id is known, not necessarily a child process. Thespawn*functions called withP_NOWAITreturn suitable process handles.
+
+0
+
+spawn*
+
+P_NOWAIT
+
+waitstatus_to_exitcode()can be used to convert the exit status into an
+exit code.
+
+waitstatus_to_exitcode()
+
+Availability: Unix, Windows, not WASI, not Android, not iOS.
+
+Changed in version 3.5:If the system call is interrupted and the signal handler does not raise an
+exception, the function now retries the system call instead of raising anInterruptedErrorexception (seePEP 475for the rationale).
+
+InterruptedError
+
+Similar towaitpid(), except no process id argument is given and a
+3-element tuple containing the childâs process id, exit status indication,
+and resource usage information is returned.  Refer toresource.getrusage()for details on resource usage information.  Theoptionsargument is the same as that provided towaitpid()andwait4().
+
+waitpid()
+
+resource.getrusage()
+
+waitpid()
+
+wait4()
+
+waitstatus_to_exitcode()can be used to convert the exit status into an
+exitcode.
+
+waitstatus_to_exitcode()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Similar towaitpid(), except a 3-element tuple, containing the childâs
+process id, exit status indication, and resource usage information is
+returned.  Refer toresource.getrusage()for details on resource usage
+information.  The arguments towait4()are the same as those provided
+towaitpid().
+
+waitpid()
+
+resource.getrusage()
+
+wait4()
+
+waitpid()
+
+waitstatus_to_exitcode()can be used to convert the exit status into an
+exitcode.
+
+waitstatus_to_exitcode()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+These are the possible values foridtypeinwaitid(). They affect
+howidis interpreted:
+
+waitid()
+
+P_PID- wait for the child whose PID isid.
+
+P_PID- wait for the child whose PID isid.
+
+P_PID
+
+P_PGID- wait for any child whose progress group ID isid.
+
+P_PGID- wait for any child whose progress group ID isid.
+
+P_PGID
+
+P_ALL- wait for any child;idis ignored.
+
+P_ALL- wait for any child;idis ignored.
+
+P_ALL
+
+P_PIDFD- wait for the child identified by the file descriptorid(a process file descriptor created withpidfd_open()).
+
+P_PIDFD- wait for the child identified by the file descriptorid(a process file descriptor created withpidfd_open()).
+
+P_PIDFD
+
+pidfd_open()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Note
+
+P_PIDFDis only available on Linux >= 5.4.
+
+P_PIDFD
+
+Added in version 3.3.
+
+Added in version 3.9:TheP_PIDFDconstant.
+
+P_PIDFD
+
+Thisoptionsflag forwaitpid(),wait3(),wait4(), andwaitid()causes child processes to be reported if they have been
+continued from a job control stop since they were last reported.
+
+waitpid()
+
+wait3()
+
+wait4()
+
+waitid()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Thisoptionsflag forwaitid()causes child processes that have terminated to
+be reported.
+
+waitid()
+
+The otherwait*functions always report children that have terminated,
+so this option is not available for them.
+
+wait*
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Added in version 3.3.
+
+Thisoptionsflag forwaitid()causes child processes that have been stopped
+by the delivery of a signal to be reported.
+
+waitid()
+
+This option is not available for the otherwait*functions.
+
+wait*
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Added in version 3.3.
+
+Thisoptionsflag forwaitpid(),wait3(), andwait4()causes
+child processes to also be reported if they have been stopped but their
+current state has not been reported since they were stopped.
+
+waitpid()
+
+wait3()
+
+wait4()
+
+This option is not available forwaitid().
+
+waitid()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Thisoptionsflag causeswaitpid(),wait3(),wait4(), andwaitid()to return right away if no child process status is available
+immediately.
+
+waitpid()
+
+wait3()
+
+wait4()
+
+waitid()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Thisoptionsflag causeswaitid()to leave the child in a waitable state, so that
+a laterwait*()call can be used to retrieve the child status information again.
+
+waitid()
+
+wait*()
+
+This option is not available for the otherwait*functions.
+
+wait*
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+These are the possible values forsi_codein the result returned bywaitid().
+
+si_code
+
+waitid()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Added in version 3.3.
+
+Changed in version 3.9:AddedCLD_KILLEDandCLD_STOPPEDvalues.
+
+CLD_KILLED
+
+CLD_STOPPED
+
+Convert a wait status to an exit code.
+
+On Unix:
+
+If the process exited normally (ifWIFEXITED(status)is true),
+return the process exit status (returnWEXITSTATUS(status)):
+result greater than or equal to 0.
+
+If the process exited normally (ifWIFEXITED(status)is true),
+return the process exit status (returnWEXITSTATUS(status)):
+result greater than or equal to 0.
+
+WIFEXITED(status)
+
+WEXITSTATUS(status)
+
+If the process was terminated by a signal (ifWIFSIGNALED(status)is
+true), return-signumwheresignumis the number of the signal that
+caused the process to terminate (return-WTERMSIG(status)):
+result less than 0.
+
+If the process was terminated by a signal (ifWIFSIGNALED(status)is
+true), return-signumwheresignumis the number of the signal that
+caused the process to terminate (return-WTERMSIG(status)):
+result less than 0.
+
+WIFSIGNALED(status)
+
+-signum
+
+-WTERMSIG(status)
+
+Otherwise, raise aValueError.
+
+Otherwise, raise aValueError.
+
+ValueError
+
+On Windows, returnstatusshifted right by 8 bits.
+
+On Unix, if the process is being traced or ifwaitpid()was called
+withWUNTRACEDoption, the caller must first check ifWIFSTOPPED(status)is true. This function must not be called ifWIFSTOPPED(status)is true.
+
+waitpid()
+
+WUNTRACED
+
+WIFSTOPPED(status)
+
+WIFSTOPPED(status)
+
+See also
+
+WIFEXITED(),WEXITSTATUS(),WIFSIGNALED(),WTERMSIG(),WIFSTOPPED(),WSTOPSIG()functions.
+
+WIFEXITED()
+
+WEXITSTATUS()
+
+WIFSIGNALED()
+
+WTERMSIG()
+
+WIFSTOPPED()
+
+WSTOPSIG()
+
+Availability: Unix, Windows, not WASI, not Android, not iOS.
+
+Added in version 3.9.
+
+The following functions take a process status code as returned bysystem(),wait(), orwaitpid()as a parameter.  They may be
+used to determine the disposition of a process.
+
+system()
+
+wait()
+
+waitpid()
+
+ReturnTrueif a core dump was generated for the process, otherwise
+returnFalse.
+
+True
+
+False
+
+This function should be employed only ifWIFSIGNALED()is true.
+
+WIFSIGNALED()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+ReturnTrueif a stopped child has been resumed by delivery ofSIGCONT(if the process has been continued from a job
+control stop), otherwise returnFalse.
+
+True
+
+SIGCONT
+
+False
+
+SeeWCONTINUEDoption.
+
+WCONTINUED
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+ReturnTrueif the process was stopped by delivery of a signal,
+otherwise returnFalse.
+
+True
+
+False
+
+WIFSTOPPED()only returnsTrueif thewaitpid()call was
+done usingWUNTRACEDoption or when the process is being traced (seeptrace(2)).
+
+WIFSTOPPED()
+
+True
+
+waitpid()
+
+WUNTRACED
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+ReturnTrueif the process was terminated by a signal, otherwise returnFalse.
+
+True
+
+False
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+ReturnTrueif the process exited terminated normally, that is,
+by callingexit()or_exit(), or by returning frommain();
+otherwise returnFalse.
+
+True
+
+exit()
+
+_exit()
+
+main()
+
+False
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Return the process exit status.
+
+This function should be employed only ifWIFEXITED()is true.
+
+WIFEXITED()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Return the signal which caused the process to stop.
+
+This function should be employed only ifWIFSTOPPED()is true.
+
+WIFSTOPPED()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Return the number of the signal that caused the process to terminate.
+
+This function should be employed only ifWIFSIGNALED()is true.
+
+WIFSIGNALED()
+
+Availability: Unix, not WASI, not Android, not iOS.
+
+Interface to the scheduler
+
+These functions control how a process is allocated CPU time by the operating
+system. They are only available on some Unix platforms. For more detailed
+information, consult your Unix manpages.
+
+Added in version 3.3.
+
+The following scheduling policies are exposed if they are supported by the
+operating system.
+
+The default scheduling policy.
+
+Scheduling policy for CPU-intensive processes that tries to preserve
+interactivity on the rest of the computer.
+
+Scheduling policy for tasks with deadline constraints.
+
+Added in version 3.14.
+
+Scheduling policy for extremely low priority background tasks.
+
+Alias forSCHED_OTHER.
+
+SCHED_OTHER
+
+Added in version 3.14.
+
+Scheduling policy for sporadic server programs.
+
+A First In First Out scheduling policy.
+
+A round-robin scheduling policy.
+
+This flag can be ORâed with any other scheduling policy. When a process with
+this flag set forks, its childâs scheduling policy and priority are reset to
+the default.
+
+This class represents tunable scheduling parameters used insched_setparam(),sched_setscheduler(), andsched_getparam(). It is immutable.
+
+sched_setparam()
+
+sched_setscheduler()
+
+sched_getparam()
+
+At the moment, there is only one possible parameter:
+
+The scheduling priority for a scheduling policy.
+
+Get the minimum priority value forpolicy.policyis one of the
+scheduling policy constants above.
+
+Get the maximum priority value forpolicy.policyis one of the
+scheduling policy constants above.
+
+Set the scheduling policy for the process with PIDpid. Apidof 0 means
+the calling process.policyis one of the scheduling policy constants
+above.paramis asched_paraminstance.
+
+sched_param
+
+Return the scheduling policy for the process with PIDpid. Apidof 0
+means the calling process. The result is one of the scheduling policy
+constants above.
+
+Set the scheduling parameters for the process with PIDpid. Apidof 0 means
+the calling process.paramis asched_paraminstance.
+
+sched_param
+
+Return the scheduling parameters as asched_paraminstance for the
+process with PIDpid. Apidof 0 means the calling process.
+
+sched_param
+
+Return the round-robin quantum in seconds for the process with PIDpid. Apidof 0 means the calling process.
+
+Voluntarily relinquish the CPU. Seesched_yield(2)for details.
+
+Restrict the process with PIDpid(or the current process if zero) to a
+set of CPUs.maskis an iterable of integers representing the set of
+CPUs to which the process should be restricted.
+
+Return the set of CPUs the process with PIDpidis restricted to.
+
+Ifpidis zero, return the set of CPUs the calling thread of the current
+process is restricted to.
+
+See also theprocess_cpu_count()function.
+
+process_cpu_count()
+
+Miscellaneous System Information
+
+Return string-valued system configuration values.namespecifies the
+configuration value to retrieve; it may be a string which is the name of a
+defined system value; these names are specified in a number of standards (POSIX,
+Unix 95, Unix 98, and others).  Some platforms define additional names as well.
+The names known to the host operating system are given as the keys of theconfstr_namesdictionary.  For configuration variables not included in that
+mapping, passing an integer fornameis also accepted.
+
+confstr_names
+
+If the configuration value specified bynameisnât defined,Noneis
+returned.
+
+None
+
+Ifnameis a string and is not known,ValueErroris raised.  If a
+specific value fornameis not supported by the host system, even if it is
+included inconfstr_names, anOSErroris raised witherrno.EINVALfor the error number.
+
+ValueError
+
+confstr_names
+
+OSError
+
+errno.EINVAL
+
+Availability: Unix.
+
+Dictionary mapping names accepted byconfstr()to the integer values
+defined for those names by the host operating system. This can be used to
+determine the set of names known to the system.
+
+confstr()
+
+Availability: Unix.
+
+Return the number of logical CPUs in thesystem. ReturnsNoneif
+undetermined.
+
+None
+
+Theprocess_cpu_count()function can be used to get the number of
+logical CPUs usable by the calling thread of thecurrent process.
+
+process_cpu_count()
+
+Added in version 3.4.
+
+Changed in version 3.13:If-Xcpu_countis given orPYTHON_CPU_COUNTis set,cpu_count()returns the override valuen.
+
+-Xcpu_count
+
+PYTHON_CPU_COUNT
+
+cpu_count()
+
+Return the number of processes in the system run queue averaged over the last
+1, 5, and 15 minutes or raisesOSErrorif the load average was
+unobtainable.
+
+OSError
+
+Availability: Unix.
+
+Get the number of logical CPUs usable by the calling thread of thecurrent
+process. ReturnsNoneif undetermined. It can be less thancpu_count()depending on the CPU affinity.
+
+None
+
+cpu_count()
+
+Thecpu_count()function can be used to get the number of logical CPUs
+in thesystem.
+
+cpu_count()
+
+If-Xcpu_countis given orPYTHON_CPU_COUNTis set,process_cpu_count()returns the override valuen.
+
+-Xcpu_count
+
+PYTHON_CPU_COUNT
+
+process_cpu_count()
+
+See also thesched_getaffinity()function.
+
+sched_getaffinity()
+
+Added in version 3.13.
+
+Return integer-valued system configuration values. If the configuration value
+specified bynameisnât defined,-1is returned.  The comments regarding
+thenameparameter forconfstr()apply here as well; the dictionary that
+provides information on the known names is given bysysconf_names.
+
+-1
+
+confstr()
+
+sysconf_names
+
+Availability: Unix.
+
+Dictionary mapping names accepted bysysconf()to the integer values
+defined for those names by the host operating system. This can be used to
+determine the set of names known to the system.
+
+sysconf()
+
+Availability: Unix.
+
+Changed in version 3.11:Add'SC_MINSIGSTKSZ'name.
+
+'SC_MINSIGSTKSZ'
+
+The following data values are used to support path manipulation operations.  These
+are defined for all platforms.
+
+Higher-level operations on pathnames are defined in theos.pathmodule.
+
+os.path
+
+The constant string used by the operating system to refer to the current
+directory. This is'.'for Windows and POSIX. Also available viaos.path.
+
+'.'
+
+os.path
+
+The constant string used by the operating system to refer to the parent
+directory. This is'..'for Windows and POSIX. Also available viaos.path.
+
+'..'
+
+os.path
+
+The character used by the operating system to separate pathname components.
+This is'/'for POSIX and'\\'for Windows.  Note that knowing this
+is not sufficient to be able to parse or concatenate pathnames â useos.path.split()andos.path.join()â but it is occasionally
+useful. Also available viaos.path.
+
+'/'
+
+'\\'
+
+os.path.split()
+
+os.path.join()
+
+os.path
+
+An alternative character used by the operating system to separate pathname
+components, orNoneif only one separator character exists.  This is set to'/'on Windows systems wheresepis a backslash. Also available viaos.path.
+
+None
+
+'/'
+
+sep
+
+os.path
+
+The character which separates the base filename from the extension; for example,
+the'.'inos.py. Also available viaos.path.
+
+'.'
+
+os.py
+
+os.path
+
+The character conventionally used by the operating system to separate search
+path components (as inPATH), such as':'for POSIX or';'for
+Windows. Also available viaos.path.
+
+PATH
+
+':'
+
+';'
+
+os.path
+
+The default search path used byexec*p*andspawn*p*if the environment doesnât have a'PATH'key. Also available viaos.path.
+
+exec*p*
+
+spawn*p*
+
+'PATH'
+
+os.path
+
+The string used to separate (or, rather, terminate) lines on the current
+platform.  This may be a single character, such as'\n'for POSIX, or
+multiple characters, for example,'\r\n'for Windows. Do not useos.linesepas a line terminator when writing files opened in text mode (the
+default); use a single'\n'instead, on all platforms.
+
+'\n'
+
+'\r\n'
+
+'\n'
+
+The file path of the null device. For example:'/dev/null'for
+POSIX,'nul'for Windows.  Also available viaos.path.
+
+'/dev/null'
+
+'nul'
+
+os.path
+
+Flags for use with thesetdlopenflags()andgetdlopenflags()functions.  See the Unix manual pagedlopen(3)for what the different flags mean.
+
+setdlopenflags()
+
+getdlopenflags()
+
+Added in version 3.3.
+
+Random numbers
+
+Get up tosizerandom bytes. The function can return less bytes than
+requested.
+
+These bytes can be used to seed user-space random number generators or for
+cryptographic purposes.
+
+getrandom()relies on entropy gathered from device drivers and other
+sources of environmental noise. Unnecessarily reading large quantities of
+data will have a negative impact on  other users  of the/dev/randomand/dev/urandomdevices.
+
+getrandom()
+
+/dev/random
+
+/dev/urandom
+
+The flags argument is a bit mask that can contain zero or more of the
+following values ORed together:os.GRND_RANDOMandGRND_NONBLOCK.
+
+os.GRND_RANDOM
+
+GRND_NONBLOCK
+
+See also theLinux getrandom() manual page.
+
+Availability: Linux >= 3.17.
+
+Added in version 3.6.
+
+Return a bytestring ofsizerandom bytes suitable for cryptographic use.
+
+This function returns random bytes from an OS-specific randomness source.  The
+returned data should be unpredictable enough for cryptographic applications,
+though its exact quality depends on the OS implementation.
+
+On Linux, if thegetrandom()syscall is available, it is used in
+blocking mode: block until the system urandom entropy pool is initialized
+(128 bits of entropy are collected by the kernel). See thePEP 524for
+the rationale. On Linux, thegetrandom()function can be used to get
+random bytes in non-blocking mode (using theGRND_NONBLOCKflag) or
+to poll until the system urandom entropy pool is initialized.
+
+getrandom()
+
+getrandom()
+
+GRND_NONBLOCK
+
+On a Unix-like system, random bytes are read from the/dev/urandomdevice. If the/dev/urandomdevice is not available or not readable, theNotImplementedErrorexception is raised.
+
+/dev/urandom
+
+/dev/urandom
+
+NotImplementedError
+
+On Windows, it will useBCryptGenRandom().
+
+BCryptGenRandom()
+
+See also
+
+Thesecretsmodule provides higher level functions. For an
+easy-to-use interface to the random number generator provided by your
+platform, please seerandom.SystemRandom.
+
+secrets
+
+random.SystemRandom
+
+Changed in version 3.5:On Linux 3.17 and newer, thegetrandom()syscall is now used
+when available.  On OpenBSD 5.6 and newer, the Cgetentropy()function is now used. These functions avoid the usage of an internal file
+descriptor.
+
+getrandom()
+
+getentropy()
+
+Changed in version 3.5.2:On Linux, if thegetrandom()syscall blocks (the urandom entropy pool
+is not initialized yet), fall back on reading/dev/urandom.
+
+getrandom()
+
+/dev/urandom
+
+Changed in version 3.6:On Linux,getrandom()is now used in blocking mode to increase the
+security.
+
+getrandom()
+
+Changed in version 3.11:On Windows,BCryptGenRandom()is used instead ofCryptGenRandom()which is deprecated.
+
+BCryptGenRandom()
+
+CryptGenRandom()
+
+By  default, when reading from/dev/random,getrandom()blocks if
+no random bytes are available, and when reading from/dev/urandom, it blocks
+if the entropy pool has not yet been initialized.
+
+/dev/random
+
+getrandom()
+
+/dev/urandom
+
+If theGRND_NONBLOCKflag is set, thengetrandom()does not
+block in these cases, but instead immediately raisesBlockingIOError.
+
+GRND_NONBLOCK
+
+getrandom()
+
+BlockingIOError
+
+Added in version 3.6.
+
+If  this  bit  is  set,  then  random bytes are drawn from the/dev/randompool instead of the/dev/urandompool.
+
+/dev/random
+
+/dev/urandom
+
+Added in version 3.6.
