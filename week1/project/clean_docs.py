@@ -1,98 +1,298 @@
+
 import re
 from pathlib import Path
 from bs4 import BeautifulSoup
 
 RAW_DIR = Path("raw_docs")
-CLEAN_DIR = Path("clean_docs")
+CLEAN_DIR = Path("clean_docs_v2")
+
 CLEAN_DIR.mkdir(exist_ok=True)
 
 html_files = list(RAW_DIR.glob("*.html"))
 
-def clean_sphinx_element(element):
+
+# ==========================================================
+# Helpers
+# ==========================================================
+
+def clean_text(text: str) -> str:
     """
-    Processes structural HTML elements individually to clean up artifacts 
-    and maintain formatting (markdown-style layout).
+    Normalize whitespace and remove common encoding artifacts.
     """
-    tag_name = element.name
-    
-    # 1. Handle Code Blocks cleanly (Preserve internal formatting & whitespace)
-    if tag_name == "pre":
-        code_text = element.get_text(strip=False)
-        # Avoid empty blocks
-        if not code_text.strip():
-            return ""
-        return f"```python\n{code_text.strip()}\n```"
-    
-    # Get text and purge bad character sets/pilcrows
-    text = element.get_text(strip=True)
-    text = text.replace("Â¶", "").replace("¶", "")
-    # Clean up multiple consecutive internal spaces
-    text = re.sub(r' +', ' ', text)
-    
+
     if not text:
         return ""
-    
-    # 2. Convert Headers into Markdown equivalents to give chunk splitters structural hints
-    if tag_name in ["h1", "h2", "h3", "h4"]:
-        level = int(tag_name[1])
-        return f"\n{'#' * level} {text}"
-    
-    # 3. Format Bullet Lists gracefully
-    if tag_name == "li":
-        return f"* {text}"
-    
-    return text
+
+    text = (
+        text.replace("Â¶", "")
+        .replace("¶", "")
+        .replace("\xa0", " ")
+    )
+
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip()
+
+
+def format_code_block(element):
+    """
+    Preserve code blocks.
+    """
+
+    code = element.get_text(strip=False)
+
+    if not code.strip():
+        return ""
+
+    return f"\n```python\n{code.strip()}\n```\n"
+
+
+# ==========================================================
+# Extract Sphinx Definition Blocks
+# ==========================================================
+
+def extract_definition_block(dl):
+    """
+    Converts:
+
+    <dl class="py function">
+        <dt>json.dumps(obj)</dt>
+        <dd>Serialize object...</dd>
+    </dl>
+
+    into structured text.
+    """
+
+    classes = dl.get("class", [])
+
+    object_type = "OBJECT"
+
+    if "function" in classes:
+        object_type = "FUNCTION"
+
+    elif "method" in classes:
+        object_type = "METHOD"
+
+    elif "class" in classes:
+        object_type = "CLASS"
+
+    elif "attribute" in classes:
+        object_type = "ATTRIBUTE"
+
+    elif "exception" in classes:
+        object_type = "EXCEPTION"
+
+    dt = dl.find("dt")
+
+    dd = dl.find("dd")
+
+    if not dt or not dd:
+        return ""
+
+    signature = clean_text(
+        dt.get_text(" ", strip=True)
+    )
+
+    description_parts = []
+
+    for child in dd.find_all(
+        ["p", "pre", "ul", "ol"],
+        recursive=True
+    ):
+
+        if child.name == "pre":
+            description_parts.append(
+                format_code_block(child)
+            )
+
+        elif child.name in ["ul", "ol"]:
+
+            for li in child.find_all("li"):
+                item = clean_text(
+                    li.get_text(" ", strip=True)
+                )
+
+                if item:
+                    description_parts.append(
+                        f"- {item}"
+                    )
+
+        else:
+
+            text = clean_text(
+                child.get_text(" ", strip=True)
+            )
+
+            if text:
+                description_parts.append(text)
+
+    description = "\n".join(
+        description_parts
+    )
+
+    block = f"""
+{object_type}: {signature}
+
+DESCRIPTION:
+{description}
+"""
+
+    return block.strip()
+
+
+# ==========================================================
+# Extract Standard Content
+# ==========================================================
+
+def extract_standard_content(main_content):
+
+    blocks = []
+
+    for element in main_content.find_all(
+        ["h1", "h2", "h3", "h4", "p", "pre"],
+        recursive=True
+    ):
+
+        if element.find_parent("dl"):
+            continue
+
+        tag = element.name
+
+        if tag.startswith("h"):
+
+            level = int(tag[1])
+
+            text = clean_text(
+                element.get_text(" ", strip=True)
+            )
+
+            if text:
+                blocks.append(
+                    f"\n{'#' * level} {text}\n"
+                )
+
+        elif tag == "pre":
+
+            blocks.append(
+                format_code_block(element)
+            )
+
+        else:
+
+            text = clean_text(
+                element.get_text(" ", strip=True)
+            )
+
+            if text:
+                blocks.append(text)
+
+    return blocks
+
+
+# ==========================================================
+# Main Processing Loop
+# ==========================================================
 
 for file_path in html_files:
-    print(f"Analyzing and cleaning: {file_path.name}")
-    html = file_path.read_text(encoding="utf-8")
-    soup = BeautifulSoup(html, "lxml")
 
-    # Target standard Sphinx documentation containers exclusively
+    print(
+        f"\nProcessing: {file_path.name}"
+    )
+
+    html = file_path.read_text(
+        encoding="utf-8",
+        errors="replace"
+    )
+
+    soup = BeautifulSoup(
+        html,
+        "lxml"
+    )
+
     main_content = (
         soup.find("div", role="main")
         or soup.find("div", class_="body")
         or soup.find("main")
         or soup.find("article")
+        or soup.find("body")
     )
-    
-    if not main_content:
-        # Emergency backup if document structure varies
-        main_content = soup.find("body")
 
     if not main_content:
-        print(f"⚠️ Warning: Could not locate core content for {file_path.name}")
+
+        print(
+            f"Skipping {file_path.name}"
+        )
+
         continue
 
-    # Unconditionally drop standard web platform layout noise inside the target space
-    for noise in main_content.find_all(["nav", "footer", "header", "script", "style", "form"]):
+    for noise in main_content.find_all(
+        [
+            "nav",
+            "footer",
+            "header",
+            "script",
+            "style",
+            "form"
+        ]
+    ):
         noise.decompose()
 
-    # Walk through the top-level structural layout blocks (avoids nested duplication)
-    structural_blocks = main_content.find_all(["h1", "h2", "h3", "h4", "p", "pre", "ul", "ol"])
-    
-    clean_text_blocks = []
-    
-    for block in structural_blocks:
-        if block.name in ["ul", "ol"]:
-            # Process inner list items sequentially to preserve list groups
-            for li in block.find_all("li", recursive=False):
-                cleaned_li = clean_sphinx_element(li)
-                if cleaned_li:
-                    clean_text_blocks.append(cleaned_li)
-        else:
-            cleaned_block = clean_sphinx_element(block)
-            if cleaned_block:
-                clean_text_blocks.append(cleaned_block)
+    final_blocks = []
 
-    # Join with clean paragraph double spacing
-    final_text = "\n\n".join(clean_text_blocks)
-    
-    # Safeguard: Remove any accidental over-stacking of newline sequences
-    final_text = re.sub(r'\n{3,}', '\n\n', final_text)
+    # ------------------------------------
+    # Standard Content
+    # ------------------------------------
 
-    # Export clean knowledge base document
-    output_file = CLEAN_DIR / f"{file_path.stem}.txt"
-    output_file.write_text(final_text, encoding="utf-8")
+    final_blocks.extend(
+        extract_standard_content(
+            main_content
+        )
+    )
 
-    print(f"✅ Processed and Saved: {output_file.name} ({len(final_text)} characters)\n")
+    # ------------------------------------
+    # Definition Blocks
+    # ------------------------------------
+
+    definition_blocks = main_content.find_all(
+        "dl"
+    )
+
+    for dl in definition_blocks:
+
+        extracted = extract_definition_block(
+            dl
+        )
+
+        if extracted:
+            final_blocks.append(
+                extracted
+            )
+
+    final_text = "\n\n".join(
+        block.strip()
+        for block in final_blocks
+        if block.strip()
+    )
+
+    final_text = re.sub(
+        r"\n{3,}",
+        "\n\n",
+        final_text
+    )
+
+    output_file = (
+        CLEAN_DIR /
+        f"{file_path.stem}.txt"
+    )
+
+    output_file.write_text(
+        final_text,
+        encoding="utf-8"
+    )
+
+    print(
+        f"Saved: {output_file.name}"
+    )
+
+print("\nDone.")
+

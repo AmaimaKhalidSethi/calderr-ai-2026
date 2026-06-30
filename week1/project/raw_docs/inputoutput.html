@@ -223,17 +223,17 @@
           <div class="body" role="main">
             
   <section id="input-and-output">
-<span id="tut-io"></span><h1><span class="section-number">7. </span>Input and Output<a class="headerlink" href="#input-and-output" title="Link to this heading">Â¶</a></h1>
+<span id="tut-io"></span><h1><span class="section-number">7. </span>Input and Output<a class="headerlink" href="#input-and-output" title="Link to this heading">¶</a></h1>
 <p>There are several ways to present the output of a program; data can be printed
 in a human-readable form, or written to a file for future use. This chapter will
 discuss some of the possibilities.</p>
 <section id="fancier-output-formatting">
-<span id="tut-formatting"></span><h2><span class="section-number">7.1. </span>Fancier Output Formatting<a class="headerlink" href="#fancier-output-formatting" title="Link to this heading">Â¶</a></h2>
-<p>So far weâve encountered two ways of writing values: <em>expression statements</em> and
+<span id="tut-formatting"></span><h2><span class="section-number">7.1. </span>Fancier Output Formatting<a class="headerlink" href="#fancier-output-formatting" title="Link to this heading">¶</a></h2>
+<p>So far we’ve encountered two ways of writing values: <em>expression statements</em> and
 the <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> function.  (A third way is using the <a class="reference internal" href="../library/io.html#io.TextIOBase.write" title="io.TextIOBase.write"><code class="xref py py-meth docutils literal notranslate"><span class="pre">write()</span></code></a> method
 of file objects; the standard output file can be referenced as <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.
 See the Library Reference for more information on this.)</p>
-<p>Often youâll want more control over the formatting of your output than simply
+<p>Often you’ll want more control over the formatting of your output than simply
 printing space-separated values. There are several ways to format output.</p>
 <ul>
 <li><p>To use <a class="reference internal" href="#tut-f-strings"><span class="std std-ref">formatted string literals</span></a>, begin a string
@@ -248,9 +248,9 @@ characters that can refer to variables or literal values.</p>
 </div>
 </li>
 <li><p>The <a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.format()</span></code></a> method of strings requires more manual
-effort.  Youâll still use <code class="docutils literal notranslate"><span class="pre">{</span></code> and <code class="docutils literal notranslate"><span class="pre">}</span></code> to mark where a variable
+effort.  You’ll still use <code class="docutils literal notranslate"><span class="pre">{</span></code> and <code class="docutils literal notranslate"><span class="pre">}</span></code> to mark where a variable
 will be substituted and can provide detailed formatting directives,
-but youâll also need to provide the information to be formatted. In the following code
+but you’ll also need to provide the information to be formatted. In the following code
 block there are two examples of how to format variables:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yes_votes</span> <span class="o">=</span> <span class="mi">42_572_654</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">total_votes</span> <span class="o">=</span> <span class="mi">85_705_149</span>
@@ -268,13 +268,13 @@ concatenation operations to create any layout you can imagine.  The
 string type has some methods that perform useful operations for padding
 strings to a given column width.</p></li>
 </ul>
-<p>When you donât need fancy output but just want a quick display of some
+<p>When you don’t need fancy output but just want a quick display of some
 variables for debugging purposes, you can convert any value to a string with
 the <a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> functions.</p>
 <p>The <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> function is meant to return representations of values which are
 fairly human-readable, while <a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></a> is meant to generate representations
 which can be read by the interpreter (or will force a <a class="reference internal" href="../library/exceptions.html#SyntaxError" title="SyntaxError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SyntaxError</span></code></a> if
-there is no equivalent syntax).  For objects which donât have a particular
+there is no equivalent syntax).  For objects which don’t have a particular
 representation for human consumption, <code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code> will return the same value as
 <code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code>.  Many values, such as numbers or structures like lists and
 dictionaries, have the same representation using either function.  Strings, in
@@ -308,7 +308,7 @@ This offers yet another way to substitute values into strings,
 using placeholders like <code class="docutils literal notranslate"><span class="pre">$x</span></code> and replacing them with values from a dictionary.
 This syntax is easy to use, although it offers much less control for formatting.</p>
 <section id="formatted-string-literals">
-<span id="tut-f-strings"></span><span id="index-0"></span><h3><span class="section-number">7.1.1. </span>Formatted String Literals<a class="headerlink" href="#formatted-string-literals" title="Link to this heading">Â¶</a></h3>
+<span id="tut-f-strings"></span><span id="index-0"></span><h3><span class="section-number">7.1.1. </span>Formatted String Literals<a class="headerlink" href="#formatted-string-literals" title="Link to this heading">¶</a></h3>
 <p><a class="reference internal" href="../reference/lexical_analysis.html#f-strings"><span class="std std-ref">Formatted string literals</span></a> (also called f-strings for
 short) let you include the value of Python expressions inside a string by
 prefixing the string with <code class="docutils literal notranslate"><span class="pre">f</span></code> or <code class="docutils literal notranslate"><span class="pre">F</span></code> and writing expressions as
@@ -356,7 +356,7 @@ on the <code class="docutils literal notranslate"><span class="pre">=</span></co
 the reference guide for the <a class="reference internal" href="../library/string.html#formatspec"><span class="std std-ref">Format specification mini-language</span></a>.</p>
 </section>
 <section id="the-string-format-method">
-<span id="tut-string-format"></span><h3><span class="section-number">7.1.2. </span>The String format() Method<a class="headerlink" href="#the-string-format-method" title="Link to this heading">Â¶</a></h3>
+<span id="tut-string-format"></span><h3><span class="section-number">7.1.2. </span>The String format() Method<a class="headerlink" href="#the-string-format-method" title="Link to this heading">¶</a></h3>
 <p>Basic usage of the <a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.format()</span></code></a> method looks like this:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;We are the </span><span class="si">{}</span><span class="s1"> who say &quot;</span><span class="si">{}</span><span class="s1">!&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;knights&#39;</span><span class="p">,</span> <span class="s1">&#39;Ni&#39;</span><span class="p">))</span>
 <span class="go">We are the knights who say &quot;Ni!&quot;</span>
@@ -385,7 +385,7 @@ are referred to by using the name of the argument.</p>
 <span class="go">The story of Bill, Manfred, and Georg.</span>
 </pre></div>
 </div>
-<p>If you have a really long format string that you donât want to split up, it
+<p>If you have a really long format string that you don’t want to split up, it
 would be nice if you could reference the variables to be formatted by name
 instead of by position.  This can be done by simply passing the dict and using
 square brackets <code class="docutils literal notranslate"><span class="pre">'[]'</span></code> to access the keys.</p>
@@ -431,8 +431,8 @@ set of columns giving integers and their squares and cubes:</p>
 <a class="reference internal" href="../library/string.html#formatstrings"><span class="std std-ref">Format string syntax</span></a>.</p>
 </section>
 <section id="manual-string-formatting">
-<h3><span class="section-number">7.1.3. </span>Manual String Formatting<a class="headerlink" href="#manual-string-formatting" title="Link to this heading">Â¶</a></h3>
-<p>Hereâs the same table of squares and cubes, formatted manually:</p>
+<h3><span class="section-number">7.1.3. </span>Manual String Formatting<a class="headerlink" href="#manual-string-formatting" title="Link to this heading">¶</a></h3>
+<p>Here’s the same table of squares and cubes, formatted manually:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="c1"># Note use of &#39;end&#39; on previous line</span>
@@ -456,8 +456,8 @@ way <a class="reference internal" href="../library/functions.html#print" title="
 field of a given width by padding it with spaces on the left. There are
 similar methods <a class="reference internal" href="../library/stdtypes.html#str.ljust" title="str.ljust"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.ljust()</span></code></a> and <a class="reference internal" href="../library/stdtypes.html#str.center" title="str.center"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.center()</span></code></a>. These methods do
 not write anything, they just return a new string. If the input string is too
-long, they donât truncate it, but return it unchanged; this will mess up your
-column lay-out but thatâs usually better than the alternative, which would be
+long, they don’t truncate it, but return it unchanged; this will mess up your
+column lay-out but that’s usually better than the alternative, which would be
 lying about a value. (If you really want truncation you can always add a
 slice operation, as in <code class="docutils literal notranslate"><span class="pre">x.ljust(n)[:n]</span></code>.)</p>
 <p>There is another method, <a class="reference internal" href="../library/stdtypes.html#str.zfill" title="str.zfill"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.zfill()</span></code></a>, which pads a numeric string on the
@@ -472,7 +472,7 @@ left with zeros.  It understands about plus and minus signs:</p>
 </div>
 </section>
 <section id="old-string-formatting">
-<h3><span class="section-number">7.1.4. </span>Old string formatting<a class="headerlink" href="#old-string-formatting" title="Link to this heading">Â¶</a></h3>
+<h3><span class="section-number">7.1.4. </span>Old string formatting<a class="headerlink" href="#old-string-formatting" title="Link to this heading">¶</a></h3>
 <p>The % operator (modulo) can also be used for string formatting.
 Given <code class="docutils literal notranslate"><span class="pre">format</span> <span class="pre">%</span> <span class="pre">values</span></code> (where <em>format</em> is a string),
 <code class="docutils literal notranslate"><span class="pre">%</span></code> conversion specifications in <em>format</em> are replaced with
@@ -488,7 +488,7 @@ interpolation. For example:</p>
 </section>
 </section>
 <section id="reading-and-writing-files">
-<span id="tut-files"></span><h2><span class="section-number">7.2. </span>Reading and Writing Files<a class="headerlink" href="#reading-and-writing-files" title="Link to this heading">Â¶</a></h2>
+<span id="tut-files"></span><h2><span class="section-number">7.2. </span>Reading and Writing Files<a class="headerlink" href="#reading-and-writing-files" title="Link to this heading">¶</a></h2>
 <p id="index-1"><a class="reference internal" href="../library/functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> returns a <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">file object</span></a>, and is most commonly used with
 two positional arguments and one keyword argument:
 <code class="docutils literal notranslate"><span class="pre">open(filename,</span> <span class="pre">mode,</span> <span class="pre">encoding=None)</span></code></p>
@@ -501,7 +501,7 @@ will be used.  <em>mode</em> can be <code class="docutils literal notranslate"><
 for only writing (an existing file with the same name will be erased), and
 <code class="docutils literal notranslate"><span class="pre">'a'</span></code> opens the file for appending; any data written to the file is
 automatically added to the end.  <code class="docutils literal notranslate"><span class="pre">'r+'</span></code> opens the file for both reading and
-writing. The <em>mode</em> argument is optional; <code class="docutils literal notranslate"><span class="pre">'r'</span></code> will be assumed if itâs
+writing. The <em>mode</em> argument is optional; <code class="docutils literal notranslate"><span class="pre">'r'</span></code> will be assumed if it’s
 omitted.</p>
 <p>Normally, files are opened in <em class="dfn">text mode</em>, that means, you read and write
 strings from and to the file, which are encoded in a specific <em>encoding</em>.
@@ -532,7 +532,7 @@ equivalent <a class="reference internal" href="../reference/compound_stmts.html#
 <span class="go">True</span>
 </pre></div>
 </div>
-<p>If youâre not using the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> keyword, then you should call
+<p>If you’re not using the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> keyword, then you should call
 <code class="docutils literal notranslate"><span class="pre">f.close()</span></code> to close the file and immediately free up any system
 resources used by it.</p>
 <div class="admonition warning">
@@ -553,14 +553,14 @@ automatically fail.</p>
 </pre></div>
 </div>
 <section id="methods-of-file-objects">
-<span id="tut-filemethods"></span><h3><span class="section-number">7.2.1. </span>Methods of File Objects<a class="headerlink" href="#methods-of-file-objects" title="Link to this heading">Â¶</a></h3>
+<span id="tut-filemethods"></span><h3><span class="section-number">7.2.1. </span>Methods of File Objects<a class="headerlink" href="#methods-of-file-objects" title="Link to this heading">¶</a></h3>
 <p>The rest of the examples in this section will assume that a file object called
 <code class="docutils literal notranslate"><span class="pre">f</span></code> has already been created.</p>
-<p>To read a fileâs contents, call <code class="docutils literal notranslate"><span class="pre">f.read(size)</span></code>, which reads some quantity of
+<p>To read a file’s contents, call <code class="docutils literal notranslate"><span class="pre">f.read(size)</span></code>, which reads some quantity of
 data and returns it as a string (in text mode) or bytes object (in binary mode).
 <em>size</em> is an optional numeric argument.  When <em>size</em> is omitted or negative, the
-entire contents of the file will be read and returned; itâs your problem if the
-file is twice as large as your machineâs memory. Otherwise, at most <em>size</em>
+entire contents of the file will be read and returned; it’s your problem if the
+file is twice as large as your machine’s memory. Otherwise, at most <em>size</em>
 characters (in text mode) or <em>size</em> bytes (in binary mode) are read and returned.
 If the end of the file has been reached, <code class="docutils literal notranslate"><span class="pre">f.read()</span></code> will return an empty
 string (<code class="docutils literal notranslate"><span class="pre">''</span></code>).</p>
@@ -572,7 +572,7 @@ string (<code class="docutils literal notranslate"><span class="pre">''</span></
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">f.readline()</span></code> reads a single line from the file; a newline character (<code class="docutils literal notranslate"><span class="pre">\n</span></code>)
 is left at the end of the string, and is only omitted on the last line of the
-file if the file doesnât end in a newline.  This makes the return value
+file if the file doesn’t end in a newline.  This makes the return value
 unambiguous; if <code class="docutils literal notranslate"><span class="pre">f.readline()</span></code> returns an empty string, the end of the file
 has been reached, while a blank line is represented by <code class="docutils literal notranslate"><span class="pre">'\n'</span></code>, a string
 containing only a single newline.</p>
@@ -601,18 +601,18 @@ the number of characters written.</p>
 <span class="go">15</span>
 </pre></div>
 </div>
-<p>Other types of objects need to be converted â either to a string (in text mode)
-or a bytes object (in binary mode) â before writing them:</p>
+<p>Other types of objects need to be converted – either to a string (in text mode)
+or a bytes object (in binary mode) – before writing them:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;the answer&#39;</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># convert the tuple to string</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 <span class="go">18</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">f.tell()</span></code> returns an integer giving the file objectâs current position in the file
+<p><code class="docutils literal notranslate"><span class="pre">f.tell()</span></code> returns an integer giving the file object’s current position in the file
 represented as number of bytes from the beginning of the file when in binary mode and
 an opaque number when in text mode.</p>
-<p>To change the file objectâs position, use <code class="docutils literal notranslate"><span class="pre">f.seek(offset,</span> <span class="pre">whence)</span></code>.  The position is computed
+<p>To change the file object’s position, use <code class="docutils literal notranslate"><span class="pre">f.seek(offset,</span> <span class="pre">whence)</span></code>.  The position is computed
 from adding <em>offset</em> to a reference point; the reference point is selected by
 the <em>whence</em> argument.  A <em>whence</em> value of 0 measures from the beginning
 of the file, 1 uses the current file position, and 2 uses the end of the file as
@@ -641,7 +641,7 @@ undefined behaviour.</p>
 Reference for a complete guide to file objects.</p>
 </section>
 <section id="saving-structured-data-with-json">
-<span id="tut-json"></span><h3><span class="section-number">7.2.2. </span>Saving structured data with <a class="reference internal" href="../library/json.html#module-json" title="json: Encode and decode the JSON format."><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code></a><a class="headerlink" href="#saving-structured-data-with-json" title="Link to this heading">Â¶</a></h3>
+<span id="tut-json"></span><h3><span class="section-number">7.2.2. </span>Saving structured data with <a class="reference internal" href="../library/json.html#module-json" title="json: Encode and decode the JSON format."><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code></a><a class="headerlink" href="#saving-structured-data-with-json" title="Link to this heading">¶</a></h3>
 <p id="index-2">Strings can easily be written to and read from a file.  Numbers take a bit more
 effort, since the <a class="reference internal" href="../library/io.html#io.TextIOBase.read" title="io.TextIOBase.read"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read()</span></code></a> method only returns strings, which will have to
 be passed to a function like <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-func docutils literal notranslate"><span class="pre">int()</span></code></a>, which takes a string like <code class="docutils literal notranslate"><span class="pre">'123'</span></code>
@@ -770,7 +770,7 @@ arbitrary code, if the data was crafted by a skilled attacker.</p>
   </div>
         </div>
 <div id="sidebarbutton" title="Collapse sidebar">
-<span>Â«</span>
+<span>«</span>
 </div>
 
       </div>
@@ -847,7 +847,7 @@ arbitrary code, if the data was crafted by a skilled attacker.</p>
 <a href="https://www.python.org/psf/donations/">Please donate.</a>
 <br>
     <br>
-      Last updated on Jun 24, 2026 (09:52 UTC).
+      Last updated on Jun 25, 2026 (11:21 UTC).
     
       <a href="/bugs.html">Found a bug</a>?
     

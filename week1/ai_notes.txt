@@ -1,0 +1,9 @@
+Transformers are deep learning architectures.
+
+Transformers use self-attention to model relationships between tokens.
+
+Embeddings convert text into numerical vectors.
+
+Vector databases store embeddings for efficient retrieval.
+
+Retrieval-Augmented Generation combines retrieval and generation.

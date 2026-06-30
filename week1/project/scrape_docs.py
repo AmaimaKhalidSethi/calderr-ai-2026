@@ -1,4 +1,6 @@
 
+from urllib import response
+
 import requests
 
 from pathlib import Path
@@ -44,14 +46,16 @@ def download_page(url):
 
         response.raise_for_status()
 
-        return response.text
+        html = response.content.decode(
+            "utf-8",
+            errors="replace"
+        )
+
+        return html
 
     except Exception as error:
 
-        print(
-            f"\nFailed: {url}"
-        )
-
+        print(f"\nFailed: {url}")
         print(error)
 
         return None
